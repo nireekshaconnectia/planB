@@ -1,0 +1,173 @@
+[
+    {
+        "foodName": "B Signature",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 29,
+        "foodSlug": "b-signature",
+        "foodDescription": "our signature latte contains 2 shots of coffee with sweetend milk",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/B-Signature-1.png"
+    },
+    {
+        "foodName": "Brûlée Latte",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 28,
+        "foodSlug": "brulee-latte",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Brulee-Latte-1.png"
+    },
+    {
+        "foodName": "Hot Chocolate",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 27,
+        "foodSlug": "Hot-Chocolate",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Hot-chocolate.webp"
+    },
+    {
+        "foodName": "Tiramisu Latte",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 29,
+        "foodSlug": "tiramisu-latte",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Tiramisu-Latte.webp"
+    },
+    {
+        "foodName": "Spanish Latte",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 29,
+        "foodSlug": "Spanish-Latte",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Latte.png"
+    },
+    {
+        "foodName": "Flat White",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Flat-White",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Flat-White.png"
+    },
+    {
+        "foodName": "Cappuccino",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Cappuccino",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Latte.png"
+    },
+    {
+        "foodName": "Latte",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Latte",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Latte.png"
+    },
+    {
+        "foodName": "Cortado",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Cortado",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Cortado.png"
+    },
+    {
+        "foodName": "Affogato",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Affogato",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/mask-1.png"
+    },
+    {
+        "foodName": "Matcha Latte",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 29,
+        "foodSlug": "Matcha-Latte",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Matcha-Latte-1.png"
+    },
+    {
+        "foodName": "V60",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "V60",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Chemex-1.png"
+    },
+    {
+        "foodName": "Chemex",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Chemex",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Chemex-1.png"
+    },
+    {
+        "foodName": "Americano",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Americano",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Americano.png"
+    },
+    {
+        "foodName": "Espresso (Single)",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Espresso-single",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Espresso-Single.png"
+    },
+    {
+        "foodName": "Espresso (Double)",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Espresso-double",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Espresso-Single.png"
+    },
+    {
+        "foodName": "English Breakfast Tea",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "English-Breakfast-Tea",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/English-Breakfast-Tea.png"
+    },
+    {
+        "foodName": "Green Tea",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "green-tea",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/01/Green-Tea.png"
+    },
+    {
+        "foodName": "Non coffee Matcha",
+        "foodType": "Vegetarian",
+        "foodCategory": "Hot Drinks",
+        "foodPrice": 26,
+        "foodSlug": "Non-coffee-Matcha",
+        "foodDescription": "Crusty, white chocolate indulgence",
+        "featureImage": "https://www.planbqa.shop/wp-content/uploads/2024/06/IMG_2973.png"
+    }
+]

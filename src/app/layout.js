@@ -1,10 +1,10 @@
-import { Inter } from "next/font/google";
+import Head from 'next/head'
+import { Content, Inter } from "next/font/google";
 import "./globals.css";
 import "./style.css";
-import Header from "../../components/header";
-import TopBar from "../../components/topbar";
-import logo from "../../public/planb-logo.svg";
-
+import "./mobile.style.css";
+import Header from "@/components/header";
+import logo from "@/assets/planb-logo.svg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}><TopBar /> <Header logo="https://planb.weblexia.in/wp-content/uploads/2024/01/plan-b-logo-01-1.svg" />{children}</body>
+      <Head> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" /> </Head>
+      <body className={inter.className}>
+        <main>
+          <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
+          <content>{children}</content>
+        </main>
+      </body>
     </html>
   );
 }

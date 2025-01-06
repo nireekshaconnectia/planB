@@ -1,0 +1,76 @@
+.loginModal {
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+    height: 90%;
+    background: #fffae5;
+    width: 580px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px 0px #0000001c;
+    padding: 50px;
+    left: 34.8%;
+}
+
+.loginModalContent {
+    background-color: #fffae5;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+}
+.loginModal form{
+    margin-top: 20px;
+    padding: 20px;
+}
+.loginModal h4{
+    font-size: 20px;
+    font-weight: 600;
+}
+.loginModal label{
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+}
+.loginClose {
+    color: #aaa;
+    position: absolute;
+    right: 0px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    top: 0px;
+}
+
+.loginClose:hover,
+.loginClose:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.loginFormGroup {
+    margin-bottom: 20px;
+}
+
+.loginError {
+    color: red;
+    margin-top: 5px;
+}
+
+.loginModal button[type="submit"], .loginModal input{
+    height: 48px;
+    width: 100%;
+    border: 1px solid #959595;
+    border-radius: 100px;
+    font-size: 16px;
+}
+.loginModal button[type="submit"]{
+    background-color: #864622;
+    color: #fff;
+    opacity: 1; transition: opacity 3s ease-in-out;
+}
+.loginModal button[type="submit"]:hover{
+    background-color: #f5f2eb;
+    opacity: 0.5;
+    color: #000;
+
+}

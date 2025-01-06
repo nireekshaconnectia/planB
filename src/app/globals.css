@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 :root {
+  --primary-font: 'Poppins', sans-serif;
+  --text-font: 'Poppins', sans-serif;
   --foreground-rgb: 252, 186, 3;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 252, 186, 3;
+  --primary-heading-color: #864622;
+  --text-secondary-color:#CF8E56;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,11 +22,35 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(180deg, rgba(94,76,62,1) 0%, rgba(176,166,156,1) 30%, rgba(245,242,235,1) 100%);
+  /* background: linear-gradient(180deg, rgba(94,76,62,1) 0%, rgba(176,166,156,1) 30%, rgba(245,242,235,1) 100%); */
+  background: aliceblue;
 }
 h2{
     font-family: "Haigrast Serif", Sans-serif;
     font-weight: 400;
+}
+main{
+  max-width: 600px;
+  background-color: #fff;
+  margin: auto;
+  transition: max-width 0.3s ease;
+}
+.main-mobile {
+  max-width: 600px;
+}
+button:focus-visible , input:focus-visible, optgroup:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline: none;
+}
+/* Hide arrows for Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide arrows for Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 @layer utilities {
   .text-balance {
