@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import QuantitySelector from "./quantitySelector/quantitySelector";
+import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import { FaRegSmileBeam, FaRegSmileWink } from "react-icons/fa";
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false); // Controls popup open state

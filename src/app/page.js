@@ -6,7 +6,7 @@ import Categorey from '@/components/categorey';
 import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
 import Subheader from '@/components/subheader';
-import SideMenu from '@/components/sideMenu/sidemenu';
+import SideMenu from '@/components/sideMenu/sideMenu';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
