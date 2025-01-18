@@ -429,7 +429,8 @@ item css */
 /* Popup full view styles */
 .popup-container {
     position: fixed;
-    width: 550px;
+    max-width: 560px;
+    width: 95%;
     background-color: #fff;
     color: white;
     cursor: pointer;
@@ -487,7 +488,8 @@ item css */
 .cart-preview {
     position: fixed;
     bottom: 0px;
-    width: 550px;
+    max-width: 560px;
+    width: 95%;
     background-color: #fff;
     color: white;
     padding: 10px 20px;
