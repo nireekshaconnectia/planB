@@ -22,7 +22,7 @@ const LoginPage = () => {
   const [confirmationResult, setConfirmationResult] = useState(null);
 
   useEffect(() => {
-    // Initialize reCAPTCHA only on the client side
+    // Ensure reCAPTCHA is initialized only on the client side
     if (typeof window !== "undefined" && !window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
         size: "invisible",
@@ -33,11 +33,13 @@ const LoginPage = () => {
           console.log("reCAPTCHA expired. Try again.");
         },
       });
+
+      // Render the widget only if it hasn't been rendered already
       window.recaptchaVerifier.render().then((widgetId) => {
         window.recaptchaWidgetId = widgetId;
       });
     }
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
   const handleCountryChange = (e) => {
     const selected = countries.find((c) => c.code === e.target.value);
@@ -46,10 +48,17 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ensure that reCAPTCHA is loaded before attempting to sign in
+    const appVerifier = window.recaptchaVerifier;
+    if (!appVerifier) {
+      alert("reCAPTCHA is not loaded properly. Please try again.");
+      return;
+    }
+
     const fullPhoneNumber = `${selectedCountry.code}${phoneNumber}`;
 
     try {
-      const appVerifier = window.recaptchaVerifier;
       const confirmationResult = await signInWithPhoneNumber(auth, fullPhoneNumber, appVerifier);
       console.log("OTP Sent Successfully");
       setConfirmationResult(confirmationResult);
@@ -113,6 +122,7 @@ const LoginPage = () => {
           <OTPPopup onClose={() => setShowOTPPopup(false)} onVerify={handleVerifyOTP} />
         )}
 
+        {/* The container for the reCAPTCHA widget */}
         <div id="recaptcha-container"></div>
       </div>
     </div>
