@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
-import { FaRegSmileBeam, FaRegSmileWink } from "react-icons/fa";
+import { CiShoppingCart } from "react-icons/ci";
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false); // Controls popup open state
   const [cartItems, setCartItems] = useState([]); // Cart items state
@@ -52,7 +52,7 @@ export default function Cart() {
         <div className="popup-header">
           <h3>Your Cart</h3>
           <button onClick={() => setIsOpen(false)}>
-            <FaRegSmileWink />
+            <CiShoppingCart />
           </button>
         </div>
         <div className="popup-content flex col g-20">
@@ -73,7 +73,7 @@ export default function Cart() {
           ) : (
             <p>Your cart is empty.</p>
           )}
-          <h4>Total Price: ${totalPrice}</h4>
+          <h4>Total Price: QAR {totalPrice}</h4>
         </div>
       </div>
 
@@ -91,7 +91,8 @@ export default function Cart() {
           {/* Button to open popup */}
           {cartItems.length > 0 && (
             <button className="show-popup-btn" onClick={() => setIsOpen(true)}>
-              <FaRegSmileBeam />
+              <CiShoppingCart />
+
             </button>
           )}
         </div>

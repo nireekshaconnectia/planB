@@ -3,6 +3,7 @@ import { Content, Inter } from "next/font/google";
 import "./globals.css";
 import "./style.css";
 import "./mobile.style.css";
+import "@/hooks/smoothscroll";
 import Header from "@/components/header";
 import logo from "@/assets/planb-logo.svg";
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
       <Head> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" /> </Head>
       <body className={inter.className}>
         <main>
-          <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
+          
           <content>{children}</content>
         </main>
       </body>

@@ -52,6 +52,9 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+:target {
+  scroll-margin-top: 150px; /* Adjust this value to match the height of your sticky header */
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;

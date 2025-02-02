@@ -1,0 +1,129 @@
+/* styles/login.module.css */
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    padding: 50px 1rem; /* Added padding for smaller screens */
+}
+
+.loginCard {
+    padding: 1.5rem; /* Reduced padding for smaller screens */
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.loginTitle {
+    font-size: 24px; /* Reduced font size for smaller screens */
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 30px; /* Reduced margin for smaller screens */
+    color: #000;
+    text-align: center;
+}
+.loginForm{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.label{
+    margin-bottom :10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000;
+}
+.inputGroup {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.countrySelector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 1rem 0.5rem;
+    color:#000;
+}
+.countrySelector select{
+    background: transparent;
+}
+.phoneInput {
+    padding: 1rem 0.5rem;
+    outline: none;
+    width: 100%;
+}
+
+.continueButton {
+    width: 100%;
+    background-color: #864622;
+    color: white;
+    font-size: 16px;
+    line-height: 40px;
+    padding: 0.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.starRating {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    justify-content: center;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .feedbackInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 15px;
+
+  }
+  
+  .star {
+    cursor: pointer;
+    transition: color 0.2s;
+    width: 37px;
+    height: 37px;
+  }
+  
+  .star:hover {
+    color: #ffc107 !important;
+  }
+  
+
+.continueButton:hover {
+    background-color: #964a1e;
+}
+.continueButton:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+  }
+  
+
+/* Mobile Responsive Styles */
+@media (max-width: 480px) {
+    .loginCard {
+        padding: 1rem; /* Further reduced padding for very small screens */
+    }
+
+    .loginTitle {
+        font-size: 1.125rem; /* Further reduced font size for very small screens */
+    }
+
+    .continueButton {
+        font-size: 0.875rem; /* Adjust button font size for smaller screens */
+    }
+}

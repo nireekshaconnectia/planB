@@ -58,6 +58,28 @@ export default function Items() {
           ))}
         </div>
       </div>
+
+      <div id="hot-drinks">
+      <div className="categorey-title">Hot Drinks</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between mt-20">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

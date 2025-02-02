@@ -2,6 +2,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Header from '@/components/header'
 import Categorey from '@/components/categorey';
 import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
@@ -32,11 +33,14 @@ export default function Home() {
   }, []);
 
   return (
+    <>
+    <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
     <div className="flex min-h-screen flex-col items-center p-10 g-20">
       <Subheader />
       <Categorey />
       <Items />
       <Cart />
     </div>
+    </>
   );
 }
