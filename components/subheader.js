@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { useRouter } from 'next/router'; // Correct import for Pages Router
 import { RiInstagramFill } from 'react-icons/ri';
