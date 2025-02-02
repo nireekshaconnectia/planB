@@ -51,7 +51,7 @@ const OTPPopup = ({ onClose, onResend }) => {
             Submit
           </button>
           <div>
-            <label htmlFor="">You haven't received a code? </label>
+            <label htmlFor="">You haven&lsquot received a code? </label>
             <button
               onClick={handleResend} 
               className={styles.otpresend}>
