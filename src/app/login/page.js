@@ -1,11 +1,12 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Flags from "country-flag-icons/react/3x2";
 import BackButton from "@/components/backbutton/backbutton";
 import OTPPopup from "@/components/auth/verifyOTP/verifyOTP";
+import Recaptcha from "@/components/auth/recaptcha/Recaptcha";  // Import the new Recaptcha component
 import styles from "./login.module.css";
-import { auth } from "@/lib/firebase/firebase";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+import { auth } from "@/lib/firebase/firebase"; 
 
 const LoginPage = () => {
   const countries = [
@@ -20,27 +21,7 @@ const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOTPPopup, setShowOTPPopup] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
-
-  // Ref to hold reCAPTCHA instance
-  const recaptchaVerifierRef = useRef(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && !recaptchaVerifierRef.current) {
-      recaptchaVerifierRef.current = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "invisible",
-        callback: (response) => {
-          console.log("reCAPTCHA solved:", response);
-        },
-        "expired-callback": () => {
-          console.log("reCAPTCHA expired. Try again.");
-        },
-      });
-
-      recaptchaVerifierRef.current.render().then((widgetId) => {
-        console.log("reCAPTCHA Widget ID:", widgetId);
-      });
-    }
-  }, []);
+  const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
 
   const handleCountryChange = (e) => {
     const selected = countries.find((c) => c.code === e.target.value);
@@ -52,16 +33,17 @@ const LoginPage = () => {
     const fullPhoneNumber = `${selectedCountry.code}${phoneNumber}`;
 
     try {
-      if (!recaptchaVerifierRef.current) {
-        alert("reCAPTCHA is not loaded properly. Please refresh the page.");
+      if (!recaptchaVerifier) {
+        alert("reCAPTCHA not ready. Please wait.");
         return;
       }
 
       const confirmation = await signInWithPhoneNumber(
         auth,
         fullPhoneNumber,
-        recaptchaVerifierRef.current
+        recaptchaVerifier
       );
+
       console.log("OTP Sent Successfully");
       setConfirmationResult(confirmation);
       setShowOTPPopup(true);
@@ -124,7 +106,8 @@ const LoginPage = () => {
           <OTPPopup onClose={() => setShowOTPPopup(false)} onVerify={handleVerifyOTP} />
         )}
 
-        <div id="recaptcha-container"></div>
+        {/* Recaptcha Component */}
+        <Recaptcha onReady={setRecaptchaVerifier} />
       </div>
     </div>
   );
