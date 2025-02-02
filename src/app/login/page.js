@@ -22,6 +22,7 @@ const LoginPage = () => {
   const [confirmationResult, setConfirmationResult] = useState(null);
 
   useEffect(() => {
+    // Initialize reCAPTCHA only on the client side
     if (typeof window !== "undefined" && !window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
         size: "invisible",
@@ -36,7 +37,7 @@ const LoginPage = () => {
         window.recaptchaWidgetId = widgetId;
       });
     }
-  }, []); // Runs only once, and only on the client side.
+  }, []);
 
   const handleCountryChange = (e) => {
     const selected = countries.find((c) => c.code === e.target.value);
