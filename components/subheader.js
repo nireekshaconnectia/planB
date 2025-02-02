@@ -1,39 +1,58 @@
 "use client";
-import React from 'react';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { RiInstagramFill } from 'react-icons/ri';
 import { SiTiktok } from 'react-icons/si';
 import { IoLocation } from 'react-icons/io5';
 import { FaStar, FaTruck } from 'react-icons/fa';
 import { SiLinktree } from 'react-icons/si';
 
-// Uppercase name for React component
-export default function Subheader({ fburl }) {
+export default function subheader({ fburl }) {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
-  // Handler for feedback page navigation
+  // Check if the component is rendered on the client-side
+  useEffect(() => {
+    setIsClient(true); // Set to true after the component is mounted
+  }, []);
+
+  // Ensure router is available before using it
   const feedback = () => {
-    router.push('/feedback');
+    if (router) {
+      router.push('/feedback');
+    }
   };
 
-  // Social media and location handlers
   const insta = () => {
-    window.open('https://www.instagram.com/planb.qa/');
+    // Ensure this runs on the client side
+    if (typeof window !== 'undefined') {
+      window.open('https://www.instagram.com/planb.qa/');
+    }
   };
 
   const location = () => {
-    window.open('https://maps.app.goo.gl/wByeN8tbfEGTAZBb7');
+    // Ensure this runs on the client side
+    if (typeof window !== 'undefined') {
+      window.open('https://maps.app.goo.gl/wByeN8tbfEGTAZBb7');
+    }
   };
 
   const linktree = () => {
-    window.open('https://linktr.ee');
+    // Ensure this runs on the client side
+    if (typeof window !== 'undefined') {
+      window.open('https://linktr.ee');
+    }
   };
+
+  if (!isClient) {
+    // Prevent rendering until client-side rendering is ready
+    return null;
+  }
 
   return (
     <div className="subheader flex col">
       <div className="text-logo">PlanB Cafe</div>
       <div className="flex g-5 icon-box">
-        {/* Icons with click events */}
         <RiInstagramFill onClick={insta} style={{ cursor: 'pointer' }} />
         <SiTiktok onClick={insta} style={{ cursor: 'pointer' }} />
         <IoLocation onClick={location} style={{ cursor: 'pointer' }} />
