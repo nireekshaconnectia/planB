@@ -1,39 +1,43 @@
-import React from 'react'
-import { useRouter } from "next/navigation";
-import { RiInstagramFill } from "react-icons/ri";
-import { SiTiktok } from "react-icons/si";
-import { IoLocation } from "react-icons/io5";
-import { FaStar } from "react-icons/fa6";
-import { FaTruck } from "react-icons/fa";
-import { SiLinktree } from "react-icons/si";
+import React from 'react';
+import { useRouter } from 'next/router'; // Correct import for Pages Router
+import { RiInstagramFill } from 'react-icons/ri';
+import { SiTiktok } from 'react-icons/si';
+import { IoLocation } from 'react-icons/io5';
+import { FaStar } from 'react-icons/fa6';
+import { FaTruck } from 'react-icons/fa';
+import { SiLinktree } from 'react-icons/si';
 
-export default function subheader(fburl , ) {
-  const router = useRouter()
+// Uppercase name for React component
+export default function Subheader({ fburl }) {
+  const router = useRouter();
+
   const feedback = () => {
-    router.push("/feedback"); 
+    router.push('/feedback');
   };
+
   const insta = () => {
-    window.open("https://www.instagram.com/planb.qa/"); 
+    window.open('https://www.instagram.com/planb.qa/');
   };
+
   const location = () => {
-    window.open("https://maps.app.goo.gl/wByeN8tbfEGTAZBb7"); 
+    window.open('https://maps.app.goo.gl/wByeN8tbfEGTAZBb7');
   };
+
   const linktree = () => {
-    window.open("https://linktr.ee"); 
+    window.open('https://linktr.ee');
   };
+
   return (
-    <div className='subheader flex col'>
-      <div className='text-logo'>
-        PlanB Cafe
-      </div>
-      <div className='flex g-5 icon-box'>
-      <RiInstagramFill onClick={insta} />
-      <SiTiktok onClick={insta} />
-      <IoLocation onClick={location} />
-      <FaStar onClick={feedback}/>
-      <FaTruck onClick={feedback}/>
-      <SiLinktree onClick={linktree}/>
+    <div className="subheader flex col">
+      <div className="text-logo">PlanB Cafe</div>
+      <div className="flex g-5 icon-box">
+        <RiInstagramFill onClick={insta} style={{ cursor: 'pointer' }} />
+        <SiTiktok onClick={insta} style={{ cursor: 'pointer' }} />
+        <IoLocation onClick={location} style={{ cursor: 'pointer' }} />
+        <FaStar onClick={feedback} style={{ cursor: 'pointer' }} />
+        <FaTruck onClick={feedback} style={{ cursor: 'pointer' }} />
+        <SiLinktree onClick={linktree} style={{ cursor: 'pointer' }} />
       </div>
     </div>
-  )
+  );
 }
