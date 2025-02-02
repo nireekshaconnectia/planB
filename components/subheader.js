@@ -7,7 +7,7 @@ import { IoLocation } from 'react-icons/io5';
 import { FaStar, FaTruck } from 'react-icons/fa';
 import { SiLinktree } from 'react-icons/si';
 
-export default function subheader({ fburl }) {
+export default function Subheader({ fburl }) {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 

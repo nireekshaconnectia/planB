@@ -2,30 +2,31 @@
 import Head from "next/head";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaSearch, FaUser, FaCaretDown } from "react-icons/fa";
+import { FaUser, FaCaretDown } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import LanguageModal from "@/components/languagemodal/languagemodal";
-import LoginFormModal from "@/components/login/userlogin";
+import PropTypes from "prop-types";
 
 const Header = ({ logo, menu, keywords }) => {
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const login = () => {
-    router.push("/login"); 
+    router.push("/login");
   };
 
   return (
     <>
+      <Head>
+        <title>Your Page Title</title>
+        <meta name="description" content="Your page description" />
+      </Head>
+
       <div className="header" id="header">
         {/* User Icon */}
         <div className="user-login">
-          <FaUser onClick={login} />
-          <LoginFormModal
-            showLoginModal={showLoginModal}
-            setShowLoginModal={setShowLoginModal}
-          />
+          <FaUser onClick={login} style={{ cursor: "pointer" }} />
         </div>
       </div>
 
@@ -42,6 +43,7 @@ const Header = ({ logo, menu, keywords }) => {
           <div
             className="language-switcher flex g-5"
             onClick={() => setShowModal(true)}
+            style={{ cursor: "pointer" }}
           >
             <TbWorld />
             English
@@ -52,6 +54,13 @@ const Header = ({ logo, menu, keywords }) => {
       </div>
     </>
   );
+};
+
+// Prop Types Validation
+Header.propTypes = {
+  logo: PropTypes.string.isRequired,
+  menu: PropTypes.array,
+  keywords: PropTypes.array,
 };
 
 export default Header;
