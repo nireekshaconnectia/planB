@@ -1,4 +1,4 @@
-import styles from "./backdrop.module.css";
+import styles from "./Backdrop.module.css"
 
 export default function Backdrop({ children, onClick }) {
   return (
