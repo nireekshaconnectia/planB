@@ -379,7 +379,6 @@ item css */
 /* grid view items */
 .grid-view{
     flex-direction: column;
-    padding: 20px;
     gap: 20px;
 }
 .grid-view .item-image{
