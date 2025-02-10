@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./SelectStoreTable.module.css";
+import styles from "./selectStoretable.module.css";
 
 const stores = [
   { id: 24, name: "Main Store", address: "123 Market St" },
