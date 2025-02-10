@@ -25,7 +25,9 @@
     font-size: 20px;
     font-weight: 600;
 }
-
+.close{
+    cursor: pointer;
+}
 .languageList{
     display: flex;
     flex-direction: column;

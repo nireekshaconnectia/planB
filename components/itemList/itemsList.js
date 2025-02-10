@@ -23,8 +23,8 @@ export default function Items() {
   }, []);
 
   return (
-    <div className="Items-List w-100 flex col g-20 mt-20">
-      <div className="list-header flex space-between">
+    <div className="Items-List w-100 flex col g-20">
+      <div className="list-header flex space-between" id="breakfast">
         <div className="categorey-title">Breakfast</div>
         <div className="flex change-view">
           {/* Grid View Button */}
@@ -47,7 +47,7 @@ export default function Items() {
               </div>
               <div className="item-details">
                 <h3>{item.foodName}</h3>
-                <div className="flex space-between mt-20">
+                <div className="flex space-between">
                   <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
                   <QuantitySelector />
                 </div>
@@ -69,7 +69,113 @@ export default function Items() {
               </div>
               <div className="item-details">
                 <h3>{item.foodName}</h3>
-                <div className="flex space-between mt-20">
+                <div className="flex space-between">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div id="cold-drinks">
+      <div className="categorey-title">Cold Drinks</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div id="all-day-dishes">
+      <div className="categorey-title">All Day Dishes</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between ">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div id="salads">
+      <div className="categorey-title">Salads</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div id="desserts">
+      <div className="categorey-title">Desserts</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between ">
+                  <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                  <QuantitySelector />
+                </div>
+                <p>{item.foodDescription}</p>
+                
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div id="ice-cream">
+      <div className="categorey-title">Ice Creams</div>
+        <div className={`food-items flex col`}>
+          {foodItems.map((item) => (
+            <div className={`item ${isGridView ? 'grid-view' : 'list'}`} key={item.foodSlug}>
+              <div className="item-image flex">
+                <img src={item.featureImage} alt={item.foodName} />
+              </div>
+              <div className="item-details">
+                <h3>{item.foodName}</h3>
+                <div className="flex space-between ">
                   <div className="item-price">QAR {item.foodPrice.toFixed(2)}</div>
                   <QuantitySelector />
                 </div>

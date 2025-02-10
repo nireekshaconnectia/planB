@@ -174,7 +174,7 @@ span {
     scroll-behavior: smooth;
     /* Smooth scrolling */
     position: sticky;
-    top: 10px;
+    top: 0px;
     background: #fff;
     z-index: 8;
 }
@@ -206,6 +206,7 @@ span {
     align-items: center;
     flex-direction: column;
     gap: 10px;
+    text-align: center;
 }
 
 .categorey-item .featured-image {
@@ -215,6 +216,7 @@ span {
     border: 1px solid #5E4C3E;
     background-size: cover;
     background-position: center center;
+    margin: auto;
 }
 
 .categorey-item>div {
@@ -333,7 +335,7 @@ item css */
     border-radius: 10px;
 }
 
-.list .item-price {
+ .item-price {
     font-size: 12px;
     background: #f1f1f1;
     padding: 2px 8px 2px 8px;
@@ -351,18 +353,18 @@ item css */
 }
 .item-details {
     width: 80%;
-    gap: 20px;
+    gap: 7px;
+    display: flex;
+    flex-direction: column;
 }
 
 .item-details h3 {
     color: var(--primary-heading-color);
     font-family: var(--primary-font);
-}
-
-.list .item-details h3 {
     font-size: 16px;
     font-weight: 600;
 }
+
 
 .item-details p {
     color: var(--text-secondary-color);
@@ -393,27 +395,11 @@ item css */
 .grid-view .item-details{
     width: 100%;
 }
-.grid-view .item-details h3{
-    font-size: 28px;
-    line-height: 1.5em;
-}
-.grid-view .item-details p{
-    font-size: 20px;
-    line-height: 1.4em;
-}
-.grid-view .item-price{
-    font-size: 24px;;
-}
-.item-buy {
+
+.item-buy{
     width: 20%;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.item-price {
-    color: var(--primary-heading-color);
-    font-family: var(--primary-font);
-    gap: 14px;
 }
 
 
@@ -615,9 +601,11 @@ item css */
 }
 .switch-language{
     color:black;
+}
+.language-switcher{
+    z-index: 2;
     cursor:pointer;
 }
-
 .SideMenu{
     width: 300px;
     height: 100vh;

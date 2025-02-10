@@ -1,0 +1,75 @@
+/* SelectStoreTable.module.css */
+
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .storeList, .tableList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .storeButton, .tableButton {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .storeButton {
+    background-color: #2563eb; /* Blue */
+    color: white;
+  }
+  
+  .storeButton:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .tableItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .tableImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+  }
+  
+  .tableButton {
+    background-color: #16a34a; /* Green */
+    color: white;
+  }
+  
+  .tableButton:hover {
+    background-color: #15803d;
+  }
+  

@@ -11,7 +11,7 @@ const Categorey = () => {
   return (
     <div className="categorey-grid" id="categorey-box">
       <div className="categorey-item">
-      <Link href="/dashboard">
+      <Link href="/#breakfast">
         <div className="C-breakfast featured-image">
         </div>
         <div>
@@ -28,7 +28,7 @@ const Categorey = () => {
         </div></Link>
       </div>
       <div className="categorey-item ">
-      <Link href="/dashboard">
+      <Link href="/#cold-drinks">
         <div className="featured-image c-colddrinks">
 
         </div>
@@ -37,28 +37,28 @@ const Categorey = () => {
         </div></Link>
       </div>
       <div className="categorey-item ">
-      <Link href="/dashboard">
+      <Link href="/#all-day-dishes">
         <div className="featured-image c-alldaydishes"></div>
         <div>
           <h2>All Day Dishes</h2>
         </div></Link>
       </div>
       <div className="categorey-item">
-      <Link href="/dashboard">
+      <Link href="/#salads">
         <div className="featured-image c-salads"></div>
         <div>
           <h2>Salads</h2>
         </div></Link>
       </div>
       <div className="categorey-item">
-      <Link href="/dashboard">
+      <Link href="/#desserts">
         <div className="featured-image c-desserts"></div>
         <div>
           <h2>Desserts</h2>
         </div></Link>
       </div>
       <div className="categorey-item">
-      <Link href="/dashboard">
+      <Link href="/#ice-cream">
         <div className="featured-image c-icecream"></div>
         <div>
           <h2>Ice Cream</h2>

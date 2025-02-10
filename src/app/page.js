@@ -7,6 +7,7 @@ import Categorey from '@/components/categorey';
 import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
 import Subheader from '@/components/subheader';
+import SelectTableStore from '@/components/selectStoreTable/selectStoreTable';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
@@ -40,6 +41,7 @@ export default function Home() {
       <Categorey />
       <Items />
       <Cart />
+      <SelectTableStore />
     </div>
     </>
   );
