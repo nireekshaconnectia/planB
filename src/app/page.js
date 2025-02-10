@@ -1,9 +1,7 @@
-
 "use client";
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Header from '@/components/header'
-import Categorey from '@/components/categorey';
+import Header from '@/components/header';
+import Category from '@/components/categorey'; // Corrected spelling
 import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
 import Subheader from '@/components/subheader';
@@ -13,36 +11,32 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkBodyClass = () => {
-      const body = document.querySelector('body');
-      if (body && body.classList.contains('main-mobile')) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
     };
 
     // Initial check
-    checkBodyClass();
+    checkIsMobile();
 
-    // Optional: Add an event listener to handle dynamic class changes
-    window.addEventListener('resize', checkBodyClass);
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIsMobile);
 
+    // Cleanup event listener
     return () => {
-      window.removeEventListener('resize', checkBodyClass);
+      window.removeEventListener('resize', checkIsMobile);
     };
   }, []);
 
   return (
     <>
-    <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
-    <div className="flex min-h-screen flex-col items-center p-10 g-20">
-      <Subheader />
-      <Categorey />
-      <Items />
-      <Cart />
-      <SelectTableStore />
-    </div>
+      <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
+      <div className="flex min-h-screen flex-col items-center  g-20" style={{ padding: isMobile ? '10px 0px' : '20px' }}>
+        <Subheader />
+        <Category />
+        <Items />
+        <Cart />
+        <SelectTableStore />
+      </div>
     </>
   );
 }
