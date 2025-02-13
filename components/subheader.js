@@ -37,12 +37,6 @@ export default function Subheader({ fburl }) {
     }
   };
 
-  const linktree = () => {
-    // Ensure this runs on the client side
-    if (typeof window !== 'undefined') {
-      window.open('https://linktr.ee');
-    }
-  };
 
   if (!isClient) {
     // Prevent rendering until client-side rendering is ready
@@ -58,7 +52,6 @@ export default function Subheader({ fburl }) {
         <IoLocation onClick={location} style={{ cursor: 'pointer' }} />
         <FaStar onClick={feedback} style={{ cursor: 'pointer' }} />
         <FaTruck onClick={feedback} style={{ cursor: 'pointer' }} />
-        <SiLinktree onClick={linktree} style={{ cursor: 'pointer' }} />
       </div>
     </div>
   );

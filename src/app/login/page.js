@@ -3,34 +3,37 @@ import { useState } from "react";
 import Flags from "country-flag-icons/react/3x2";
 import BackButton from "@/components/backbutton/backbutton";
 import OTPPopup from "@/components/auth/verifyOTP/verifyOTP";
-import Recaptcha from "@/components/auth/recaptcha/Recaptcha";  // Import the new Recaptcha component
+import Recaptcha from "@/components/auth/recaptcha/Recaptcha";
 import styles from "./login.module.css";
-import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
-import { auth } from "@/lib/firebase/firebase"; 
+import { signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "@/lib/firebase/firebase";
+
+const countries = {
+  "+974": { name: "QA", flag: Flags.QA }, // Qatar
+  "+971": { name: "AE", flag: Flags.AE }, // UAE
+  "+91": { name: "IN", flag: Flags.IN },  // India
+  "+1": { name: "US", flag: Flags.US },   // USA
+  "+44": { name: "GB", flag: Flags.GB },  // UK
+  "+33": { name: "FR", flag: Flags.FR },  // France
+  "+49": { name: "DE", flag: Flags.DE },  // Germany
+};
 
 const LoginPage = () => {
-  const countries = [
-    { code: "+91", name: "IN", flag: Flags.IN },
-    { code: "+1", name: "US", flag: Flags.US },
-    { code: "+44", name: "GB", flag: Flags.GB },
-    { code: "+33", name: "FR", flag: Flags.FR },
-    { code: "+49", name: "DE", flag: Flags.DE },
-  ];
-
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+  const [countryCode, setCountryCode] = useState("+971"); // Default UAE
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOTPPopup, setShowOTPPopup] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
 
-  const handleCountryChange = (e) => {
-    const selected = countries.find((c) => c.code === e.target.value);
-    setSelectedCountry(selected);
+  const handleCountryCodeChange = (e) => {
+    const inputCode = e.target.value.replace(/[^0-9+]/g, ""); // Allow only numbers & '+'
+    setCountryCode(inputCode || "+"); // Ensure there's always at least '+'
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const fullPhoneNumber = `${selectedCountry.code}${phoneNumber}`;
+    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
 
     try {
       if (!recaptchaVerifier) {
@@ -38,11 +41,7 @@ const LoginPage = () => {
         return;
       }
 
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        fullPhoneNumber,
-        recaptchaVerifier
-      );
+      const confirmation = await signInWithPhoneNumber(auth, fullPhoneNumber, recaptchaVerifier);
 
       console.log("OTP Sent Successfully");
       setConfirmationResult(confirmation);
@@ -65,6 +64,8 @@ const LoginPage = () => {
     }
   };
 
+  const currentCountry = countries[countryCode] || { name: "Unknown", flag: () => <span>🌍</span> }; // Show globe emoji or default
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
@@ -79,14 +80,14 @@ const LoginPage = () => {
           </label>
           <div className={styles.inputGroup}>
             <div className={styles.countrySelector}>
-              <selectedCountry.flag className="w-6 h-4 mr-2" />
-              <select onChange={handleCountryChange} className={styles.select}>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.code}
-                  </option>
-                ))}
-              </select>
+              <currentCountry.flag className="w-6 h-4 mr-2" />
+              <input
+                type="text"
+                value={countryCode}
+                onChange={handleCountryCodeChange}
+                className={styles.countryCodeInput}
+                maxLength="4"
+              />
             </div>
             <input
               type="text"
@@ -106,7 +107,6 @@ const LoginPage = () => {
           <OTPPopup onClose={() => setShowOTPPopup(false)} onVerify={handleVerifyOTP} />
         )}
 
-        {/* Recaptcha Component */}
         <Recaptcha onReady={setRecaptchaVerifier} />
       </div>
     </div>

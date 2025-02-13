@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./selectStoretable.module.css";
+import { HiBuildingStorefront } from "react-icons/hi2";
+import { IoArrowBack } from "react-icons/io5"; // Back icon
+import { MdTableBar } from "react-icons/md";
 
 const stores = [
   { id: 24, name: "Main Store", address: "123 Market St" },
-  { id: 25, name: "Downtown Store", address: "456 Central Ave" }
+  { id: 25, name: "Downtown Store", address: "456 Central Ave" },
 ];
 
 const tables = [
   { no: 7, image: "/table7.jpg" },
-  { no: 8, image: "/table8.jpg" }
+  { no: 8, image: "/table8.jpg" },
 ];
 
 export default function SelectTableStore({ storeId, tableNo }) {
@@ -19,7 +22,6 @@ export default function SelectTableStore({ storeId, tableNo }) {
   const [selectedTable, setSelectedTable] = useState(null);
 
   useEffect(() => {
-    console.log("storeId:", storeId, "tableNo:", tableNo);
     if (!storeId || !tableNo) {
       setOpen(true);
     }
@@ -36,27 +38,47 @@ export default function SelectTableStore({ storeId, tableNo }) {
     setOpen(false);
   };
 
+  const goBack = () => {
+    setSelectedStore(null); // Reset selected store
+  };
+
   return (
     open && (
       <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
-          <h2 className={styles.title}>Select Store & Table</h2>
-          {!selectedStore ? (
-            <div className={styles.storeList}>
-              {stores.map((store) => (
-                <button key={store.id} onClick={() => handleStoreSelect(store)} className={styles.storeButton}>
-                  {store.name} - {store.address}
-                </button>
-              ))}
-            </div>
-          ) : (
+          {selectedStore ? (
             <div className={styles.tableList}>
+              <button className={styles.backButton} onClick={goBack}>
+                <IoArrowBack /> Back
+              </button>
+              <h2 className={styles.title}>Select Table</h2>
+              <div className="flex g-20 space-between">
               {tables.map((table) => (
-                <div key={table.no} className={styles.tableItem}>
-                  <img src={table.image} alt={`Table ${table.no}`} className={styles.tableImage} />
-                  <button onClick={() => handleTableSelect(table)} className={styles.tableButton}>Table {table.no}</button>
+                <div key={table.no} className={styles.tableItem} onClick={() => handleTableSelect(table)}>
+                  <MdTableBar />
+                  <h3>Table {table.no}</h3>   
                 </div>
               ))}
+              </div>
+              
+            </div>
+          ) : (
+            <div className={styles.storeList}>
+              <h2 className={styles.title}>Select Store</h2>
+              <div className="flex g-20 space-between">
+                {stores.map((store) => (
+                  <div
+                    className={styles.store}
+                    key={store.id}
+                    onClick={() => handleStoreSelect(store)}
+                  >
+                    <HiBuildingStorefront />
+                    <h3>{store.name}</h3>
+
+                    <p>{store.address}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
