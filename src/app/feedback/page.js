@@ -63,7 +63,7 @@ const Feedback = () => {
         <div className={styles.mb4}>
           <BackButton />
         </div>
-        <h1 className={styles.loginTitle}>What do you think about <br /> planbqa Cafe</h1>
+        <h1 className={styles.loginTitle}>What do you think about <br /> Plan B Cafe</h1>
         <form className={styles.loginForm} onSubmit={handleSubmit}>
           {/* Star Rating Input (Moved Before Phone Number) */}
           <div className={styles.starRating}>

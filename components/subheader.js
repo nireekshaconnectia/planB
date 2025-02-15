@@ -48,7 +48,6 @@ export default function Subheader({ fburl }) {
       <div className="text-logo">PlanB Cafe</div>
       <div className="flex g-5 icon-box">
         <RiInstagramFill onClick={insta} style={{ cursor: 'pointer' }} />
-        <SiTiktok onClick={insta} style={{ cursor: 'pointer' }} />
         <IoLocation onClick={location} style={{ cursor: 'pointer' }} />
         <FaStar onClick={feedback} style={{ cursor: 'pointer' }} />
         <FaTruck onClick={feedback} style={{ cursor: 'pointer' }} />

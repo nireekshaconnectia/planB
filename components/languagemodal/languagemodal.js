@@ -7,7 +7,7 @@ const LanguageModal = ({ showModal, setShowModal }) => {
     <>
       {showModal && (
         <>
-          <Backdrop />
+          <Backdrop onClick={() => setShowModal(false)} />
           <div className={styles.langModal}>
             <div className={styles.modalContent}>
               <div className={styles.modalHead}>
