@@ -486,6 +486,7 @@ item css */
     cursor: pointer;
     box-shadow: 0px 4px 20px 0px #0000001c;
     border-radius: 20px 20px 0px 0px;
+    z-index: 99;
 }
 
 .cart-preview>div {

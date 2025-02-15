@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToCart , removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import { CiShoppingCart } from "react-icons/ci";
+import Backdrop from "@/components/backdrop/backdrop"; // Import Backdrop component
 
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Cart() {
 
   return (
     <>
+    
       <div className={`popup-container ${isOpen ? "popup-open" : "popup-closed"}`}>
         <div className="popup-header">
           <h3>Your Cart</h3>
@@ -22,6 +24,7 @@ export default function Cart() {
             <CiShoppingCart />
           </button>
         </div>
+        
         <div className="popup-content flex col g-20">
           {Object.keys(cartItems).length > 0 ? (
             Object.values(cartItems).map((item) => (
