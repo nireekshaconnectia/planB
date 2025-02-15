@@ -377,6 +377,9 @@ item css */
     font-weight: 500;
 }
 /* grid view items */
+.grid{
+    flex-direction: column;
+}
 .grid-view{
     flex-direction: column;
     gap: 20px;

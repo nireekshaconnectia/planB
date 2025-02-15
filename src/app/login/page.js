@@ -19,7 +19,7 @@ const countries = {
 };
 
 const LoginPage = () => {
-  const [countryCode, setCountryCode] = useState("+971"); // Default UAE
+  const [countryCode, setCountryCode] = useState("+974"); // Default UAE
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOTPPopup, setShowOTPPopup] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
