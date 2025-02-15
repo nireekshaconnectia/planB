@@ -50,8 +50,9 @@
     padding: 1rem 0.5rem;
     color:#000;
 }
-.countrySelector select{
+.countrySelector input{
     background: transparent;
+    width: 50px;
 }
 .phoneInput {
     padding: 1rem 0.5rem;

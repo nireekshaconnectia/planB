@@ -5,30 +5,39 @@ import Flags from "country-flag-icons/react/3x2";
 import styles from "./feedback.module.css"; // Using same styles as LoginPage
 import { FaStar } from "react-icons/fa"; // Star rating icon
 
-const Feedback = () => {
-  const countries = [
-    { code: "+91", name: "IN", flag: Flags.IN }, // India
-    { code: "+1", name: "US", flag: Flags.US },  // USA
-    { code: "+44", name: "GB", flag: Flags.GB }, // UK
-    { code: "+33", name: "FR", flag: Flags.FR }, // France
-    { code: "+49", name: "DE", flag: Flags.DE }, // Germany
-  ];
+const countries = {
+  "+974": { name: "QA", flag: Flags.QA }, // Qatar
+  "+971": { name: "AE", flag: Flags.AE }, // UAE
+  "+91": { name: "IN", flag: Flags.IN },  // India
+  "+1": { name: "US", flag: Flags.US },   // USA
+  "+44": { name: "GB", flag: Flags.GB },  // UK
+  "+33": { name: "FR", flag: Flags.FR },  // France
+  "+49": { name: "DE", flag: Flags.DE },  // Germany
+};
 
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+const Feedback = () => {
+  const [countryCode, setCountryCode] = useState("+974"); // Default Qatar
   const [phoneNumber, setPhoneNumber] = useState("");
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
 
-  const handleCountryChange = (e) => {
-    const selected = countries.find((c) => c.code === e.target.value);
-    setSelectedCountry(selected);
+  const handlePhoneNumberChange = (e) => {
+    const input = e.target.value.replace(/[^0-9]/g, "");
+    setPhoneNumber(input);
   };
+
+  const handleCountryCodeChange = (e) => {
+    const inputCode = e.target.value.replace(/[^0-9+]/g, "");
+    setCountryCode(inputCode || "+");
+  };
+
+  const currentCountry = countries[countryCode] || { name: "Unknown", flag: () => <span>🌍</span> };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const feedbackData = {
-      phone: `${selectedCountry.code}${phoneNumber}`,
+      phone: `${countryCode}${phoneNumber}`,
       rating,
       feedback,
     };
@@ -65,7 +74,7 @@ const Feedback = () => {
         </div>
         <h1 className={styles.loginTitle}>What do you think about <br /> Plan B Cafe</h1>
         <form className={styles.loginForm} onSubmit={handleSubmit}>
-          {/* Star Rating Input (Moved Before Phone Number) */}
+          {/* Star Rating Input */}
           <div className={styles.starRating}>
             {[1, 2, 3, 4, 5].map((star) => (
               <FaStar
@@ -84,21 +93,21 @@ const Feedback = () => {
           </label>
           <div className={styles.inputGroup}>
             <div className={styles.countrySelector}>
-              <selectedCountry.flag className="w-6 h-4 mr-2" />
-              <select onChange={handleCountryChange} className={styles.select}>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.code}
-                  </option>
-                ))}
-              </select>
+              <currentCountry.flag className="w-6 h-4 mr-2" />
+              <input
+                type="text"
+                value={countryCode}
+                onChange={handleCountryCodeChange}
+                className={styles.countryCodeInput}
+                maxLength="4"
+              />
             </div>
             <input
               type="text"
               id="phoneNumber"
               placeholder="Phone Number"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={handlePhoneNumberChange}
               className={styles.phoneInput}
             />
           </div>
