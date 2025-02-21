@@ -270,7 +270,9 @@ span {
 .categorey-item:hover .C-breakfast , 
 .categorey-item:hover .c-hotdrinks ,
 .categorey-item:hover .c-colddrinks {
-    background-size: 150%;
+    background-color: #F5F2EB;
+    background-size: 125%;
+    background-blend-mode: multiply;
 }
 
 .c-colddrinks {
