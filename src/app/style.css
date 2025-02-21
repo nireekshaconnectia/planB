@@ -219,9 +219,11 @@ span {
     width: 80px;
     border-radius: 100px;
     border: 1px solid #5E4C3E;
-    background-size: cover;
+    background-size: 125%;
     background-position: center center;
     margin: auto;
+    background-color: #F5F2EB;
+    background-blend-mode: multiply;
 }
 
 .categorey-item>div {
@@ -261,16 +263,13 @@ span {
 
 .C-breakfast {
     background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/breakfast.jpeg");
-    background-color: #F5F2EB;
-    background-blend-mode: multiply;
-    background-size: 125% !important;
 }
 
 .c-hotdrinks {
     background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-15-at-23.38.53.jpeg");
-    background-color: #F5F2EB;
-    background-blend-mode: multiply;
-    background-size: 125% !important;
+}
+.c-colddrinks {
+    background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/cold-drinks.jpeg");
 }
 
 .categorey-item:hover .C-breakfast , 
@@ -278,20 +277,17 @@ span {
 .categorey-item:hover .c-colddrinks {
     background-color: #B49E77;
     background-blend-mode: multiply;
+    background-size: 150% ;
 }
 .categorey-item a:focus .C-breakfast , 
 .categorey-item a:focus .c-hotdrinks ,
 .categorey-item a:focus .c-colddrinks {
     background-color: #B49E77;
     background-blend-mode: multiply;
+    background-size: 150% ;
 }
 
-.c-colddrinks {
-    background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/cold-drinks.jpeg");
-    background-color: #F5F2EB;
-    background-blend-mode: multiply;
-    background-size: 125% !important;
-}
+
 
 .c-alldaydishes {
     background-image: url("https://www.planbqa.shop/wp-content/uploads/2024/01/All-Dishes.png");
