@@ -272,6 +272,12 @@ span {
 .categorey-item:hover .C-breakfast , 
 .categorey-item:hover .c-hotdrinks ,
 .categorey-item:hover .c-colddrinks {
+    background-color: #F5F2EB;
+    background-blend-mode: multiply;
+}
+.categorey-item a:focus .C-breakfast , 
+.categorey-item a:focus .c-hotdrinks ,
+.categorey-item a:focus .c-colddrinks {
     background-color: #B49E77;
     background-blend-mode: multiply;
 }
