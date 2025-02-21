@@ -219,7 +219,7 @@ span {
     width: 80px;
     border-radius: 100px;
     border: 1px solid #5E4C3E;
-    background-size: 125%;
+    background-size: 100%;
     background-position: center center;
     margin: auto;
     background-color: #F5F2EB;
@@ -266,14 +266,16 @@ span {
 }
 
 .c-hotdrinks {
-    background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-15-at-23.38.53.jpeg");
+    background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/hot-drinks.jpeg");
 }
 .c-colddrinks {
     background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/cold-drinks.jpeg");
 }
-
+.categorey-item:hover .c-hotdrinks {
+    background-image: url("http://planb.weblexia.in/wp-content/uploads/2025/02/hot-drinks-hover.jpeg");
+    background-size: 125%;
+}
 .categorey-item:hover .C-breakfast , 
-.categorey-item:hover .c-hotdrinks ,
 .categorey-item:hover .c-colddrinks {
     background-color: #B49E77;
     background-blend-mode: multiply;
