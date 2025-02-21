@@ -46,7 +46,7 @@ const Header = ({ logo, menu, keywords }) => {
             style={{ cursor: "pointer" }}
           >
             <TbWorld />
-            English
+            <p>English</p>
             <FaCaretDown />
           </div>
           <LanguageModal showModal={showModal} setShowModal={setShowModal} />

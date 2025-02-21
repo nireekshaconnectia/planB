@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
-      <div className="flex min-h-screen flex-col items-center  g-20" style={{ padding: isMobile ? '10px 0px' : '20px' }}>
+      <div className="flex min-h-screen flex-col items-center  g-20" style={{ padding: isMobile ? '10px 0px' : '0px' }}>
         <Subheader />
         <Category />
         <Items />

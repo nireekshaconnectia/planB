@@ -17,9 +17,11 @@ export default function Cart() {
   return (
     <>
     
-      <div className={`popup-container ${isOpen ? "popup-open" : "popup-closed"}`}>
+      <div className={` ${isOpen ? "popup-open" : "popup-closed"}`}>
+      {isOpen && <Backdrop onClick={() => setIsOpen(false)} />}
+      <div className="popup-container">
         <div className="popup-header">
-          <h3>Your Cart</h3>
+          <h3>Your cart</h3>
           <button onClick={() => setIsOpen(false)}>
             <CiShoppingCart />
           </button>
@@ -29,7 +31,7 @@ export default function Cart() {
           {Object.keys(cartItems).length > 0 ? (
             Object.values(cartItems).map((item) => (
               <div className="cart-item" key={item.foodSlug}>
-                <div className="flex space-between">
+                <div className="flex space-between g-20 ">
                   <div className="cart-item-name">
                     <h4>{item.foodName}</h4>
                   </div>
@@ -52,6 +54,7 @@ export default function Cart() {
             <p>Your cart is empty.</p>
           )}
           <h4>Total Price: QAR {totalPrice}</h4>
+        </div>
         </div>
       </div>
 
