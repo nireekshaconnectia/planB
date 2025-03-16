@@ -1,19 +1,36 @@
 "use client";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaUser, FaCaretDown } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase/firebase";
 import LanguageModal from "@/components/languagemodal/languagemodal";
+import SideMenu from "@/components/sideMenu/sideMenu";
 import PropTypes from "prop-types";
 
 const Header = ({ logo, menu, keywords }) => {
   const [showModal, setShowModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const router = useRouter();
 
-  const login = () => {
-    router.push("/login");
+  // Check if user is logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, []);
+
+  const handleUserClick = () => {
+    if (user) {
+      setMenuOpen(true); // Open SideMenu if logged in
+    } else {
+      router.push("/login"); // Redirect to login if not logged in
+    }
   };
 
   return (
@@ -26,7 +43,7 @@ const Header = ({ logo, menu, keywords }) => {
       <div className="header" id="header">
         {/* User Icon */}
         <div className="user-login">
-          <FaUser onClick={login} style={{ cursor: "pointer" }} />
+          <FaUser onClick={handleUserClick} style={{ cursor: "pointer" }} />
         </div>
       </div>
 
@@ -52,6 +69,9 @@ const Header = ({ logo, menu, keywords }) => {
           <LanguageModal showModal={showModal} setShowModal={setShowModal} />
         </div>
       </div>
+
+      {/* Show SideMenu if menuOpen is true */}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
     </>
   );
 };

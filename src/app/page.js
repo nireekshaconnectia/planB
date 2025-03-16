@@ -6,6 +6,7 @@ import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
 import Subheader from '@/components/subheader';
 import SelectTableStore from '@/components/selectStoreTable/selectStoreTable';
+import SelectFirstPage from '@/components/selectFirstPage/SelectFirstPage';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
@@ -30,6 +31,7 @@ export default function Home() {
   return (
     <>
       <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
+      <SelectFirstPage />
       <div className="flex min-h-screen flex-col items-center  g-20" style={{ padding: isMobile ? '10px 0px' : '0px' }}>
         <Subheader />
         <Category />

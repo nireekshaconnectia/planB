@@ -1,0 +1,20 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    padding: 50px 1rem; /* Added padding for smaller screens */
+}
+.pageCard {
+    padding: 1.5rem; /* Reduced padding for smaller screens */
+    border-radius: 0.5rem;
+    width: 100%;
+}
+.pageTitle {
+    font-size: 24px; /* Reduced font size for smaller screens */
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 60px; /* Reduced margin for smaller screens */
+    color: #000;
+}

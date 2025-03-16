@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart , removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
@@ -10,6 +11,7 @@ export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // Calculate total price
   const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.foodPrice * item.quantity, 0).toFixed(2);
@@ -53,7 +55,18 @@ export default function Cart() {
           ) : (
             <p>Your cart is empty.</p>
           )}
-          <h4>Total Price: QAR {totalPrice}</h4>
+          <div className="cart-checkout">
+              <h4>Total Price: QAR {totalPrice}</h4>
+              <div>
+                <button
+                  className="checkout-btn"
+                  onClick={() => router.push("/checkout")}
+                >
+                  Checkout
+                </button>
+              </div>
+            </div>
+          
         </div>
         </div>
       </div>

@@ -1,0 +1,26 @@
+.profilePage{
+    color: #111;
+}
+.profilePage .profileItem{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 10px;
+    border-bottom: 1px solid white;
+
+}
+.label{
+    font-size: 12px;
+}
+.name{
+    font-size: 14px;
+}
+.editBtn{
+    font-size: 12px;
+    border: 1px solid #864622;
+    color:#864622;
+    border-radius: 50px;
+    padding: 5px 10px;
+}
+.profilePage .profileItem input{
+    background: transparent;
+}

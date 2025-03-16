@@ -1,57 +1,56 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { RiInstagramFill } from 'react-icons/ri';
-import { SiTiktok } from 'react-icons/si';
-import { IoLocation } from 'react-icons/io5';
-import { FaStar, FaTruck } from 'react-icons/fa';
-import { SiLinktree } from 'react-icons/si';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { RiInstagramFill } from "react-icons/ri";
+import { SiTiktok } from "react-icons/si";
+import { IoLocation } from "react-icons/io5";
+import { FaStar, FaTruck } from "react-icons/fa";
+import { SiLinktree } from "react-icons/si";
+import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
 
 export default function Subheader({ fburl }) {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
 
-  // Check if the component is rendered on the client-side
+  // Ensure this component only runs on the client-side
   useEffect(() => {
-    setIsClient(true); // Set to true after the component is mounted
+    setIsClient(true);
   }, []);
 
-  // Ensure router is available before using it
   const feedback = () => {
-    if (router) {
-      router.push('/feedback');
-    }
+    router.push("/feedback");
   };
 
   const insta = () => {
-    // Ensure this runs on the client side
-    if (typeof window !== 'undefined') {
-      window.open('https://www.instagram.com/planb.qa/');
-    }
+    window.open("https://www.instagram.com/planb.qa/");
   };
 
   const location = () => {
-    // Ensure this runs on the client side
-    if (typeof window !== 'undefined') {
-      window.open('https://maps.app.goo.gl/wByeN8tbfEGTAZBb7');
-    }
+    window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5");
   };
 
-
   if (!isClient) {
-    // Prevent rendering until client-side rendering is ready
-    return null;
+    return null; // Prevents rendering on the server
   }
 
   return (
-    <div className="subheader flex col">
-      <div className="text-logo">PlanB Cafe</div>
-      <div className="flex g-5 icon-box">
-        <RiInstagramFill onClick={insta} style={{ cursor: 'pointer' }} />
-        <IoLocation onClick={location} style={{ cursor: 'pointer' }} />
-        <FaStar onClick={feedback} style={{ cursor: 'pointer' }} />
-        <FaTruck onClick={feedback} style={{ cursor: 'pointer' }} />
+    <>
+      <div className="subheader flex col">
+        <div className="text-logo">PlanB Cafe</div>
+        <div className="flex g-5 icon-box">
+          <RiInstagramFill onClick={insta} style={{ cursor: "pointer" }} />
+          <IoLocation onClick={location} style={{ cursor: "pointer" }} />
+          <FaStar onClick={feedback} style={{ cursor: "pointer" }} />
+          <FaTruck onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }} />
+        </div>
       </div>
-    </div>
+
+      {/* Delivery Options Popup */}
+      <DeliveryOptions 
+        isOpen={showDeliveryPopup} 
+        onClose={() => setShowDeliveryPopup(false)} 
+      />
+    </>
   );
 }

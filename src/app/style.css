@@ -638,3 +638,10 @@ item css */
     top: 0;
 }
 
+.cart-checkout{
+    display: flex;
+    justify-content: space-between;
+}
+.cart-checkout button{
+    color: #864622;
+}

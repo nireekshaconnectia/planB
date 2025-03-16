@@ -3,7 +3,58 @@
     left:0;
     top: 0;
     color: #000;
-    background-color: #fffae5;
+    background-color: #f1f1f1;
     width: 400px;
     height: 100%;
+    z-index: 999;
+    padding: 100px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.userName{
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+.menuItem{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.menuItem li{
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 2px solid white;
+    padding: 8px 0px;
+    cursor: pointer;
+    transition: background 0.3s;
+    color: #111;
+    display: flex;
+    justify-content: space-between;
+}
+.menuItem li svg{
+    margin: auto 0px;
+}
+.menuItem li div{
+    display: flex;
+    gap: 5px;
+}
+.menuItem li div svg{
+    margin: auto;
+}
+.logout button{
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 100px;
+    border: 1px solid #5E4C3E;
+    padding: 6px 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+    color: #111;
+    display: flex;
+    gap: 5px;
+}
+.logout button svg{
+    margin: auto
 }
