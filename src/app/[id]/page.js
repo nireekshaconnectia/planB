@@ -4,6 +4,8 @@ import { useRouter, useParams } from "next/navigation";
 import UserPage from "@/components/userPage/userPage";
 import Profile from "@/components/auth/user/profile";
 import OrderHistory from "@/components/auth/user/OrderHistory"
+import Settings from "@/components/auth/user/Settings"
+
 const ProfilePage = () => {
   const { id } = useParams(); // Get dynamic route parameter like "user-details"
   const router = useRouter();
@@ -13,7 +15,7 @@ const ProfilePage = () => {
     const loadComponents = async () => {
       try {
         // Dynamically import components
-        const { default: SettingsContent } = await import("@/components/auth/user/settingsContent");
+        const { default: SettingsContent } = await import("@/components/auth/user/settings");
         const { default: OrdersContent } = await import("@/components/auth/user/OrderHistory");
         const { default: AddressContent } = await import("@/components/auth/user/addressContent");
 
