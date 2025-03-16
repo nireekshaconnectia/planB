@@ -20,22 +20,25 @@ const BookStudyRoom = () => {
   const [endTime, setEndTime] = useState("");
   const router = useRouter();
 
+  // Calculate the duration in hours, with validation for minimum 1 hour
   const calculateDuration = () => {
     if (!startTime || !endTime) return 0;
-  const [startHour, startMin] = startTime.split(":").map(Number);
-  const [endHour, endMin] = endTime.split(":").map(Number);
-  const start = startHour + startMin / 60;
-  const end = endHour + endMin / 60;
-  const duration = end - start;
-  return duration > 0 ? duration : 0;
+    const [startHour, startMin] = startTime.split(":").map(Number);
+    const [endHour, endMin] = endTime.split(":").map(Number);
+    const start = startHour + startMin / 60;
+    const end = endHour + endMin / 60;
+    const duration = end - start;
+
+    // Ensure minimum duration is 1 hour
+    return duration >= 1 ? duration : 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const duration = calculateDuration();
 
-    if (!selectedRoom || !date || duration <= 0) {
-      alert("Please select valid room, date, and time range.");
+    if (!selectedRoom || !date || duration < 1) {
+      alert("Please select a valid room, date, and time range with a minimum of 1 hour.");
       return;
     }
 
@@ -121,6 +124,10 @@ const BookStudyRoom = () => {
           <p className={styles.durationInfo}>
             Selected Duration: {calculateDuration()} hour{calculateDuration() > 1 ? "s" : ""}
           </p>
+        )}
+
+        {calculateDuration() === 0 && (
+          <p className={styles.errorMessage}>Duration must be at least 1 hour.</p>
         )}
 
         <button type="submit" className={styles.submitButton}>
