@@ -76,7 +76,7 @@ const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
             Submit
           </button>
           <div>
-            <label>You haven't received a code? </label>
+            <label>You haven&apos;t received a code? </label>
             <button onClick={onResend} className={styles.otpresend}>
               Resend
             </button>
