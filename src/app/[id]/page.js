@@ -22,7 +22,7 @@ const ProfilePage = () => {
         // Define allowed pages and their corresponding components
         const pages = {
           "user-details": { title: "User Profile", content: <Profile /> },
-          settings: { title: "Settings", content: <SettingsContent /> },
+          settings: { title: "Settings", content: <Settings /> },
           "order-history": { title: "Order History", content: <OrderHistory /> },
           addresses: { title: "Addresses", content: <AddressContent /> },
         };
