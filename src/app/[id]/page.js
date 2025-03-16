@@ -15,8 +15,8 @@ const ProfilePage = () => {
     const loadComponents = async () => {
       try {
         // Dynamically import components
-        const { default: SettingsContent } = await import("@/components/auth/user/settings");
-        const { default: OrdersContent } = await import("@/components/auth/user/OrderHistory");
+        const { default: Settings } = await import("@/components/auth/user/settings");
+        const { default: OrderHistory } = await import("@/components/auth/user/OrderHistory");
         const { default: AddressContent } = await import("@/components/auth/user/addressContent");
 
         // Define allowed pages and their corresponding components
