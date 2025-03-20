@@ -24,7 +24,7 @@ const DeliveryOptions = ({ isOpen, onClose }) => {
       <div className={styles.langModal}>
         <div className={styles.modalHead}>
           <span className={styles.modalTitle}>Select delivery platform</span>
-          <span className={styles.close} onClick={onClose}>✖</span>
+          <span className={styles.close} onClick={onClose}>Cancel</span>
         </div>
         <ul className={styles.languageList}>
           <li onClick={talabat}>Talabat</li>

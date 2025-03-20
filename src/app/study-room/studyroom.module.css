@@ -96,8 +96,6 @@
     border-radius: 50px;
     height: 56px;
     appearance: auto;
-  }
-  .input[type="time"]{
     width: 100%;
   }
   .submitButton {

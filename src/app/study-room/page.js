@@ -6,6 +6,8 @@ import styles from "./studyroom.module.css";
 import { HiUsers } from "react-icons/hi2";
 import { IoIosBriefcase } from "react-icons/io";
 import BackButton from "@/components/backbutton/backbutton";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const studyRooms = [
   { id: 1, name: "Study Room 1", capacity: 1, price: 40, icon: HiUsers },
@@ -15,12 +17,11 @@ const studyRooms = [
 
 const BookStudyRoom = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const router = useRouter();
 
-  // Calculate the duration in hours, with validation for minimum 1 hour
   const calculateDuration = () => {
     if (!startTime || !endTime) return 0;
     const [startHour, startMin] = startTime.split(":").map(Number);
@@ -28,9 +29,25 @@ const BookStudyRoom = () => {
     const start = startHour + startMin / 60;
     const end = endHour + endMin / 60;
     const duration = end - start;
-
-    // Ensure minimum duration is 1 hour
     return duration >= 1 ? duration : 0;
+  };
+
+  const handleStartTimeChange = (value) => {
+    setStartTime(value);
+    const [hour, min] = value.split(":").map(Number);
+    const minEndHour = hour + 1;
+    if (!endTime || parseInt(endTime.split(":")[0]) < minEndHour) {
+      const paddedHour = String(minEndHour).padStart(2, "0");
+      setEndTime(`${paddedHour}:${min.toString().padStart(2, "0")}`);
+    }
+  };
+
+  const getMinEndTime = () => {
+    if (!startTime) {
+      return new Date(1970, 0, 1, 10, 0);
+    }
+    const [h, m] = startTime.split(":").map(Number);
+    return new Date(1970, 0, 1, h + 1, m);
   };
 
   const handleSubmit = (e) => {
@@ -45,7 +62,7 @@ const BookStudyRoom = () => {
     const query = new URLSearchParams({
       roomId: selectedRoom.id.toString(),
       roomName: selectedRoom.name,
-      date,
+      date: date.toISOString().split("T")[0],
       startTime,
       endTime,
       duration: duration.toString(),
@@ -87,35 +104,54 @@ const BookStudyRoom = () => {
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.label}>Select Date:</label>
-        <input
-          type="date"
+        <DatePicker
+          selected={date}
+          onChange={(d) => setDate(d)}
+          dateFormat="yyyy-MM-dd"
+          minDate={new Date()}
           className={styles.input}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          min={new Date().toISOString().split("T")[0]}
+          placeholderText="Select Date"
         />
 
         <div className={styles.timeRow}>
           <div>
             <label className={styles.label}>From:</label>
-            <input
-              type="time"
+            <DatePicker
+              selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
+              onChange={(date) => {
+                const hours = date.getHours().toString().padStart(2, "0");
+                const mins = date.getMinutes().toString().padStart(2, "0");
+                handleStartTimeChange(`${hours}:${mins}`);
+              }}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={30}
+              timeCaption="Start Time"
+              dateFormat="HH:mm"
+              minTime={new Date(1970, 0, 1, 9, 0)}
+              maxTime={new Date(1970, 0, 1, 22, 0)}
               className={styles.input}
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              min="09:00"
-              max="23:00"
+              placeholderText="Start Time"
             />
           </div>
           <div>
             <label className={styles.label}>To:</label>
-            <input
-              type="time"
+            <DatePicker
+              selected={endTime ? new Date(`1970-01-01T${endTime}`) : null}
+              onChange={(date) => {
+                const hours = date.getHours().toString().padStart(2, "0");
+                const mins = date.getMinutes().toString().padStart(2, "0");
+                setEndTime(`${hours}:${mins}`);
+              }}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={30}
+              timeCaption="End Time"
+              dateFormat="HH:mm"
+              minTime={getMinEndTime()}
+              maxTime={new Date(1970, 0, 1, 23, 0)}
               className={styles.input}
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              min={startTime || "09:00"}
-              max="23:00"
+              placeholderText="End Time"
             />
           </div>
         </div>
@@ -126,11 +162,15 @@ const BookStudyRoom = () => {
           </p>
         )}
 
-        {calculateDuration() === 0 && (
+        {calculateDuration() === 0 && startTime && endTime && (
           <p className={styles.errorMessage}>Duration must be at least 1 hour.</p>
         )}
 
-        <button type="submit" className={styles.submitButton}>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          disabled={calculateDuration() < 1}
+        >
           Proceed to Checkout
         </button>
       </form>

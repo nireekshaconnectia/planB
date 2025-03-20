@@ -34,7 +34,6 @@ const CheckoutPage = () => {
                 <CartCheckoutForm />
             ) : (
                 <>
-                    <p>Please select a table to continue to checkout.</p>
                     <SelectTable />
                 </>
             )}

@@ -20,7 +20,7 @@ export default function SelectTable() {
 
   return (
     <div className={styles.tableList}>
-      <h2>Select a Table</h2>
+      <h2>Please select a table to continue to checkout.</h2>
       <div className="flex g-20">
         {tables.map((table) => (
           <div key={table.no} className={styles.tableItem} onClick={() => handleTableSelect(table.no)}>

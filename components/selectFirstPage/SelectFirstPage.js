@@ -13,6 +13,9 @@ const SelectFirstPage = () => {
   const location = () => {
     window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5");
   };
+  const loyalty = () =>{
+    window.open("https://loyalty.is/j3aifc");
+  }
   useEffect(() => {
     // Show popup only if there are no query parameters
     if (!searchParams.toString()) {
@@ -42,9 +45,9 @@ const SelectFirstPage = () => {
         </div>
         <ul className={styles.languageList}>
           <li onClick={() => handleSelect("menu")}>Menu</li>
-          <li onClick={() => handleSelect("study-room")}>Meeting room</li>
+          <li onClick={() => handleSelect("study-room")}>Study room/Meeting room</li>
           <li onClick={location}>Location</li>
-          <li >Loyalty card</li>
+          <li onClick={() => handleSelect("loyalty")}>Loyalty card</li>
           <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>Delivery platforms</li>
         </ul>
       </div>
