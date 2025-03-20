@@ -18,10 +18,10 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
 
       <form className={styles.formDetails}>
         <div><label>Name:</label>
-          <input type="text" name="name" required /></div>
+          <input type="text" name="name" placeholder="Your Name" required /></div>
 
         <div><label>Phone:</label>
-          <input type="tel" name="phone" required /></div>
+          <input type="tel" name="phone" placeholder="Your Phone Number"required /></div>
 
 
         <button type="submit" className={styles.submitButton}>Confirm Booking</button>
