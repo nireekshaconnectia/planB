@@ -1,5 +1,4 @@
 "use client";
-import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaUser, FaCaretDown } from "react-icons/fa";
@@ -8,79 +7,100 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import LanguageModal from "@/components/languagemodal/languagemodal";
 import SideMenu from "@/components/sideMenu/sideMenu";
+import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
 import PropTypes from "prop-types";
+import { IoMdArrowBack } from "react-icons/io";
 
-const Header = ({ logo, menu, keywords }) => {
+const Header = ({ logo }) => {
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showFirstPage, setShowFirstPage] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
 
-  // Check if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
-    return () => unsubscribe(); // Cleanup on unmount
+    return () => unsubscribe();
   }, []);
 
-  const handleUserClick = () => {
+  const profile = () => {
     if (user) {
-      setMenuOpen(true); // Open SideMenu if logged in
+      setMenuOpen(true);
     } else {
-      router.push("/login"); // Redirect to login if not logged in
+      router.push("/login");
     }
+  };
+
+  const handleBackClick = () => {
+    setShowFirstPage(true);
   };
 
   return (
     <>
-      <Head>
-        <title>Your Page Title</title>
-        <meta name="description" content="Your page description" />
-      </Head>
-
-      <div className="header" id="header">
-        {/* User Icon */}
-        <div className="user-login">
-          <FaUser onClick={handleUserClick} style={{ cursor: "pointer" }} />
-        </div>
-      </div>
-
-      <div className="sub-header flex space-between w-100">
-        {/* Language Switcher */}
-        <div className="w-25"></div>
-
-        {/* Site Logo */}
-        <div className="site-logo w-50">
-          <img src={logo} alt="Site Logo" className="logo-image m-auto" />
-        </div>
-
-        <div className="switch-language w-25">
-          <div
-            className="language-switcher flex g-5"
-            onClick={() => setShowModal(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <TbWorld />
-            <p>English</p>
-            <FaCaretDown />
+      {showFirstPage ? (
+        <SelectFirstPage />
+      ) : (
+        <>
+          <div className="header" id="header">
+            <div className="showMenu">
+              <IoMdArrowBack
+                onClick={handleBackClick}
+                style={{ cursor: "pointer" }}
+                aria-label="Open first page"
+                role="button"
+                tabIndex="0"
+              />
+            </div>
+            <div className="user-login">
+              <FaUser
+                onClick={profile}
+                style={{ cursor: "pointer" }}
+                aria-label="User login or profile"
+                role="button"
+                tabIndex="0"
+              />
+            </div>
           </div>
-          <LanguageModal showModal={showModal} setShowModal={setShowModal} />
-        </div>
-      </div>
 
-      {/* Show SideMenu if menuOpen is true */}
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+          <div className="sub-header flex space-between w-100">
+            <div className="w-25"></div>
+
+            <div className="site-logo w-50">
+              <img
+                src={logo}
+                alt="Site Logo"
+                className="logo-image m-auto"
+              />
+            </div>
+
+            <div className="switch-language w-25">
+              <div
+                className="language-switcher flex g-5"
+                onClick={() => setShowModal(true)}
+                style={{ cursor: "pointer" }}
+                aria-label="Change language"
+                role="button"
+                tabIndex="0"
+              >
+                <TbWorld />
+                <p>English</p>
+                <FaCaretDown />
+              </div>
+              <LanguageModal showModal={showModal} setShowModal={setShowModal} />
+            </div>
+          </div>
+
+          {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+        </>
+      )}
     </>
   );
 };
 
-// Prop Types Validation
 Header.propTypes = {
   logo: PropTypes.string.isRequired,
-  menu: PropTypes.array,
-  keywords: PropTypes.array,
 };
 
 export default Header;

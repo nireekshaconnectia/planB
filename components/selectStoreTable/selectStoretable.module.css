@@ -125,3 +125,14 @@
   .backButton:hover {
     color: #000;
   }
+  .orderTypeBtns{
+    display: flex;
+    gap: 20px;
+  }
+  .orderTypeBtns button{
+    width: 50%;
+    border:1px solid #864622;
+    font-size: 18px;
+    border-radius: 12px;
+    line-height: 60px;
+  }
