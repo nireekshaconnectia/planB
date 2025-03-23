@@ -39,62 +39,62 @@ const Header = ({ logo }) => {
 
   return (
     <>
-      {showFirstPage ? (
-        <SelectFirstPage />
-      ) : (
-        <>
-          <div className="header" id="header">
-            <div className="showMenu">
-              <IoMdArrowBack
-                onClick={handleBackClick}
-                style={{ cursor: "pointer" }}
-                aria-label="Open first page"
-                role="button"
-                tabIndex="0"
-              />
-            </div>
-            <div className="user-login">
-              <FaUser
-                onClick={profile}
-                style={{ cursor: "pointer" }}
-                aria-label="User login or profile"
-                role="button"
-                tabIndex="0"
-              />
-            </div>
+      {/* Always render SelectFirstPage but control via props */}
+      <SelectFirstPage
+        isOpen={showFirstPage}
+        onClose={() => setShowFirstPage(false)}
+      />
+
+      <div className="header" id="header">
+        <div className="showMenu">
+          <IoMdArrowBack
+            onClick={handleBackClick}
+            style={{ cursor: "pointer" }}
+            aria-label="Open first page"
+            role="button"
+            tabIndex="0"
+          />
+        </div>
+        <div className="user-login">
+          <FaUser
+            onClick={profile}
+            style={{ cursor: "pointer" }}
+            aria-label="User login or profile"
+            role="button"
+            tabIndex="0"
+          />
+        </div>
+      </div>
+
+      <div className="sub-header flex space-between w-100">
+        <div className="w-25"></div>
+
+        <div className="site-logo w-50">
+          <img
+            src={logo}
+            alt="Site Logo"
+            className="logo-image m-auto"
+          />
+        </div>
+
+        <div className="switch-language w-25">
+          <div
+            className="language-switcher flex g-5"
+            onClick={() => setShowModal(true)}
+            style={{ cursor: "pointer" }}
+            aria-label="Change language"
+            role="button"
+            tabIndex="0"
+          >
+            <TbWorld />
+            <p>English</p>
+            <FaCaretDown />
           </div>
+          <LanguageModal showModal={showModal} setShowModal={setShowModal} />
+        </div>
+      </div>
 
-          <div className="sub-header flex space-between w-100">
-            <div className="w-25"></div>
-
-            <div className="site-logo w-50">
-              <img
-                src={logo}
-                alt="Site Logo"
-                className="logo-image m-auto"
-              />
-            </div>
-
-            <div className="switch-language w-25">
-              <div
-                className="language-switcher flex g-5"
-                onClick={() => setShowModal(true)}
-                style={{ cursor: "pointer" }}
-                aria-label="Change language"
-                role="button"
-                tabIndex="0"
-              >
-                <TbWorld />
-                <p>English</p>
-                <FaCaretDown />
-              </div>
-              <LanguageModal showModal={showModal} setShowModal={setShowModal} />
-            </div>
-          </div>
-
-          {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
-        </>
-      )}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
     </>
   );
 };

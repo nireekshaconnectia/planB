@@ -1,25 +1,46 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cartSlice";
+import popupReducer from "./popupSlice"; // 👈 Make sure this is imported
 import { combineReducers } from "redux";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage
 import { persistReducer, persistStore } from "redux-persist";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
-// Combine your reducers (in case you add more later)
+// SSR-Safe storage
+const createNoopStorage = () => {
+  return {
+    getItem() {
+      return Promise.resolve(null);
+    },
+    setItem(_key, value) {
+      return Promise.resolve(value);
+    },
+    removeItem() {
+      return Promise.resolve();
+    },
+  };
+};
+
+const storage = typeof window !== "undefined"
+  ? createWebStorage("local")
+  : createNoopStorage();
+
+// ✅ Add popup slice here
 const rootReducer = combineReducers({
   cart: cartReducer,
+  popup: popupReducer, // 👈 Now redux knows about popup slice
 });
 
-// Setup persist config
+// Persist Config
 const persistConfig = {
   key: "root",
   storage,
 };
 
-// Enhance rootReducer with persistReducer
+// Persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure store with persisted reducer
+// Store config
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -30,5 +51,5 @@ export const store = configureStore({
     }),
 });
 
-// Create persistor for PersistGate
+// Persistor for PersistGate
 export const persistor = persistStore(store);

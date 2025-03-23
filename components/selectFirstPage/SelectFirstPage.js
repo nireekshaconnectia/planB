@@ -1,46 +1,40 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import styles from "./SelectFirstPage.module.css"; // Import CSS module
-import Backdrop from "../backdrop/backdrop"; // Import Backdrop component
+import styles from "./SelectFirstPage.module.css";
+import Backdrop from "../backdrop/backdrop";
 import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
 
-const SelectFirstPage = () => {
-  const [showPopup, setShowPopup] = useState(false);
+const SelectFirstPage = ({ isOpen, onClose }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
-  const location = () => {
-    window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5");
-  };
-  const loyalty = () =>{
-    window.open("https://loyalty.is/j3aifc");
-  }
-  useEffect(() => {
-    // Show popup only if there are no query parameters
-    if (!searchParams.toString()) {
-      setShowPopup(true);
-    }
-  }, [searchParams]);
+
+  const location = () => window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5", "_blank");
+  const loyalty = () => window.open("https://loyalty.is/j3aifc", "_blank");
 
   const handleSelect = (option) => {
     if (option === "menu") {
-      setShowPopup(false); // Close the popup, stay on the page
+      onClose();
     } else if (option === "study-room") {
-      router.push("/study-room"); // Redirect to study-room
+      onClose();
+      router.push("/study-room");
     }
   };
 
-  if (!showPopup) return null; // Don't render the popup if it's hidden
+  if (!isOpen) return null;
 
   return (
     <>
-      <Backdrop onClick={() => setShowPopup(false)} />
+      <Backdrop onClick={onClose} />
       <div className={styles.langModal}>
         <div className={styles.modalHead}>
-        <div className={styles.logoContainer}>
-          <img src="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" alt="Site Logo" className="logo-image m-auto" />
-        </div>
+          <div className={styles.logoContainer}>
+            <img
+              src="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png"
+              alt="Site Logo"
+              className="logo-image m-auto"
+            />
+          </div>
           <div className={styles.modalTitle}>PLAN B<div> coffee</div></div>
         </div>
         <ul className={styles.languageList}>
@@ -51,7 +45,6 @@ const SelectFirstPage = () => {
           <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>Delivery platforms</li>
         </ul>
       </div>
-      {/* Delivery Options Popup */}
       <DeliveryOptions 
         isOpen={showDeliveryPopup} 
         onClose={() => setShowDeliveryPopup(false)} 
