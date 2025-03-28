@@ -35,12 +35,6 @@ export default function Home() {
   return (
     <>
       <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
-      <button 
-        onClick={() => setShowPopup(true)} 
-        style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000 }}
-      >
-        Open Popup Manually
-      </button>
       <SelectFirstPage 
         isOpen={showPopup} 
         onClose={() => setShowPopup(false)} 
