@@ -5,9 +5,12 @@ import BackButton from "@/components/backbutton/backbutton";
 import StudyRoomCheckoutForm from "@/components/auth/checkout/StudyRoomCheckoutForm";
 import CartCheckoutForm from "@/components/auth/checkout/CartCheckoutForm";
 import SelectTable from "@/components/selectStoreTable/selectStoreTable";
+import { useTranslations } from "next-intl";
+
 
 const CheckoutPage = () => {
     const searchParams = useSearchParams();
+    const t = useTranslations();
 
     const bookingData = {
         roomId: searchParams.get("roomId"),
@@ -27,7 +30,7 @@ const CheckoutPage = () => {
             <div className={styles.pageHead}>
                 <div>
                     <BackButton />
-                </div><h1 className={styles.title}>Checkout</h1></div>
+                </div><h1 className={styles.title}>{t("checkout")}</h1></div>
             {hasRoomBooking ? (
                 <StudyRoomCheckoutForm bookingData={bookingData} />
             ) : hasTable ? (

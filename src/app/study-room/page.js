@@ -8,6 +8,7 @@ import { IoIosBriefcase } from "react-icons/io";
 import BackButton from "@/components/backbutton/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useTranslations } from "next-intl";
 
 const studyRooms = [
   { id: 1, name: "Study Room 1", capacity: 1, price: 40, icon: HiUsers },
@@ -21,6 +22,7 @@ const BookStudyRoom = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const router = useRouter();
+  const t = useTranslations(); // ✅ Initialize translations here
 
   const calculateDuration = () => {
     if (!startTime || !endTime) return 0;
@@ -78,7 +80,7 @@ const BookStudyRoom = () => {
         <div>
           <BackButton />
         </div>
-        <h1 className={styles.title}>Book a Room</h1>
+        <h1 className={styles.title}>{t('book-a-room')}</h1>
       </div>
 
       <div className={styles.grid}>
@@ -103,19 +105,19 @@ const BookStudyRoom = () => {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <label className={styles.label}>Select Date:</label>
+        <label className={styles.label}>{t('select-date')}:</label>
         <DatePicker
           selected={date}
           onChange={(d) => setDate(d)}
           dateFormat="yyyy-MM-dd"
           minDate={new Date()}
           className={styles.input}
-          placeholderText="Select Date"
+          placeholderText={t('select-date')}
         />
 
         <div className={styles.timeRow}>
           <div>
-            <label className={styles.label}>From:</label>
+            <label className={styles.label}>{t('from')}:</label>
             <DatePicker
               selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
               onChange={(date) => {
@@ -135,7 +137,7 @@ const BookStudyRoom = () => {
             />
           </div>
           <div>
-            <label className={styles.label}>To:</label>
+            <label className={styles.label}>{t('to')}:</label>
             <DatePicker
               selected={endTime ? new Date(`1970-01-01T${endTime}`) : null}
               onChange={(date) => {
@@ -158,7 +160,7 @@ const BookStudyRoom = () => {
 
         {calculateDuration() > 0 && (
           <p className={styles.durationInfo}>
-            Selected Duration: {calculateDuration()} hour{calculateDuration() > 1 ? "s" : ""}
+            {t('selected-duration')}: {calculateDuration()} hour{calculateDuration() > 1 ? "s" : ""}
           </p>
         )}
 
@@ -171,7 +173,7 @@ const BookStudyRoom = () => {
           className={styles.submitButton}
           disabled={calculateDuration() < 1}
         >
-          Proceed to Checkout
+          {t('proceed-to-checkout')}
         </button>
       </form>
     </div>

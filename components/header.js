@@ -5,6 +5,7 @@ import { FaUser, FaCaretDown } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
+import { useSelector } from "react-redux"; // Import Redux hook
 import LanguageModal from "@/components/languagemodal/languagemodal";
 import SideMenu from "@/components/sideMenu/sideMenu";
 import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
@@ -17,6 +18,15 @@ const Header = ({ logo }) => {
   const [showFirstPage, setShowFirstPage] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
+
+  // 🔹 Get selected language from Redux store
+  const selectedLang = useSelector((state) => state.language.lang) || "en"; 
+
+  // 🔹 Language display mapping
+  const languageMap = {
+    en: "English",
+    ar: "العربية",
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -39,11 +49,7 @@ const Header = ({ logo }) => {
 
   return (
     <>
-      {/* Always render SelectFirstPage but control via props */}
-      <SelectFirstPage
-        isOpen={showFirstPage}
-        onClose={() => setShowFirstPage(false)}
-      />
+      <SelectFirstPage isOpen={showFirstPage} onClose={() => setShowFirstPage(false)} />
 
       <div className="header" id="header">
         <div className="showMenu">
@@ -70,11 +76,7 @@ const Header = ({ logo }) => {
         <div className="w-25"></div>
 
         <div className="site-logo w-50">
-          <img
-            src={logo}
-            alt="Site Logo"
-            className="logo-image m-auto"
-          />
+          <img src={logo} alt="Site Logo" className="logo-image m-auto" />
         </div>
 
         <div className="switch-language w-25">
@@ -87,7 +89,7 @@ const Header = ({ logo }) => {
             tabIndex="0"
           >
             <TbWorld />
-            <p>English</p>
+            <p>{languageMap[selectedLang]}</p> {/* 🔹 Show selected language */}
             <FaCaretDown />
           </div>
           <LanguageModal showModal={showModal} setShowModal={setShowModal} />

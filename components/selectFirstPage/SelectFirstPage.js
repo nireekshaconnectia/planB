@@ -4,10 +4,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./SelectFirstPage.module.css";
 import Backdrop from "../backdrop/backdrop";
 import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
+import { useTranslations } from "next-intl";
 
 const SelectFirstPage = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
+  const t = useTranslations(); // ✅ Initialize translations here
 
   const location = () => window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5", "_blank");
   const loyalty = () => window.open("https://loyalty.is/j3aifc", "_blank");
@@ -22,6 +24,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
   };
 
   if (!isOpen) return null;
+  
 
   return (
     <>
@@ -38,16 +41,18 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
           <div className={styles.modalTitle}>PLAN B<div> coffee</div></div>
         </div>
         <ul className={styles.languageList}>
-          <li onClick={() => handleSelect("menu")}>Menu</li>
-          <li onClick={() => handleSelect("study-room")}>Study room/Meeting room</li>
-          <li onClick={location}>Location</li>
-          <li onClick={loyalty}>Loyalty card</li>
-          <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>Delivery platforms</li>
+          <li onClick={() => handleSelect("menu")}>
+            {t("menu")}
+          </li>
+          <li onClick={() => handleSelect("study-room")}>{t("study-room")}</li>
+          <li onClick={location}>{t("location")}</li>
+          <li onClick={loyalty}>{t("loyalty card")}</li>
+          <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>{t("delivery platforms")}</li>
         </ul>
       </div>
-      <DeliveryOptions 
-        isOpen={showDeliveryPopup} 
-        onClose={() => setShowDeliveryPopup(false)} 
+      <DeliveryOptions
+        isOpen={showDeliveryPopup}
+        onClose={() => setShowDeliveryPopup(false)}
       />
     </>
   );

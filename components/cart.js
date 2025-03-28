@@ -6,12 +6,14 @@ import { addToCart , removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import { CiShoppingCart } from "react-icons/ci";
 import Backdrop from "@/components/backdrop/backdrop"; // Import Backdrop component
+import { useTranslations } from "next-intl";
 
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const router = useRouter();
+  const t = useTranslations(); // Initialize translations
 
   // Calculate total price
   const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.foodPrice * item.quantity, 0).toFixed(2);
@@ -23,7 +25,7 @@ export default function Cart() {
       {isOpen && <Backdrop onClick={() => setIsOpen(false)} />}
       <div className="popup-container">
         <div className="popup-header">
-          <h3>Your cart</h3>
+          <h3>{t("your-cart")}</h3>
           <button onClick={() => setIsOpen(false)}>
             <CiShoppingCart />
           </button>
@@ -53,16 +55,16 @@ export default function Cart() {
               </div>
             ))
           ) : (
-            <p>Your cart is empty.</p>
+            <p>{t("cart-is-empty")}.</p>
           )}
           <div className="cart-checkout">
-              <h4>Total Price: QAR {totalPrice}</h4>
+              <h4>{t("total-price")}: QAR {totalPrice}</h4>
               <div>
                 <button
                   className="checkout-btn"
                   onClick={() => router.push("/checkout")}
                 >
-                  Checkout
+                  {t("checkout")}
                 </button>
               </div>
             </div>
@@ -75,10 +77,10 @@ export default function Cart() {
         <div className="cart-preview" onClick={() => setIsOpen(true)}>
           <div className="flex">
             <div className="total-items flex g-20">
-              <h4>Items in cart :</h4>
+              <h4>{t("items-in-cart")} :</h4>
               <p>{Object.keys(cartItems).length}</p>
             </div>
-            <p>Total: QAR {totalPrice}</p>
+            <p>{t("total")}: QAR {totalPrice}</p>
           </div>
           <button className="show-popup-btn" onClick={() => setIsOpen(true)}>
             <CiShoppingCart />
