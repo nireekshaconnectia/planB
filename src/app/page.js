@@ -5,7 +5,6 @@ import Category from '@/components/categorey';
 import Items from '@/components/itemList/itemsList';
 import Cart from '@/components/cart';
 import Subheader from '@/components/subheader';
-import SelectTableStore from '@/components/selectStoreTable/selectStoreTable';
 import SelectFirstPage from '@/components/selectFirstPage/SelectFirstPage';
 
 export default function Home() {
@@ -44,7 +43,6 @@ export default function Home() {
         <Category />
         <Items />
         <Cart />
-        <SelectTableStore />
       </div>
     </>
   );
