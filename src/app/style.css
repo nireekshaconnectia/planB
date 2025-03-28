@@ -84,17 +84,6 @@ span {
     width:100px;
     object-fit: contain
 }
-
-.header::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 280px;
-    margin: auto;
-    background-color: #000;
-    z-index: 1;
-    opacity: 0;
-}
 .user-login{
     background: white;
     display: flex;
