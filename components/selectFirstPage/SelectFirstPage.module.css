@@ -55,6 +55,7 @@
 @media only screen and (max-width: 600px) {
     .langModal{
         padding: 20px 20px;
+        align-items: normal;
     }
     .modalTitle {
         font-size: 24px;
@@ -65,6 +66,6 @@
         line-height: 34px;
     }
     .languageList li {
-        padding: 10px 20px;
+        padding: 12px 20px;
     }
   }
