@@ -68,4 +68,7 @@
     .languageList li {
         padding: 12px 20px;
     }
+    .languageList {
+        margin: 0px auto;
+    }
   }
