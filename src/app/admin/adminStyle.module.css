@@ -1,0 +1,22 @@
+.body{
+    max-width: 1120px;
+    margin: auto;
+}
+.body main{
+    max-width: 100%;
+    color: #111;
+    display: flex;
+    gap: 20px;
+    background-color: unset;
+    min-height: 100vh;
+    margin: auto;
+}
+.adminPanel{
+    width: 100%;
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 12px;
+    margin:auto;
+    flex: 1;
+    min-height: 600px;
+}

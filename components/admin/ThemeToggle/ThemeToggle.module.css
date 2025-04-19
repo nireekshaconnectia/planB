@@ -1,0 +1,47 @@
+.toggleWrapper {
+    width: 56px;
+    height: 32px;
+    background-color: var(--toggle-bg, #e2e8f0); /* default: light bg */
+    border-radius: 9999px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+.darkMode{
+    background-color: #1a202cd3; /* dark shade for light theme */
+  }
+  
+.lightMode{
+    background-color: #e2e8f0; /* white for dark theme */
+  }
+  .toggleCircle {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    font-size: 14px;
+    padding: 2px;
+  }
+  .darkMode .toggleCircle{
+    background-color: #000;
+  }
+  .dark {
+    transform: translateX(24px);
+  }
+  
+  .light {
+    transform: translateX(0);
+  }
+  .icon {
+    user-select: none;
+  }
+  

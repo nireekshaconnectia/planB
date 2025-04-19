@@ -1,0 +1,14 @@
+/* dashboard.module.css */
+.dashboardWrapper {
+    padding: 20px 40px;
+    background-color: #f4f4f4;
+    color: #222;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+  
+  
