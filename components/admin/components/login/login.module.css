@@ -1,0 +1,73 @@
+.loginContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo{
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    object-fit: cover;
+}
+.logoContainer h2{
+    font-size: 40px;
+    font-weight: 700;
+    color: #864622;
+    text-align: center;
+}
+.loginContainer form{
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.loginContainer label{
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    line-height: 30px;
+}
+.loginContainer button[type="submit"] , .loginContainer input{
+    height: 48px;
+    width: 100%;
+    border: 1px solid #959595;
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 10px;
+    color: #000;
+}
+.loginContainer button[type="submit"]{
+    background-color: #864622;
+    color: #fff;
+    opacity: 1; transition: opacity 3s ease-in-out;
+}
+.loginContainer button[type="submit"]:hover{
+    background-color: #f5f2eb;
+    opacity: 0.5;
+    color: #000;
+
+}
+@media only screen and (max-width: 600px) {
+    .loginContainer{
+        padding: 20px;
+    }
+    .logo{
+        width: 80px;
+        height: 80px;
+    }
+    .logoContainer h2{
+        font-size: 30px;
+    }
+    .loginContainer label{
+        font-size: 12px;
+    }
+    .loginContainer button[type="submit"] , .loginContainer input{
+        height: 40px;
+        font-size: 14px;
+    }
+    
+}

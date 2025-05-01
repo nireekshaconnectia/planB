@@ -5,6 +5,7 @@ import UserPage from "@/components/userPage/userPage";
 import Profile from "@/components/auth/user/profile";
 import OrderHistory from "@/components/auth/user/OrderHistory";
 import Settings from "@/components/auth/user/Settings";
+import AddressContent from "@/components/auth/user/addressContent"; // Import AddressContent if needed
 
 // Optionally, import other components like AddressContent if you plan to use them
 // import AddressContent from "@/components/auth/user/addressContent";
@@ -22,7 +23,7 @@ const ProfilePage = () => {
       "order-history": { title: "Order History", content: <OrderHistory /> },
       addresses: {
         title: "Addresses",
-        content: <p>Address section is unavailable at the moment.</p>, // Fallback for missing AddressContent
+        content: <AddressContent />, // Fallback for missing AddressContent
       },
     };
 

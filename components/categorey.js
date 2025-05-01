@@ -1,81 +1,46 @@
-// components/Header.js
-import Head from "next/head";
-import Image from "next/image";
-import Link from 'next/link'
-import { useEffect, useRef } from 'react';
-import { FaLocationDot } from "react-icons/fa6";
-import { FaPhone } from "react-icons/fa6";
-import { MdOutlineAlternateEmail } from "react-icons/md";
+// components/Category.js
+import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
-const Categorey = () => {
-  const t = useTranslations(); // Initialize translations
+const Category = () => {
+  const t = useTranslations();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`);
+        if (!response.ok) throw new Error("Failed to fetch categories");
+        const result = await response.json();
+        setCategories(result.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <div className="categorey-grid" id="categorey-box">
-      <div className="categorey-item">
-      <Link href="/#breakfast">
-        <div className="C-breakfast featured-image">
+      {categories.map((category) => (
+        <div key={category._id} className="categorey-item">
+          <Link href={`/#${category.slug}`}>
+            <div
+              className="featured-image"
+              style={{
+                backgroundImage: `url(${category.image})`,
+              }}
+            />
+            <div>
+              <h2>{t(category.slug) || category.name}</h2>
+            </div>
+          </Link>
         </div>
-        <div>
-        <h2>{t("breakfast")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item">
-      <Link href="/#hot-drinks">
-        <div className="featured-image c-hotdrinks">
-
-        </div>
-        <div>
-          <h2>{t("hot-drinks")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item ">
-      <Link href="/#cold-drinks">
-        <div className="featured-image c-colddrinks">
-
-        </div>
-        <div>
-          <h2>{t("cold-drinks")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item ">
-      <Link href="/#all-day-dishes">
-        <div className="featured-image c-alldaydishes"></div>
-        <div>
-          <h2>{t("all-day-dishes")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item">
-      <Link href="/#salads">
-        <div className="featured-image c-salads"></div>
-        <div>
-          <h2>{t("salads")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item">
-      <Link href="/#desserts">
-        <div className="featured-image c-desserts"></div>
-        <div>
-          <h2>{t("desserts")}</h2>
-        </div></Link>
-      </div>
-      <div className="categorey-item">
-      <Link href="/#ice-cream">
-        <div className="featured-image c-icecream"></div>
-        <div>
-          <h2>{t("ice-cream")}</h2>
-          {/* <img
-            src="https://planb.weblexia.in/wp-content/uploads/2024/01/ArrowElbowDownRight.svg"
-            alt="Arrow Elbow Down Right"
-            width={30}
-            height={30}
-            className="custom-arrow"
-          /> */}
-        </div></Link>
-      </div>
-      
+      ))}
     </div>
   );
 };
 
-export default Categorey;
+export default Category;

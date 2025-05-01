@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { SessionProvider } from "next-auth/react";
 import store, { persistor } from "../../store/store";
 import LanguageWrapper from "@/components/LanguageWrapper"; // New wrapper component
 import "./globals.css";
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
         <main>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <LanguageWrapper>{children}</LanguageWrapper>
+              <SessionProvider>
+                <LanguageWrapper>{children}</LanguageWrapper>
+              </SessionProvider>
             </PersistGate>
           </Provider>
         </main>

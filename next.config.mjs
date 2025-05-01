@@ -4,6 +4,6 @@ const nextConfig = {
       locales: ["en", "ar"], // Define supported languages
       defaultLocale: "en", // Set English as the default language
     },
-  };
+};
   
-  export default nextConfig;  
+export default nextConfig;  

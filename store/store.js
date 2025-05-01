@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["language"], // Persist only language state
+  whitelist: ["language" , "cart"], // Persist only language state
 };
 
 // Persisted reducer

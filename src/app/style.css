@@ -226,6 +226,7 @@ span {
     font-family: "Cormorant Garamond", serif;
     font-size: 18px;
     font-weight: 300;
+    text-transform: capitalize;
 }
 
 .categorey-item~.contact {

@@ -1,38 +1,53 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './user.module.css';
 
 export default function OrderHistory() {
-  const [editing, setEditing] = useState(false);
-  const [orders, setOrders] = useState([
-    {
-      id: '12345',
-      date: '2025-03-15',
-      totalAmount: '$250.00',
-    },
-    {
-      id: '12346',
-      date: '2025-03-14',
-      totalAmount: '$180.00',
-    },
-    {
-      id: '12347',
-      date: '2025-03-10',
-      totalAmount: '$320.00',
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-  const toggleEdit = (id) => {
-    setEditing((prev) => !prev); // Toggle edit for the current order
-  };
+  // Sample effect to simulate fetching order history (replace with actual API call)
+  useEffect(() => {
+    // In a real app, fetch orders from API here using user token
+    const sampleOrders = [
+      {
+        id: '12345',
+        date: '2025-03-15',
+        totalAmount: '$250.00',
+        items: [
+          { name: 'Product A', quantity: 1, price: '$100' },
+          { name: 'Product B', quantity: 2, price: '$75' },
+        ],
+      },
+      {
+        id: '12346',
+        date: '2025-03-14',
+        totalAmount: '$180.00',
+        items: [
+          { name: 'Product C', quantity: 1, price: '$180' },
+        ],
+      },
+      {
+        id: '12347',
+        date: '2025-03-10',
+        totalAmount: '$320.00',
+        items: [
+          { name: 'Product D', quantity: 2, price: '$160' },
+        ],
+      },
+    ];
 
-  const handleSave = (id) => {
-    // Save logic here (API call etc.)
-    setEditing(false);
+    setOrders(sampleOrders);
+  }, []);
+
+  const toggleDetails = (id) => {
+    setSelectedOrderId((prevId) => (prevId === id ? null : id));
   };
 
   return (
     <div className={styles.orderHistoryPage}>
+      <h2 className={styles.sectionTitle}>Order History</h2>
+
       <div className={styles.orderHistoryDetails}>
         {orders.map((order) => (
           <div className={styles.orderItem} key={order.id}>
@@ -48,12 +63,27 @@ export default function OrderHistory() {
               <div className={styles.label}>Total Amount</div>
               <p>{order.totalAmount}</p>
             </div>
+
             <button
               className={styles.editBtn}
-              onClick={() => toggleEdit(order.id)}
+              onClick={() => toggleDetails(order.id)}
             >
-              {editing ? 'Save' : 'View Details'}
+              {selectedOrderId === order.id ? 'Hide Details' : 'View Details'}
             </button>
+
+            {/* Show order details if selected */}
+            {selectedOrderId === order.id && (
+              <div className={styles.orderDetails}>
+                <h4>Items</h4>
+                {order.items.map((item, index) => (
+                  <div key={index} className={styles.orderItemRow}>
+                    <p>{item.name}</p>
+                    <p>Qty: {item.quantity}</p>
+                    <p>Price: {item.price}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

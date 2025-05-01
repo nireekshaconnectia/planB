@@ -25,7 +25,6 @@ const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
   // Function to handle OTP verification
   const handleVerify = async () => {
     if (!confirmationResult) {
-      console.error("❌ Error: confirmationResult is undefined.");
       setError("Something went wrong. Please try again.");
       return;
     }
@@ -36,13 +35,40 @@ const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
     }
   
     try {
-      const result = await confirmationResult.confirm(otp); // Verify OTP
-      console.log("✅ OTP Verified Successfully:", result.user);
-      alert("🎉 Login Successful!");
-      onClose(); // Close popup after successful verification
-      router.push("/"); // Redirect to home page
+      // Confirm the OTP code using Firebase's confirmation result
+      const result = await confirmationResult.confirm(otp);
+      const user = result.user;
+      
+      // Fetch the Firebase ID token (this is the correct token to use)
+      const firebaseToken = await user.getIdToken(); // Get Firebase ID token
+  
+      console.log("Firebase ID Token:", firebaseToken); // Log to ensure it's correct
+  
+      const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${firebaseToken}`, // Send the token in Authorization header
+        },
+        body: JSON.stringify({ phoneNumber: user.phoneNumber }),
+      });
+  
+      const userData = await loginResponse.json();
+      console.log("User created or fetched:", userData);
+  
+      if (userData.success) {
+        // Save Firebase token and user data in localStorage
+        localStorage.setItem("userToken", firebaseToken); // Store the actual Firebase ID token
+        localStorage.setItem("userData", JSON.stringify(userData.user)); // Store user data
+  
+        onClose(); // Close the OTP popup
+        router.push("/"); // Redirect to home
+      } else {
+        setError("User verification failed. Try again.");
+      }
+  
     } catch (error) {
-      console.error("❌ Error verifying OTP:", error);
+      console.error("OTP verification error:", error);
       setError("Invalid OTP. Please try again.");
     }
   };

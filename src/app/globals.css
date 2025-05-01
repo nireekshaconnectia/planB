@@ -34,6 +34,7 @@ main{
   background-color: #fff;
   margin: auto;
   transition: max-width 0.3s ease;
+  min-height: 100vh;
 }
 .main-mobile {
   max-width: 600px;

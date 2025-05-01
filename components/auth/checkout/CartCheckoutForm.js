@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import styles from "./CartCheckoutForm.module.css";
+import ConfirmOrder from "./confirm-order/confirmOrder";
 
 export default function CartCheckoutForm() {
   const searchParams = useSearchParams();
@@ -43,7 +44,7 @@ export default function CartCheckoutForm() {
           ))}
           <div className={styles.total}>
             <h3>Total: QAR {totalPrice}</h3>
-            <button className={styles.confirmBtn}>Confirm Order</button>
+            <ConfirmOrder />
           </div>
         </div>
       ) : (
