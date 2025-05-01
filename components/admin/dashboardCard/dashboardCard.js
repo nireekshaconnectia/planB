@@ -49,7 +49,7 @@ export default function DashboardCard() {
             <div className={styles.card}>
                 <FaClipboardList className={styles.icon} />
                 <div>
-                    <h2>Today's Orders</h2>
+                    <h2>Today&apos;s Orders</h2>
                     <p>21 Orders</p>
                 </div>
             </div>
