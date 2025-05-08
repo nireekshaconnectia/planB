@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Lottie from "lottie-react"; // Import Lottie
 import styles from './paymentSuccess.module.css'; // Custom CSS
