@@ -1,12 +1,13 @@
 "use client";
 import styles from './categoryList.module.css';
+import Image from 'next/image';
 
 export default function CategoryList({ categories, onDelete, onEdit }) {
     return (
         <div className={styles.grid}>
             {categories.map(category => (
                 <div key={category.id} className={styles.card}>
-                    <img src={category.imageUrl} alt={category.name} />
+                    <Image src={category.imageUrl} alt={category.name} />
                     <div>
                         <h3>{category.name}</h3>
                         <p>{category.description}</p>

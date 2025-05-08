@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import styles from './login.module.css';
+import Image from 'next/image';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ export default function LoginForm() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
-        <img className={styles.logo} src="/logo.png" alt="Logo" />
+        <Image className={styles.logo} src="/logo.png" alt="Logo" />
         <h2>PlanB Cafe</h2>
       </div>
       

@@ -6,6 +6,8 @@ import { addToCart, removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems"; // ← Make sure this is the correct path
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
+import Image from 'next/image';
+
 
 export default function Items() {
   const [foodItems, setFoodItems] = useState([]);
@@ -99,7 +101,7 @@ export default function Items() {
                     key={item.foodSlug}
                   >
                     <div className="item-image flex">
-                      <img src={item.featureImage} alt={item.foodName} />
+                      <Image src={item.featureImage} alt={item.foodName} />
                     </div>
                     <div className="item-details">
                       <h3>{item.foodName}</h3>

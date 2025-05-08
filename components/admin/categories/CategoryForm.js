@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import styles from './categoryForm.module.css';
+import Image from 'next/image';
 
 export default function CategoryForm({ onSave, initialData = null }) {
     const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ export default function CategoryForm({ onSave, initialData = null }) {
                     }
                 }}
             />
-            {formData.imagePreview && <img src={formData.imagePreview} alt="Preview" />}
+            {formData.imagePreview && <Image src={formData.imagePreview} alt="Preview" />}
             <button type="submit">{initialData ? 'Update' : 'Create'}</button>
         </form>
     );

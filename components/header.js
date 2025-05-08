@@ -11,6 +11,8 @@ import SideMenu from "@/components/sideMenu/sideMenu";
 import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
 import PropTypes from "prop-types";
 import { IoMdArrowBack } from "react-icons/io";
+import Image from 'next/image';
+
 
 const Header = ({ logo }) => {
   const [showModal, setShowModal] = useState(false);
@@ -76,7 +78,7 @@ const Header = ({ logo }) => {
         <div className="w-25"></div>
 
         <div className="site-logo w-50">
-          <img src={logo} alt="Site Logo" className="logo-image m-auto" />
+          <Image src={logo} alt="Site Logo" className="logo-image m-auto" />
         </div>
 
         <div className="switch-language w-25">

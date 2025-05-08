@@ -1,8 +1,10 @@
+import Image from 'next/image';
+
 export default function Item() {
   return (
     <div className="item">
       <div className="item-image">
-        <img
+        <Image
           src="https://planb.weblexia.in/wp-content/uploads/2024/01/B-Signature-1.png"
           alt="B Signature"
         />
