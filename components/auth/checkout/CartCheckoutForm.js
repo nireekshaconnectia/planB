@@ -9,6 +9,7 @@ import ConfirmOrder from "./confirm-order/confirmOrder";
 export default function CartCheckoutForm() {
   const searchParams = useSearchParams();
   const tableNo = searchParams.get("table");
+  const orderType = searchParams.get("orderType");
 
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function CartCheckoutForm() {
 
   return (
     <div className={styles.checkoutForm}>
-      <h2>Checkout for Table {tableNo}</h2>
+      <h2>{orderType} for Table No {tableNo}</h2>
 
       {Object.keys(cartItems).length > 0 ? (
         <div>

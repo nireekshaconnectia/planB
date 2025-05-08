@@ -1,0 +1,30 @@
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.button{
+    color: #864622;
+    width: 100%;
+  border: 1px solid #864622;
+  font-size: 18px;
+  border-radius: 12px;
+  line-height: 60px;
+  max-width: 300px;
+}
+.icon{
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+.successTitle{
+    font-size: 32px;
+    text-align: center;
+    color: #864622;
+}

@@ -1,0 +1,28 @@
+.supportContainer {
+    max-width: 300px;
+    margin: auto;
+  }
+  
+  
+  .buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .supportBtn {
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #864622;
+    border-radius: 100px;
+    padding: 16px 60px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s ease;
+    color: #111;
+  }
+  
+  .supportBtn:hover {
+    background-color: #864622;
+  }
+  

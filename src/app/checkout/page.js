@@ -14,7 +14,7 @@ const CheckoutPage = () => {
 
     const bookingData = {
         roomId: searchParams.get("roomId"),
-        roomName: searchParams.get("roomName"), // <-- fix here
+        roomName: searchParams.get("roomName"),
         date: searchParams.get("date"),
         startTime: searchParams.get("startTime"),
         endTime: searchParams.get("endTime"),

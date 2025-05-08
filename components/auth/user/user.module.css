@@ -1,41 +1,48 @@
-.profilePage{
+.profilePage {
     color: #111;
 }
-.profilePage .profileItem{
+
+.profilePage .profileItem {
     display: flex;
     justify-content: space-between;
     padding: 20px 10px;
     border-bottom: 1px solid white;
 
 }
-.label{
+
+.label {
     font-size: 14px;
 }
-.name{
+
+.name {
     font-size: 14px;
 }
-.editBtn{
+
+.editBtn {
     font-size: 14px;
     border: 1px solid #864622;
-    color:#864622;
+    color: #864622;
     border-radius: 50px;
     padding: 5px 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.submitBtn{
+
+.submitBtn {
     font-size: 14px;
     border: 1px solid #864622;
-    color:#864622;
+    color: #864622;
     border-radius: 50px;
     padding: 5px 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.profilePage .profileItem input{
+
+.profilePage .profileItem input {
     background: transparent;
 }
-.addressCard{
+
+.addressCard {
     display: flex;
     justify-content: space-between;
     padding: 20px 10px;
@@ -44,6 +51,67 @@
     border-radius: 6px;
     color: #864622;
 }
-.addressContent{
+
+.addressContent {
     color: #111;
+}
+
+.orderHistoryDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.orderItem {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.orderItem:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.label{
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.orderItem p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: #111827;
+}
+
+
+.orderDetails {
+    margin-top: 1rem;
+    background: #f3f4f6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.orderDetails h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.orderItemRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.orderItemRow:last-child {
+    border-bottom: none;
 }

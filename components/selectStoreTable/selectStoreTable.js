@@ -3,11 +3,19 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./selectStoretable.module.css";
-import { MdTableBar } from "react-icons/md";
+import { MdOutlineTableBar } from "react-icons/md";
 
 const tables = [
+  { no: 1 },
+  { no: 2 },
+  { no: 3 },
+  { no: 4 },
+  { no: 5 },
+  { no: 6 },
   { no: 7 },
   { no: 8 },
+  { no: 9 },
+  { no: 10 },
 ];
 
 export default function SelectTable() {
@@ -37,27 +45,27 @@ export default function SelectTable() {
 
       <div className={styles.orderTypeBtns}>
         <button
-          className={`${styles.orderBtn} ${orderType === 'dinein' ? styles.active : ''}`}
+          className={`${styles.orderBtn} ${orderType === 'DineIn' ? styles.active : ''}`}
           onClick={() => handleOrderTypeSelect('dinein')}
         >
           Dine In
         </button>
         <button
-          className={`${styles.orderBtn} ${orderType === 'takeaway' ? styles.active : ''}`}
+          className={`${styles.orderBtn} ${orderType === 'Takeaway' ? styles.active : ''}`}
           onClick={() => handleOrderTypeSelect('takeaway')}
         >
           Takeaway
         </button>
       </div>
 
-      <div className="flex g-20" style={{ marginTop: "20px" }}>
+      <div className={styles.tableItems}>
         {tables.map((table) => (
           <div
             key={table.no}
             className={styles.tableItem}
             onClick={() => handleTableSelect(table.no)}
           >
-            <MdTableBar size={32} />
+            <MdOutlineTableBar size={50} />
             <h3>Table {table.no}</h3>
           </div>
         ))}

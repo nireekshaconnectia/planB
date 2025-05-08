@@ -1,138 +1,171 @@
 /* SelectStoreTable.module.css */
 
 .modalOverlay {
-    position: fixed;
-    inset: 0;
-    bottom: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #f9f9f9;
+  padding: 20px 20px 50px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.storeList,
+.tableList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Shared styles for store/table items */
+.store,
+.tableItem {
+  padding: 30px 20px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  color: #111;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.store:hover,
+.tableItem:hover {
+  border-color: #864622;
+  color: #864622;
+  cursor: pointer;
+}
+
+.store:hover svg,
+.tableItem:hover svg {
+  color: #864622;
+}
+
+.store h3,
+.tableItem h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0 5px;
+}
+
+.store svg,
+.tableItem svg {
+  font-size: 50px;
+}
+
+.storeButton,
+.tableButton {
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+/* Button color variants */
+.storeButton {
+  background-color: #2563eb;
+  color: white;
+}
+
+.storeButton:hover {
+  background-color: #1d4ed8;
+}
+
+.tableButton {
+  background-color: #16a34a;
+  color: white;
+}
+
+.tableButton:hover {
+  background-color: #15803d;
+}
+
+/* Back button */
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.backButton:hover {
+  color: #000;
+}
+
+/* Order Type Buttons */
+.orderTypeBtns {
+  display: flex;
+  gap: 20px;
+}
+
+.orderTypeBtns button {
+  width: 50%;
+  border: 1px solid #864622;
+  font-size: 18px;
+  border-radius: 12px;
+  line-height: 60px;
+}
+.orderTypeBtns button:hover , .orderTypeBtns button:focus {
+  background-color: #864622;
+  color: #fff;
+}
+
+/* Table Grid Layout */
+.tableItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Table image styling */
+.tableImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+/* Optional: Responsive tweak for small screens */
+@media (max-width: 600px) {
   .modalContent {
-    background: #f9f9f9;
-    padding: 20px;
-    padding-bottom: 50px;
-    border-radius: 10px 10px 0px 0px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
+    border-radius: 20px 20px 0 0;
+    padding: 15px 15px 40px;
   }
-  
-  .title {
-    font-size: 24px;
-    font-weight: 600;
-    color:#111;
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .storeList, .tableList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .storeList .store , .tableItem{
-    width: 275px;
-    padding: 50px 20px;
-    border:1px solid black;
-    border-radius: 10px;
-    color:#111;
-    text-align: center;
-  }
-  .tableItem{
-    flex-direction: column;
-  }
-  .storeList .store:hover , .tableItem:hover{
-    border-color: #864622;
-    color: #864622;
-    cursor: pointer;
-  }
-  .storeList .store:hover svg , .tableItem:hover svg{
-    color: #864622;
-  }
-  .storeList .store h3 , .tableItem h3{
-    font-size: 20px;
-    font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: 5px;
-  }
-.storeList .store svg , .tableItem svg{
-    font-size: 50px;
-  }
-  .storeList .store {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .storeButton, .tableButton {
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .storeButton {
-    background-color: #2563eb; /* Blue */
-    color: white;
-  }
-  
-  .storeButton:hover {
-    background-color: #1d4ed8;
-  }
-  
-  .tableItem {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-  }
-  
-  .tableImage {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-  }
-  
-  .tableButton {
-    background-color: #16a34a; /* Green */
-    color: white;
-  }
-  
-  .tableButton:hover {
-    background-color: #15803d;
-  }
-  
-  .backButton {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: none;
-    background: transparent;
+
+  .orderTypeBtns button {
     font-size: 16px;
-    cursor: pointer;
-    color: #333;
-    margin-bottom: 10px;
+    line-height: 50px;
   }
-  
-  .backButton:hover {
-    color: #000;
+
+  .tableItems {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .orderTypeBtns{
-    display: flex;
-    gap: 20px;
-  }
-  .orderTypeBtns button{
-    width: 50%;
-    border:1px solid #864622;
-    font-size: 18px;
-    border-radius: 12px;
-    line-height: 60px;
-  }
+}

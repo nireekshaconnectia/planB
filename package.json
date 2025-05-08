@@ -15,6 +15,7 @@
     "firebase": "^11.2.0",
     "firebase-admin": "^13.3.0",
     "i18next": "^24.2.3",
+    "lottie-react": "^2.4.1",
     "next": "^14.2.23",
     "next-auth": "^4.24.11",
     "next-i18next": "^15.4.2",
