@@ -101,7 +101,7 @@ export default function Items() {
                     key={item.foodSlug}
                   >
                     <div className="item-image flex">
-                      <Image src={item.featureImage} alt={item.foodName} />
+                      <Image src={item.featureImage} alt={item.foodName} width={100} height={100}/>
                     </div>
                     <div className="item-details">
                       <h3>{item.foodName}</h3>

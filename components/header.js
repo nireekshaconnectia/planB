@@ -78,7 +78,7 @@ const Header = ({ logo }) => {
         <div className="w-25"></div>
 
         <div className="site-logo w-50">
-          <Image src={logo} alt="Site Logo" className="logo-image m-auto" />
+          <Image src={logo} alt="Site Logo" className="logo-image m-auto" width={100} height={100}/>
         </div>
 
         <div className="switch-language w-25">

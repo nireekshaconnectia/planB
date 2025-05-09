@@ -7,6 +7,8 @@ export default function Item() {
         <Image
           src="https://planb.weblexia.in/wp-content/uploads/2024/01/B-Signature-1.png"
           alt="B Signature"
+          width={100}
+          height={100}
         />
       </div>
       <div className="item-details">

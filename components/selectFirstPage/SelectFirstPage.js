@@ -7,7 +7,6 @@ import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
 import { useTranslations } from "next-intl";
 import Image from 'next/image';
 
-
 const SelectFirstPage = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
@@ -35,9 +34,11 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
         <div className={styles.modalHead}>
           <div className={styles.logoContainer}>
             <Image
-              src="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png"
+              src="/logo.png"
               alt="Site Logo"
               className="logo-image m-auto"
+              width={100}
+              height={100}
             />
           </div>
           <div className={styles.modalTitle}>PLAN B<div> coffee</div></div>

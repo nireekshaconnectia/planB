@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <>
-      <Header logo="http://planb.weblexia.in/wp-content/uploads/2024/11/planB-logo.png" />
+      <Header logo="/assets/images/logo.png" />
       <SelectFirstPage 
         isOpen={showPopup} 
         onClose={() => setShowPopup(false)} 

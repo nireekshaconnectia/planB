@@ -4,6 +4,9 @@ const nextConfig = {
       locales: ["en", "ar"], // Define supported languages
       defaultLocale: "en", // Set English as the default language
     },
+    images: {
+      domains: ['www.planbqa.shop'],
+    },
 };
   
 export default nextConfig;  
