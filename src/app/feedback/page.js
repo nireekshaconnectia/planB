@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import BackButton from "@/components/backbutton/backbutton"; 
 import Flags from "country-flag-icons/react/3x2";
 import styles from "./feedback.module.css"; // Using same styles as LoginPage
@@ -20,6 +21,7 @@ const Feedback = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
+  const t = useTranslations();
 
   const handlePhoneNumberChange = (e) => {
     const input = e.target.value.replace(/[^0-9]/g, "");
@@ -52,16 +54,16 @@ const Feedback = () => {
       });
 
       if (response.ok) {
-        alert("Feedback submitted successfully!");
+        alert(t("feedback-submitted"));
         setPhoneNumber("");
         setRating(0);
         setFeedback("");
       } else {
-        alert("Error submitting feedback.");
+        alert(t("feedback-error"));
       }
     } catch (error) {
       console.error("API request failed:", error);
-      alert("Something went wrong. Please try again.");
+      alert(t("feedback-error-general"));
     }
   };
 
@@ -72,7 +74,7 @@ const Feedback = () => {
         <div className={styles.mb4}>
           <BackButton />
         </div>
-        <h1 className={styles.loginTitle}>What do you think about <br /> Plan B Cafe</h1>
+        <h1 className={styles.loginTitle}>{t("feedback-title")}</h1>
         <form className={styles.loginForm} onSubmit={handleSubmit}>
           {/* Star Rating Input */}
           <div className={styles.starRating}>
@@ -89,7 +91,7 @@ const Feedback = () => {
 
           {/* Phone Number Input */}
           <label htmlFor="phoneNumber" className={styles.label}>
-            Phone Number
+            {t("your-phone-number")}
           </label>
           <div className={styles.inputGroup}>
             <div className={styles.countrySelector}>
@@ -105,7 +107,7 @@ const Feedback = () => {
             <input
               type="text"
               id="phoneNumber"
-              placeholder="Phone Number"
+              placeholder={t("your-phone-number")}
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
               className={styles.phoneInput}
@@ -113,11 +115,11 @@ const Feedback = () => {
           </div>
 
           {/* Feedback Text Field */}
-          <label className={styles.label}>Feedback</label>
+          <label className={styles.label}>{t("feedback")}</label>
           <textarea
             rows="6"
             className={styles.feedbackInput}
-            placeholder="Write your feedback..."
+            placeholder={t("write-feedback")}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
           ></textarea>
@@ -128,7 +130,7 @@ const Feedback = () => {
             className={styles.continueButton}
             disabled={rating === 0} // Button disabled if no star is selected
           >
-            Submit Feedback
+            {t("submit-feedback")}
           </button>
         </form>
       </div>

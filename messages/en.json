@@ -52,5 +52,22 @@
     "your-name": "Your Name",
     "phone": "Phone",
     "your-phone-number": "Your Phone Number",
-    "confirm-booking": "Confirm Booking"
+    "confirm-booking": "Confirm Booking",
+    "verifying-payment": "Verifying payment...",
+    "payment-failed": "❌ Payment Failed",
+    "payment-error": "Something went wrong. Please contact support.",
+    "try-again": "Try Again",
+    "loading-rooms": "Loading rooms...",
+    "capacity-text": "Capacity: {count} {person}",
+    "login": "Login",
+    "continue": "Continue",
+    "feedback-title": "What do you think about Plan B Cafe",
+    "feedback": "Feedback",
+    "feedback-placeholder": "Write your feedback...",
+    "submit": "Submit",
+    "customers": "Customers",
+    "menu-items": "Menu Items",
+    "study-rooms": "Study Rooms",
+    "logging-out": "Logging out...",
+    "page-unavailable": "This page is unavailable."
 }

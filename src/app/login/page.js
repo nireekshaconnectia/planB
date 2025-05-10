@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import router for redirection
+import { useTranslations } from "next-intl";
 import Flags from "country-flag-icons/react/3x2";
 import BackButton from "@/components/backbutton/backbutton";
 import OTPPopup from "@/components/auth/verifyOTP/verifyOTP";
@@ -26,6 +27,7 @@ const LoginPage = () => {
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
   const router = useRouter(); // Use router for navigation
+  const t = useTranslations();
 
   // ✅ Redirect user if already logged in
   useEffect(() => {
@@ -80,10 +82,10 @@ const LoginPage = () => {
           <BackButton />
         </div>
 
-        <h1 className={styles.loginTitle}>Login</h1>
+        <h1 className={styles.loginTitle}>{t("login")}</h1>
         <form className={styles.loginForm} onSubmit={handleSubmit}>
           <label htmlFor="phoneNumber" className={styles.label}>
-            Phone Number
+            {t("your-phone-number")}
           </label>
           <div className={styles.inputGroup}>
             <div className={styles.countrySelector}>
@@ -99,14 +101,14 @@ const LoginPage = () => {
             <input
               type="text"
               id="phoneNumber"
-              placeholder="Phone Number"
+              placeholder={t("your-phone-number")}
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className={styles.phoneInput}
             />
           </div>
           <button type="submit" className={styles.continueButton}>
-            Continue
+            {t("continue")}
           </button>
         </form>
 

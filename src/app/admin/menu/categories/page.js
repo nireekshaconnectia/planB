@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import styles from './categories.module.css';
 import CategoryForm from '@/components/admin/categories/CategoryForm';
 import CategoryList from '@/components/admin/categories/CategoryList';
@@ -9,6 +10,7 @@ export default function Categories() {
     const [categories, setCategories] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
+    const t = useTranslations();
 
     const fetchCategories = async () => {
         const response = await fetch('/api/admin/categories');
@@ -25,7 +27,7 @@ export default function Categories() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Categories</h1>
+                <h1>{t("categories")}</h1>
                 <button 
                     onClick={() => {
                         setEditingCategory(null);
@@ -33,7 +35,7 @@ export default function Categories() {
                     }}
                     className={styles.addButton}
                 >
-                    Add New Category
+                    {t("add-new-category")}
                 </button>
             </div>
 

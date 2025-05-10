@@ -108,7 +108,7 @@ const BookStudyRoom = () => {
       </div>
 
       {loading ? (
-        <p>Loading rooms...</p>
+        <p>{t("loading-rooms")}</p>
       ) : (
         <div className={styles.grid}>
           {studyRooms.map((room) => {
@@ -125,9 +125,12 @@ const BookStudyRoom = () => {
                   <Icon className={styles.icon} />
                   <h2 className={styles.roomName}>{room.name}</h2>
                   <p className={styles.capacity}>
-                    Capacity: {room.capacity} person{room.capacity > 1 ? "s" : ""}
+                    {t("capacity-text", {
+                      count: room.capacity,
+                      person: room.capacity > 1 ? t("persons") : t("person")
+                    })}
                   </p>
-                  <p className={styles.price}>{room.price} QAR / hr</p>
+                  <p className={styles.price}>{room.price} {t("price-per-hour")}</p>
                 </div>
               </div>
             );
@@ -164,7 +167,7 @@ const BookStudyRoom = () => {
               minTime={new Date(1970, 0, 1, 9, 0)}
               maxTime={new Date(1970, 0, 1, 22, 0)}
               className={styles.input}
-              placeholderText="Start Time"
+              placeholderText={t("from")}
             />
           </div>
           <div>
@@ -184,27 +187,23 @@ const BookStudyRoom = () => {
               minTime={getMinEndTime()}
               maxTime={new Date(1970, 0, 1, 23, 0)}
               className={styles.input}
-              placeholderText="End Time"
+              placeholderText={t("to")}
             />
           </div>
         </div>
 
         {calculateDuration() > 0 && (
           <p className={styles.durationInfo}>
-            {t("selected-duration")}: {calculateDuration()} hour
+            {t("selected-duration")}: {calculateDuration()} {t("hour")}
             {calculateDuration() > 1 ? "s" : ""}
           </p>
         )}
 
         {calculateDuration() === 0 && startTime && endTime && (
-          <p className={styles.errorMessage}>Duration must be at least 1 hour.</p>
+          <p className={styles.errorMessage}>{t("duration-error")}</p>
         )}
 
-        <button
-          type="submit"
-          className={styles.submitButton}
-          disabled={calculateDuration() < 1}
-        >
+        <button type="submit" className={styles.submitButton}>
           {t("proceed-to-checkout")}
         </button>
       </form>

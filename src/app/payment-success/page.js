@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/store/cartSlice"; // ✅ Make sure you have this action
 import { useSearchParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import PaymentSuccess from "@/components/payment-success/PaymentSuccess"; // Import your success component
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
+  const t = useTranslations();
   const [token, setToken] = useState(null);
   const [status, setStatus] = useState("loading");
 
@@ -68,16 +70,16 @@ export default function PaymentSuccessPage() {
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
-      {status === "loading" && <p>Verifying payment...</p>}{" "}
+      {status === "loading" && <p>{t("verifying-payment")}</p>}{" "}
       {/* Loading state */}
       {status === "success" && (
         <PaymentSuccess /> // Render your success component here
       )}
       {status === "error" && (
         <>
-          <h2>❌ Payment Failed</h2>
-          <p>Something went wrong. Please contact support.</p>
-          <button onClick={() => router.push("/")}>Try Again</button>{" "}
+          <h2>{t("payment-failed")}</h2>
+          <p>{t("payment-error")}</p>
+          <button onClick={() => router.push("/")}>{t("try-again")}</button>{" "}
           {/* Retry option */}
         </>
       )}

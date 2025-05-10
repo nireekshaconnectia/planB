@@ -3,14 +3,17 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import SideMenu from '@/components/admin/adminSidebar/sideMenu';
 import ThemeToggle from '@/components/admin/ThemeToggle/ThemeToggle';
 import LoginForm from '@/components/admin/components/login/login';
 import { AdminThemeProvider } from './AdminThemeContext';
 import styles from './adminStyle.module.css';
+
 export default function AdminLayout({ children }) {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const t = useTranslations();
 
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -19,7 +22,7 @@ export default function AdminLayout({ children }) {
     }, [status, router]);
 
     if (status === 'loading') {
-        return <div>Loading...</div>;
+        return <div>{t("loading")}</div>;
     }
 
     if (!session) {
