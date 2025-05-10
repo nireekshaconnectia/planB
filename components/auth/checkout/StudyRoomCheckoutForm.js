@@ -1,6 +1,7 @@
 "use client";
 import styles from "./studyroom.module.css";
 import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/lib/auth/useRequireAuth";
 
 const StudyRoomCheckoutForm = ({ bookingData }) => {
   const { roomName, date, startTime, endTime, duration, price } = bookingData;

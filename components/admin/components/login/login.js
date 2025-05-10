@@ -38,7 +38,7 @@ export default function LoginForm() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
-        <Image className={styles.logo} src="/logo.png" alt="Logo" />
+        <Image className={styles.logo} src="/public/logo.png" alt="Logo" width={100}  height={100}/>
         <h2>PlanB Cafe</h2>
       </div>
       

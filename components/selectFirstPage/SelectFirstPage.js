@@ -47,7 +47,9 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
           <li onClick={() => handleSelect("menu")}>
             {t("menu")}
           </li>
-          <li onClick={() => handleSelect("study-room")}>{t("study-room")}</li>
+          <li onClick={() => handleSelect("study-room")}>
+            {t("study-room")}
+          </li>
           <li onClick={location}>{t("location")}</li>
           <li onClick={loyalty}>{t("loyalty card")}</li>
           <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>{t("delivery platforms")}</li>

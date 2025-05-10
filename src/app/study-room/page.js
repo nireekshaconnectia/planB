@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./studyroom.module.css";
 import { HiUsers } from "react-icons/hi2";
@@ -9,20 +9,44 @@ import BackButton from "@/components/backbutton/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
-
-const studyRooms = [
-  { id: 1, name: "Study Room 1", capacity: 1, price: 40, icon: HiUsers },
-  { id: 2, name: "Study Room 2", capacity: 2, price: 55, icon: HiUsers },
-  { id: 3, name: "Meeting Room", capacity: 12, price: 110, icon: IoIosBriefcase },
-];
+import { useRequireAuth } from "@/lib/auth/useRequireAuth";
+import { useStudyRoomBooking } from "@/lib/hooks/studyRoomBooking";
 
 const BookStudyRoom = () => {
+  useRequireAuth("/study-room");
+  const { bookRoomAndPay } = useStudyRoomBooking();
+
+  const [studyRooms, setStudyRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const router = useRouter();
-  const t = useTranslations(); // ✅ Initialize translations here
+  const t = useTranslations();
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`);
+        const result = await res.json();
+        if (result.success) {
+          setStudyRooms(result.data.filter((room) => room.isAvailable));
+        }
+      } catch (error) {
+        console.error("Failed to fetch rooms:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
+  const getRoomIcon = (name, capacity) => {
+    if (name.toLowerCase().includes("conference") || capacity >= 10) return IoIosBriefcase;
+    return HiUsers;
+  };
 
   const calculateDuration = () => {
     if (!startTime || !endTime) return 0;
@@ -62,7 +86,7 @@ const BookStudyRoom = () => {
     }
 
     const query = new URLSearchParams({
-      roomId: selectedRoom.id.toString(),
+      roomId: selectedRoom._id,
       roomName: selectedRoom.name,
       date: date.toISOString().split("T")[0],
       startTime,
@@ -80,44 +104,51 @@ const BookStudyRoom = () => {
         <div>
           <BackButton />
         </div>
-        <h1 className={styles.title}>{t('book-a-room')}</h1>
+        <h1 className={styles.title}>{t("book-a-room")}</h1>
       </div>
 
-      <div className={styles.grid}>
-        {studyRooms.map((room) => {
-          const Icon = room.icon;
-          const isSelected = selectedRoom?.id === room.id;
-          return (
-            <div
-              key={room.id}
-              onClick={() => setSelectedRoom(room)}
-              className={`${styles.roomCard} ${isSelected ? styles.selected : ""}`}
-            >
-              <div className={styles.roomContent}>
-                <Icon className={styles.icon} />
-                <h2 className={styles.roomName}>{room.name}</h2>
-                <p className={styles.capacity}>Capacity: {room.capacity} person{room.capacity > 1 ? "s" : ""}</p>
-                <p className={styles.price}>{room.price} QAR / hr</p>
+      {loading ? (
+        <p>Loading rooms...</p>
+      ) : (
+        <div className={styles.grid}>
+          {studyRooms.map((room) => {
+            const Icon = getRoomIcon(room.name, room.capacity);
+            const isSelected = selectedRoom?._id === room._id;
+
+            return (
+              <div
+                key={room._id}
+                onClick={() => setSelectedRoom(room)}
+                className={`${styles.roomCard} ${isSelected ? styles.selected : ""}`}
+              >
+                <div className={styles.roomContent}>
+                  <Icon className={styles.icon} />
+                  <h2 className={styles.roomName}>{room.name}</h2>
+                  <p className={styles.capacity}>
+                    Capacity: {room.capacity} person{room.capacity > 1 ? "s" : ""}
+                  </p>
+                  <p className={styles.price}>{room.price} QAR / hr</p>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <label className={styles.label}>{t('select-date')}:</label>
+        <label className={styles.label}>{t("select-date")}:</label>
         <DatePicker
           selected={date}
           onChange={(d) => setDate(d)}
           dateFormat="yyyy-MM-dd"
           minDate={new Date()}
           className={styles.input}
-          placeholderText={t('select-date')}
+          placeholderText={t("select-date")}
         />
 
         <div className={styles.timeRow}>
           <div>
-            <label className={styles.label}>{t('from')}:</label>
+            <label className={styles.label}>{t("from")}:</label>
             <DatePicker
               selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
               onChange={(date) => {
@@ -137,7 +168,7 @@ const BookStudyRoom = () => {
             />
           </div>
           <div>
-            <label className={styles.label}>{t('to')}:</label>
+            <label className={styles.label}>{t("to")}:</label>
             <DatePicker
               selected={endTime ? new Date(`1970-01-01T${endTime}`) : null}
               onChange={(date) => {
@@ -160,7 +191,8 @@ const BookStudyRoom = () => {
 
         {calculateDuration() > 0 && (
           <p className={styles.durationInfo}>
-            {t('selected-duration')}: {calculateDuration()} hour{calculateDuration() > 1 ? "s" : ""}
+            {t("selected-duration")}: {calculateDuration()} hour
+            {calculateDuration() > 1 ? "s" : ""}
           </p>
         )}
 
@@ -173,7 +205,7 @@ const BookStudyRoom = () => {
           className={styles.submitButton}
           disabled={calculateDuration() < 1}
         >
-          {t('proceed-to-checkout')}
+          {t("proceed-to-checkout")}
         </button>
       </form>
     </div>
