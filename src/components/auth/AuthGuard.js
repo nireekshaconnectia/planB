@@ -44,7 +44,7 @@ export default function AuthGuard({ children }) {
         }
 
         // Add more role-based redirects here if needed
-    }, [session, status, pathname, router]);
+    }, [session, status, pathname, router, isLoginPage, isAdminRoot]);
 
     if (status === "loading") {
         return <div>Loading...</div>;
