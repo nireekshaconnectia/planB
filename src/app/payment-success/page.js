@@ -10,33 +10,36 @@ export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
-  const token = localStorage.getItem('userToken'); // Retrieve the token from localStorage
-
+  const [token, setToken] = useState(null);
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    const orderId = searchParams.get("transId"); // Correctly get 'id' as orderId
-    const paymentStatus = searchParams.get("status"); // Get 'status' parameter from URL
+    // Move localStorage access inside useEffect
+    const userToken = localStorage.getItem('userToken');
+    setToken(userToken);
+  }, []);
 
-    if (!orderId || !paymentStatus) {
-      // If necessary parameters are missing, show error
+  useEffect(() => {
+    const orderId = searchParams.get("transId");
+    const paymentStatus = searchParams.get("status");
+
+    if (!orderId || !paymentStatus || !token) {
       setStatus("error");
       return;
     }
 
     const saveFinalOrder = async () => {
       try {
-        // Send payment status to backend to update the order status
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}/status`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ✅ Include token here
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              paymentStatus, // e.g. "Paid"
+              paymentStatus,
               paymentDetails: {
                 transId: searchParams.get("transId") || "",
                 statusId: searchParams.get("statusId") || "",
@@ -49,23 +52,19 @@ export default function PaymentSuccessPage() {
         const result = await res.json();
 
         if (res.ok && result.success) {
-          // If order status updated successfully, show success message
           setStatus("success");
-          dispatch(clearCart()); // Clear the cart after successful payment
+          dispatch(clearCart());
         } else {
-          // If there was an issue with the backend, show error
           setStatus("error");
         }
       } catch (err) {
-        // Catch network errors or other issues
         console.error("Error saving payment status:", err);
         setStatus("error");
       }
     };
 
-    // Call the function to save order status
     saveFinalOrder();
-  }, [dispatch, searchParams]); // Dependency array to run only once
+  }, [dispatch, searchParams, token]); // Added token to dependencies
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
