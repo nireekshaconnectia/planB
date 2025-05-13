@@ -1,6 +1,7 @@
 // components/Category.js
-import Link from "next/link";
+// import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Link, animateScroll as scroll } from "react-scroll"; // Import from react-scroll
 import { useEffect, useState } from "react";
 
 const Category = () => {
@@ -26,7 +27,13 @@ const Category = () => {
     <div className="categorey-grid" id="categorey-box">
       {categories.map((category) => (
         <div key={category._id} className="categorey-item">
-          <Link href={`/#${category.slug}`}>
+          <Link 
+          key={`/#{category.slug}`}
+            to={category.slug}
+            smooth={true}
+            offset={-125} // Adjust for your navbar height
+            duration={500} // Duration of the scroll animation (500ms)
+          >
             <div
               className="featured-image"
               style={{

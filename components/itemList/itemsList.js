@@ -1,13 +1,12 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems"; // ← Make sure this is the correct path
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
+import Styles from "./itemsList.module.css"; // Adjust the path as necessary
 import Image from 'next/image';
-
 
 export default function Items() {
   const [foodItems, setFoodItems] = useState([]);
@@ -59,7 +58,7 @@ export default function Items() {
     if (quantity > 0) {
       dispatch(addToCart({ ...item, quantity }));
     } else {
-      dispatch(removeFromCart(item.foodSlug));
+      dispatch(removeFromCart(item.slug));
     }
   };
 
@@ -71,8 +70,9 @@ export default function Items() {
   // ✅ Main Render if everything loaded successfully
   return (
     <div className="Items-List w-100 flex col g-20">
+      
       <div className="list-header flex space-between">
-        <div className="category-title">Menu</div>
+          <div className={Styles.listHeading}>Menu</div>
         <div className="flex change-view">
           <button onClick={() => setIsGridView(true)}>
             <CiGrid2H />
@@ -84,37 +84,46 @@ export default function Items() {
       </div>
 
       {categories.map((category) => {
-        const filteredItems = foodItems.filter(
-          (item) =>
-            item.foodCategory?.toLowerCase() === category.name?.toLowerCase()
-        );
+        const filteredItems = foodItems.filter((item) => {
+          // Check if the item has a category that matches the current category name
+          return item.categories.some(
+            (cat) => cat.name.toLowerCase() === category.name.toLowerCase()
+          );
+        });
 
         return (
           <div key={category.slug} id={category.slug} className="category-section">
-            <div className="category-title">{category.name}</div>
+            <div className={Styles.category_title}>{category.name}</div>
 
             {filteredItems.length > 0 ? (
               <div className={`food-items flex ${isGridView ? "grid" : "col"}`}>
                 {filteredItems.map((item) => (
                   <div
                     className={`item ${isGridView ? "grid-view" : "list"}`}
-                    key={item.foodSlug}
+                    key={item.slug} // Using `slug` for unique key
                   >
-                    <div className="item-image flex">
-                      <Image src={item.featureImage} alt={item.foodName} width={100} height={100}/>
+                    <div className={"item-image flex"}>
+                      <Image
+                        src={item.image} // Updated to match API response
+                        alt={item.name}
+                        width={100}
+                        height={100}
+                      />
                     </div>
                     <div className="item-details">
-                      <h3>{item.foodName}</h3>
+                      <h3>{item.name}</h3>
                       <div className="flex space-between">
                         <div className="item-price">
-                          QAR {item.foodPrice?.toFixed(2) || "0.00"}
+                          QAR {item.price?.toFixed(2) || "0.00"}
                         </div>
                         <QuantitySelector
-                          quantity={cart[item.foodSlug]?.quantity || 0}
-                          onQuantityChange={(qty) => handleQuantityChange(item, qty)}
+                          quantity={cart[item.slug]?.quantity || 0}
+                          onQuantityChange={(qty) =>
+                            handleQuantityChange(item, qty)
+                          }
                         />
                       </div>
-                      <p>{item.foodDescription}</p>
+                      <p>{item.description}</p>
                     </div>
                   </div>
                 ))}

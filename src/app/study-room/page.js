@@ -9,13 +9,8 @@ import BackButton from "@/components/backbutton/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
-import { useRequireAuth } from "@/lib/auth/useRequireAuth";
-import { useStudyRoomBooking } from "@/lib/hooks/studyRoomBooking";
 
 const BookStudyRoom = () => {
-  useRequireAuth("/study-room");
-  const { bookRoomAndPay } = useStudyRoomBooking();
-
   const [studyRooms, setStudyRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -26,9 +21,19 @@ const BookStudyRoom = () => {
   const t = useTranslations();
 
   useEffect(() => {
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+      router.push("/login");
+      return;
+    }
+
     const fetchRooms = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, {
+          headers: {
+            'Authorization': `Bearer ${userToken}`,
+          },
+        });
         const result = await res.json();
         if (result.success) {
           setStudyRooms(result.data.filter((room) => room.isAvailable));
@@ -41,7 +46,7 @@ const BookStudyRoom = () => {
     };
 
     fetchRooms();
-  }, []);
+  }, [router]);
 
   const getRoomIcon = (name, capacity) => {
     if (name.toLowerCase().includes("conference") || capacity >= 10) return IoIosBriefcase;
@@ -81,7 +86,7 @@ const BookStudyRoom = () => {
     const duration = calculateDuration();
 
     if (!selectedRoom || !date || duration < 1) {
-      alert("Please select a valid room, date, and time range with a minimum of 1 hour.");
+      alert(t("select-valid-room-date-time"));
       return;
     }
 

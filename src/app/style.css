@@ -333,8 +333,8 @@ item css */
 }
 
 .list .item-image img {
-    text-align: right;
-    width: 90px;
+    width: 64px;
+    height: 64px;
     border-radius: 10px;
 }
 
@@ -374,6 +374,10 @@ item css */
     font-size: 12px;
     font-weight: 400;
     mix-blend-mode: multiply;
+    text-overflow: ellipsis;
+  overflow: hidden;
+  width: 350px;
+  white-space: nowrap;
 }
 .categorey-title{
     font-size: 20px;
