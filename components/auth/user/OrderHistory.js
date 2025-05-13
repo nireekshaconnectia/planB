@@ -95,7 +95,7 @@ export default function OrderHistory() {
                     <div key={index} className={styles.orderItemRow}>
                       <p>{item.foodName}</p>
                       <p>Qty: {item.quantity}</p>
-                      <p>Price: {item.foodPrice}</p>
+                      <p>Price: {item.price}</p>
                     </div>
                   ))}
                 </div>

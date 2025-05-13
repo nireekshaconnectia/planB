@@ -14,7 +14,7 @@ export default function CartCheckoutForm() {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
-  const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.foodPrice * item.quantity, 0).toFixed(2);
+  const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   return (
     <div className={styles.checkoutForm}>
@@ -23,18 +23,18 @@ export default function CartCheckoutForm() {
       {Object.keys(cartItems).length > 0 ? (
         <div>
           {Object.values(cartItems).map((item) => (
-            <div className="cart-item" key={item.foodSlug}>
+            <div className="cart-item" key={item.slug}>
               <div className="flex space-between g-20">
                 <div className="cart-item-name">
-                  <h4>{item.foodName}</h4>
+                  <h4>{item.name}</h4>
                 </div>
                 <div className="cart-item-quantity">x {item.quantity}</div>
-                <div className="cart-item-price">QAR {item.foodPrice.toFixed(2)}</div>
+                <div className="cart-item-price">QAR {item.price.toFixed(2)}</div>
                 <QuantitySelector
                   quantity={item.quantity}
                   onQuantityChange={(qty) => {
                     if (qty === 0) {
-                      dispatch(removeFromCart(item.foodSlug));
+                      dispatch(removeFromCart(item.slug));
                     } else {
                       dispatch(addToCart({ ...item, quantity: qty }));
                     }
