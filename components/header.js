@@ -12,9 +12,10 @@ import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
 import PropTypes from "prop-types";
 import { IoMdArrowBack } from "react-icons/io";
 import Image from 'next/image';
+import logo from "@/assets/logo.png"; // Adjust the path as necessary
 
 
-const Header = ({ logo }) => {
+const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showFirstPage, setShowFirstPage] = useState(false);

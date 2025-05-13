@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <>
-      <Header logo="/assets/images/logo.png" />
+      <Header />
       <SelectFirstPage 
         isOpen={showPopup} 
         onClose={() => setShowPopup(false)} 
