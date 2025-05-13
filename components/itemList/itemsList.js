@@ -85,10 +85,10 @@ export default function Items() {
 
       {categories.map((category) => {
         const filteredItems = foodItems.filter((item) => {
-          // Check if the item has a category that matches the current category name
-          return item.categories.some(
-            (cat) => cat.name.toLowerCase() === category.name.toLowerCase()
-          );
+          // Add null check for item.categories
+          return item?.categories?.some(
+            (cat) => cat?.name?.toLowerCase() === category?.name?.toLowerCase()
+          ) || false;
         });
 
         return (
