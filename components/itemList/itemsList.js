@@ -5,7 +5,7 @@ import { addToCart, removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems"; // ← Make sure this is the correct path
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
-import Styles from "./itemsList.module.css"; // Adjust the path as necessary
+import Styles from "./itemslist.module.css"; // Adjust the path as necessary
 import Image from 'next/image';
 
 export default function Items() {
