@@ -1,15 +1,7 @@
-"use client";
 import { Inter, Poppins } from "next/font/google";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { SessionProvider } from "next-auth/react";
-import { store, persistor } from "../../store/index";
-import LanguageWrapper from "@/components/LanguageWrapper";
-import CartInitializer from "@/components/cart/CartInitializer";
 import "./globals.css";
 import "./style.css";
 import "./mobile.style.css";
-import "@/hooks/smoothscroll";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -18,21 +10,30 @@ const poppins = Poppins({
   display: "swap",
 });
 
+export const metadata = {
+  title: 'Plan B Coffee',
+  description: 'Plan B Coffee - Your perfect coffee destination',
+  keywords: 'coffee, cafe, plan b, coffee shop, study room',
+  authors: [
+    { name: 'Plan B Coffee' },
+    { name: 'Weblexia', url: 'https://weblexia.in' }
+  ],
+  viewport: 'width=device-width, initial-scale=1',
+  robots: 'index, follow',
+  openGraph: {
+    title: 'Plan B Coffee',
+    description: 'Plan B Coffee - Your perfect coffee destination',
+    type: 'website',
+    locale: 'en_US',
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${poppins.className}`}>
         <main>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <SessionProvider>
-                <LanguageWrapper>
-                  <CartInitializer />
-                  {children}
-                </LanguageWrapper>
-              </SessionProvider>
-            </PersistGate>
-          </Provider>
+          {children}
         </main>
       </body>
     </html>
