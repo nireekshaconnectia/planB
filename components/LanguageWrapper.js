@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { NextIntlClientProvider } from "next-intl";
 
 const LanguageWrapper = ({ children }) => {
-  const lang = useSelector((state) => state.language.lang) || "en";
+  const lang = useSelector((state) => state?.language?.lang) || "en";
 
   let messages;
   try {

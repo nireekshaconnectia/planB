@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./SelectFirstPage.module.css";
-import Backdrop from "../backdrop/backdrop";
 import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
 import { useTranslations } from "next-intl";
 import Image from 'next/image';
@@ -29,7 +28,6 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Backdrop onClick={onClose} />
       <div className={styles.langModal}>
         <div className={styles.modalHead}>
           <div className={styles.logoContainer}>

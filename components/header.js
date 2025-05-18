@@ -38,6 +38,11 @@ const Header = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = showFirstPage ? 'hidden' : '';
+    return () => document.body.style.overflow = '';
+  }, [showFirstPage]);
+
   const profile = () => {
     if (user) {
       setMenuOpen(true);

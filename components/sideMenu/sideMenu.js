@@ -44,9 +44,6 @@ export default function SideMenu({ onClose }) {
             <li onClick={() => handleMenuClick("/order-history")}>
               <div><FaClipboardList />{t('order-history')}</div> <FaCaretRight />
             </li>
-            <li onClick={() => handleMenuClick("/addresses")}>
-              <div><FaLocationDot /> {t('addresses')} </div><FaCaretRight />
-            </li>
             <li onClick={() => handleMenuClick("/payments")}>
               <div><MdPayment /> {t('payment-methods')}</div> <FaCaretRight />
             </li>

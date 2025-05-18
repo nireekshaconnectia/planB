@@ -5,7 +5,6 @@ import UserPage from "@/components/userPage/userPage";
 import Profile from "@/components/auth/user/profile";
 import OrderHistory from "@/components/auth/user/OrderHistory";
 import Settings from "@/components/auth/user/Settings";
-import AddressContent from "@/components/auth/user/addressContent";
 import Support from "@/components/support/support"; // Import the Support component
 
 // Optionally, import other components like AddressContent if you plan to use them
@@ -22,10 +21,6 @@ const ProfilePage = () => {
       "user-details": { title: "User Profile", content: <Profile /> },
       settings: { title: "Settings", content: <Settings /> },
       "order-history": { title: "Order History", content: <OrderHistory /> },
-      addresses: {
-        title: "Addresses",
-        content: <AddressContent />, // Fallback for missing AddressContent
-      },
       support: {
         title: "Support",
         content: <Support />, // Fallback for missing AddressContent

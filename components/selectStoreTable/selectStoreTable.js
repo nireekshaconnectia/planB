@@ -1,41 +1,31 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./selectStoretable.module.css";
 import { MdOutlineTableBar } from "react-icons/md";
 
-const tables = [
-  { no: 1 },
-  { no: 2 },
-  { no: 3 },
-  { no: 4 },
-  { no: 5 },
-  { no: 6 },
-  { no: 7 },
-  { no: 8 },
-  { no: 9 },
-  { no: 10 },
-];
+const tables = Array.from({ length: 10 }, (_, i) => ({ no: i + 1 }));
 
 export default function SelectTable() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [orderType, setOrderType] = useState(null);
 
   const handleOrderTypeSelect = (type) => {
     setOrderType(type);
+
+    if (type === "takeaway") {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("orderType", type);
+      router.push(`/checkout?${params.toString()}`);
+    }
   };
 
   const handleTableSelect = (tableNo) => {
-    if (!orderType) {
-      alert("Please select Dine In or Takeaway first.");
-      return;
-    }
-    const params = new URLSearchParams(searchParams);
-    params.set('orderType', orderType);
-    params.set('table', tableNo);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("orderType", "Dine In");
+    params.set("table", tableNo);
     router.push(`/checkout?${params.toString()}`);
   };
 
@@ -45,31 +35,33 @@ export default function SelectTable() {
 
       <div className={styles.orderTypeBtns}>
         <button
-          className={`${styles.orderBtn} ${orderType === 'DineIn' ? styles.active : ''}`}
-          onClick={() => handleOrderTypeSelect('dinein')}
+          className={`${styles.orderBtn} ${orderType === "Dine In" ? styles.active : ""}`}
+          onClick={() => handleOrderTypeSelect("Dine In")}
         >
           Dine In
         </button>
         <button
-          className={`${styles.orderBtn} ${orderType === 'Takeaway' ? styles.active : ''}`}
-          onClick={() => handleOrderTypeSelect('takeaway')}
+          className={`${styles.orderBtn} ${orderType === "takeaway" ? styles.active : ""}`}
+          onClick={() => handleOrderTypeSelect("takeaway")}
         >
           Takeaway
         </button>
       </div>
 
-      <div className={styles.tableItems}>
-        {tables.map((table) => (
-          <div
-            key={table.no}
-            className={styles.tableItem}
-            onClick={() => handleTableSelect(table.no)}
-          >
-            <MdOutlineTableBar size={50} />
-            <h3>Table {table.no}</h3>
-          </div>
-        ))}
-      </div>
+      {orderType === "Dine In" && (
+        <div className={styles.tableItems}>
+          {tables.map((table) => (
+            <div
+              key={table.no}
+              className={styles.tableItem}
+              onClick={() => handleTableSelect(table.no)}
+            >
+              <MdOutlineTableBar size={50} />
+              <h3>Table {table.no}</h3>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

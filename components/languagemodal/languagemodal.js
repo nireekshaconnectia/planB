@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./languagemodal.module.css"; // Import module CSS
 import Backdrop from "../backdrop/backdrop";
-import { setLanguage } from "../../store/store";
+import { setLanguage } from "../../store/index";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 

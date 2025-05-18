@@ -1,44 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Load initial state from localStorage if available
+const loadInitialState = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      return savedCart ? { items: JSON.parse(savedCart) } : { items: {} };
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      return { items: {} };
+    }
+  }
+  return { items: {} };
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: { items: {} },
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      const key = item.slug; // Always use slug as the key
+      const key = item.slug;
       
-      if (!key) return; // Don't add if no slug
+      if (!key) return;
       
-      // If item exists, update quantity
-      if (state.items[key]) {
-        state.items[key].quantity = item.quantity;
-      } else {
-        // If new item, add it
-        state.items[key] = {
-          slug: item.slug,
-          name: item.name,
-          price: Number(item.price),
-          quantity: item.quantity,
-          image: item.image,
-          description: item.description
-        };
+      state.items[key] = {
+        slug: item.slug,
+        name: item.name,
+        price: Number(item.price),
+        quantity: item.quantity,
+        image: item.image,
+        description: item.description
+      };
+
+      // Save to localStorage after each update
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('cart', JSON.stringify(state.items));
       }
     },
     removeFromCart: (state, action) => {
       const key = action.payload;
-      if (state.items[key]) {
-        delete state.items[key];
+      delete state.items[key];
+      
+      // Save to localStorage after each update
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('cart', JSON.stringify(state.items));
       }
     },
     clearCart: (state) => {
       state.items = {};
+      
+      // Clear localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('cart');
+      }
     },
-    resetCart: () => {
-      return { items: {} }; // Reset to initial state
+    setCart: (state, action) => {
+      state.items = action.payload;
+      
+      // Save to localStorage after setting cart
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('cart', JSON.stringify(action.payload));
+      }
     }
   },
 });
 
-export const { addToCart, removeFromCart, clearCart, resetCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, setCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart, resetCart } from "@/store/cartSlice";
+import { addToCart, removeFromCart } from "@/store/cartSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems";
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
@@ -17,11 +17,6 @@ export default function Items() {
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-
-  // Reset cart on component mount
-  useEffect(() => {
-    dispatch(resetCart());
-  }, [dispatch]);
 
   useEffect(() => {
     const fetchCategoriesAndItems = async () => {

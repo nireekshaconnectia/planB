@@ -190,29 +190,51 @@ span {
 }
 
 .categorey-item {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-content: end;
-    flex-wrap: wrap;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  max-width: 110px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.categorey-item:hover {
+  transform: scale(1.03);
 }
 
 .categorey-item .featured-image {
-    height: 80px;
-    width: 80px;
-    border-radius: 100px;
-    border: 1px solid #5E4C3E;
-    background-size: 100%;
-    background-position: center center;
-    margin: auto;
-    background-color: #F5F2EB;
-    background-blend-mode: multiply;
+  height: 80px;
+  width: 80px;
+  border-radius: 100px;
+  border: 1px solid #5E4C3E;
+  background-size: 100%;
+  background-position: center center;
+  margin: auto;
+  background-color: #F5F2EB;
+  background-blend-mode: multiply;
+  position: relative;
+  overflow: hidden;
+  transition: background-size 0.4s ease, transform 0.3s ease;
+}
+
+.categorey-item .featured-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  transition: background-color 0.3s ease;
+}
+
+.categorey-item .featured-image:hover {
+  background-size: 120%;
+  transform: scale(1.05);
+}
+
+.categorey-item .featured-image:hover::before {
+  background-color: rgba(180, 158, 119, 0.45); /* #B49E7773 as rgba */
 }
 
 .categorey-item>div {

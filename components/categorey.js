@@ -31,7 +31,7 @@ const Category = () => {
           key={`/#{category.slug}`}
             to={category.slug}
             smooth={true}
-            offset={-125} // Adjust for your navbar height
+            offset={-150} // Adjust for your navbar height
             duration={500} // Duration of the scroll animation (500ms)
           >
             <div

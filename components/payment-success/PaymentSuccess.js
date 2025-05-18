@@ -22,7 +22,7 @@ const PaymentSuccess = () => {
           <button className={styles.button} onClick={() => window.location.href = '/'}>
             Go to Home
           </button>
-          <button className={styles.button} onClick={() => window.location.href = '/orders'}>
+          <button className={styles.button} onClick={() => window.location.href = '/order-history'}>
             View Orders
           </button>
         </div>

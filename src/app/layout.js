@@ -3,8 +3,9 @@ import { Inter, Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { SessionProvider } from "next-auth/react";
-import store, { persistor } from "../../store/store";
-import LanguageWrapper from "@/components/LanguageWrapper"; // New wrapper component
+import { store, persistor } from "../../store/index";
+import LanguageWrapper from "@/components/LanguageWrapper";
+import CartInitializer from "@/components/cart/CartInitializer";
 import "./globals.css";
 import "./style.css";
 import "./mobile.style.css";
@@ -25,7 +26,10 @@ export default function RootLayout({ children }) {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <SessionProvider>
-                <LanguageWrapper>{children}</LanguageWrapper>
+                <LanguageWrapper>
+                  <CartInitializer />
+                  {children}
+                </LanguageWrapper>
               </SessionProvider>
             </PersistGate>
           </Provider>

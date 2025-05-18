@@ -1,12 +1,32 @@
-import { configureStore } from "@reduxjs/toolkit";
-import cartReducer from "./cartSlice";
-import popupReducer from "./popupSlice"; // 👈 Make sure this is imported
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
+import cartReducer from "./cartSlice";
+import popupReducer from "./popupSlice";
 import { persistReducer, persistStore } from "redux-persist";
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
-// SSR-Safe storage
+// Language slice
+const languageSlice = createSlice({
+  name: "language",
+  initialState: { lang: "en" }, // Default language
+  reducers: {
+    setLanguage: (state, action) => {
+      state.lang = action.payload;
+    },
+  },
+});
+
+export const { setLanguage } = languageSlice.actions;
+
+// ✅ SSR-safe storage fallback
 const createNoopStorage = () => {
   return {
     getItem() {
@@ -25,22 +45,25 @@ const storage = typeof window !== "undefined"
   ? createWebStorage("local")
   : createNoopStorage();
 
-// ✅ Add popup slice here
+// ✅ Combine your reducers
 const rootReducer = combineReducers({
   cart: cartReducer,
-  popup: popupReducer, // 👈 Now redux knows about popup slice
+  popup: popupReducer,
+  language: languageSlice.reducer,
 });
 
-// Persist Config
+// ✅ redux-persist config
 const persistConfig = {
   key: "root",
   storage,
+  whitelist: ["cart", "language"],
+  blacklist: ["popup"], // Don't persist popup state
 };
 
-// Persisted reducer
+// ✅ Wrap reducer with persistence
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Store config
+// ✅ Create store
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -51,5 +74,5 @@ export const store = configureStore({
     }),
 });
 
-// Persistor for PersistGate
+// ✅ Create persistor
 export const persistor = persistStore(store);
