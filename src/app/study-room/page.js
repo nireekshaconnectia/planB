@@ -9,6 +9,8 @@ import BackButton from "@/components/backbutton/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
+import { IoMdArrowBack } from "react-icons/io";
+import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
 
 const BookStudyRoom = () => {
   const [studyRooms, setStudyRooms] = useState([]);
@@ -17,6 +19,7 @@ const BookStudyRoom = () => {
   const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [showFirstPage, setShowFirstPage] = useState(false);
   const router = useRouter();
   const t = useTranslations();
 
@@ -102,12 +105,24 @@ const BookStudyRoom = () => {
 
     router.push(`/checkout?${query.toString()}`);
   };
+  const handleBackClick = () => {
+    setShowFirstPage(true);
+  };
 
   return (
+    <>
+    <SelectFirstPage isOpen={showFirstPage} onClose={() => setShowFirstPage(false)} />
+    
     <div className={styles.container}>
       <div className={styles.pageHead}>
-        <div>
-          <BackButton />
+        <div className={styles.showMenu}>
+          <IoMdArrowBack
+                      onClick={handleBackClick}
+                      style={{ cursor: "pointer" }}
+                      aria-label="Open first page"
+                      role="button"
+                      tabIndex="0"
+                    />
         </div>
         <h1 className={styles.title}>{t("book-a-room")}</h1>
       </div>
@@ -213,6 +228,7 @@ const BookStudyRoom = () => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 

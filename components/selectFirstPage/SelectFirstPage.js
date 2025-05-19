@@ -17,6 +17,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
   const handleSelect = (option) => {
     if (option === "menu") {
       onClose();
+      router.push("/");
     } else if (option === "study-room") {
       onClose();
       router.push("/study-room");

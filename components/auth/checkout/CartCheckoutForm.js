@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
@@ -14,11 +14,16 @@ export default function CartCheckoutForm() {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
-  const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  const totalPrice = Object.values(cartItems)
+    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .toFixed(2);
 
   return (
     <div className={styles.checkoutForm}>
-      <h2>{orderType} for Table No {tableNo}</h2>
+      <h2>
+        {orderType}
+        {tableNo && ` for Table No ${tableNo}`}
+      </h2>
 
       {Object.keys(cartItems).length > 0 ? (
         <div>
@@ -29,7 +34,9 @@ export default function CartCheckoutForm() {
                   <h4>{item.name}</h4>
                 </div>
                 <div className="cart-item-quantity">x {item.quantity}</div>
-                <div className="cart-item-price">QAR {item.price.toFixed(2)}</div>
+                <div className="cart-item-price">
+                  QAR {item.price.toFixed(2)}
+                </div>
                 <QuantitySelector
                   quantity={item.quantity}
                   onQuantityChange={(qty) => {

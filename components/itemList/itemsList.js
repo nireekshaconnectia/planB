@@ -113,7 +113,7 @@ export default function Items() {
                           alt={item.name}
                           width={560}
                           height={350}
-                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..." //
                         />
                       </div>
                       <div className="item-details">
