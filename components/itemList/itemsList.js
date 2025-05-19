@@ -111,8 +111,8 @@ export default function Items() {
                         <Image
                           src={item.image}
                           alt={item.name}
-                          width={100}
-                          height={100}
+                          width={560}
+                          height={350}
                         />
                       </div>
                       <div className="item-details">

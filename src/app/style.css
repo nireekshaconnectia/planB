@@ -165,6 +165,7 @@ span {
     display: flex;
     width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-behavior: smooth;
     /* Smooth scrolling */
     position: sticky;
