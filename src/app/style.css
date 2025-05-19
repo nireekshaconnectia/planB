@@ -172,6 +172,7 @@ span {
     top: 0px;
     background: #fff;
     z-index: 8;
+    gap: 15px;
 }
 
 .categorey-grid>* {
@@ -191,13 +192,12 @@ span {
 }
 
 .categorey-item {
-  padding: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 10px;
   text-align: center;
-  max-width: 110px;
+  max-width: 80px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
