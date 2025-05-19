@@ -113,6 +113,7 @@ export default function Items() {
                           alt={item.name}
                           width={560}
                           height={350}
+                          placeholder="blur"
                         />
                       </div>
                       <div className="item-details">
