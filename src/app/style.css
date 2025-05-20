@@ -680,3 +680,8 @@ item css */
     background-color: #864622;
     color:#fff;
 }
+@media only screen and (max-width: 600px) {
+    .categorey-item{
+        max-width: 60px;
+    }
+}
