@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
+import { setMenuData, setCategoriesData, setLoading, setError } from "@/store/apiSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems";
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
@@ -9,22 +10,27 @@ import Styles from "./itemslist.module.css";
 import Image from 'next/image';
 
 export default function Items() {
-  const [foodItems, setFoodItems] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [isGridView, setIsGridView] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
+  const { menu: foodItems, categories, loading, error } = useSelector((state) => state.apiData);
+  const lang = useSelector((state) => state.language.lang);
 
   useEffect(() => {
     const fetchCategoriesAndItems = async () => {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
+        
+        // Only add language header for Arabic
+        const headers = lang === 'ar' ? {
+          'Accept-Language': lang
+        } : {};
+
+        console.log('Fetching with language:', lang);
+
         const [categoryResponse, menuResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`, { headers }),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu`, { headers }),
         ]);
 
         if (!categoryResponse.ok || !menuResponse.ok) {
@@ -34,36 +40,55 @@ export default function Items() {
         const categoryResult = await categoryResponse.json();
         const menuResult = await menuResponse.json();
 
+        console.log('Category API Response:', categoryResult);
+        console.log('Menu API Response:', menuResult);
+
         if (
           categoryResult?.data?.categories?.length > 0 &&
           menuResult?.data?.length > 0
         ) {
-          setCategories(categoryResult.data.categories);
-          setFoodItems(menuResult.data);
+          dispatch(setCategoriesData(categoryResult.data.categories));
+          dispatch(setMenuData(menuResult.data));
         } else {
-          setCategories([]);
-          setFoodItems([]);
+          dispatch(setCategoriesData([]));
+          dispatch(setMenuData([]));
         }
       } catch (err) {
-        setError(err.message || "Unknown error");
+        dispatch(setError(err.message || "Unknown error"));
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchCategoriesAndItems();
-  }, []);
+  }, [dispatch, lang]);
+
+  // Add debug logging for categories
+  useEffect(() => {
+    console.log('Current categories in Redux:', categories);
+  }, [categories]);
 
   const handleQuantityChange = (item, quantity) => {
+    console.log('Adding to cart - Item data:', item);
+    console.log('Price type:', typeof item.price, 'Price value:', item.price);
+    
+    if (!item.price || isNaN(Number(item.price))) {
+      console.error('Invalid price for item:', item);
+      return;
+    }
+    
     if (quantity > 0) {
-      dispatch(addToCart({
+      const cartItem = {
         slug: item.slug,
         name: item.name,
         price: Number(item.price),
         quantity: quantity,
         image: item.image,
-        description: item.description
-      }));
+        description: item.description,
+        categories: item.categories
+      };
+      console.log('Dispatching to cart:', cartItem);
+      dispatch(addToCart(cartItem));
     } else {
       dispatch(removeFromCart(item.slug));
     }
@@ -90,7 +115,7 @@ export default function Items() {
       {categories.map((category) => {
         const filteredItems = foodItems.filter((item) => {
           return item.categories.some(
-            (cat) => cat.name.toLowerCase() === category.name.toLowerCase()
+            (cat) => cat.slug === category.slug
           );
         });
 
@@ -113,7 +138,7 @@ export default function Items() {
                           alt={item.name}
                           width={560}
                           height={350}
-                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..." //
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
                         />
                       </div>
                       <div className="item-details">

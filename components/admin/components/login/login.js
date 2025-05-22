@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import styles from './login.module.css';
 import Image from 'next/image';
+import logo from "@/assets/logo.png";
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -38,12 +39,11 @@ export default function LoginForm() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
-        <Image className={styles.logo} src="/public/logo.png" alt="Logo" width={100}  height={100}/>
+        <Image className={styles.logo} src={logo} alt="Logo" width={100}  height={100}/>
         <h2>PlanB Cafe</h2>
       </div>
       
       <form onSubmit={handleSubmit} className={styles.loginForm}>
-        <h2>Admin Login</h2>
         {error && <div className={styles.error}>{error}</div>}
         <div className={styles.formGroup}>
           <label htmlFor="email">Email</label>

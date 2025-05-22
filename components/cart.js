@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart , removeFromCart } from "@/store/cartSlice";
@@ -15,8 +15,17 @@ export default function Cart() {
   const router = useRouter();
   const t = useTranslations(); // Initialize translations
 
+  // Debug logging
+  useEffect(() => {
+    console.log('Current cart items:', cartItems);
+    Object.entries(cartItems).forEach(([slug, item]) => {
+      console.log(`Item ${slug}:`, item);
+      console.log(`Price for ${slug}:`, item.price, typeof item.price);
+    });
+  }, [cartItems]);
+
   // Calculate total price
-  const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  const totalPrice = Object.values(cartItems).reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0).toFixed(2);
 
   return (
     <>
@@ -40,7 +49,7 @@ export default function Cart() {
                     <h4>{item.name}</h4>
                   </div>
                   <div className="cart-item-quantity">x {item.quantity}</div>
-                  <div className="cart-item-price">QAR {item.price.toFixed(2)}</div>
+                  <div className="cart-item-price">QAR {(item.price || 0).toFixed(2)}</div>
                   <QuantitySelector
                     quantity={item.quantity}
                     onQuantityChange={(qty) => {

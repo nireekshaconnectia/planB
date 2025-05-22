@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import cartReducer from "./cartSlice";
 import popupReducer from "./popupSlice";
@@ -12,19 +12,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-
-// Language slice
-const languageSlice = createSlice({
-  name: "language",
-  initialState: { lang: "en" }, // Default language
-  reducers: {
-    setLanguage: (state, action) => {
-      state.lang = action.payload;
-    },
-  },
-});
-
-export const { setLanguage } = languageSlice.actions;
+import languageReducer from "./languageSlice";
+import apiReducer from "./apiSlice";
 
 // ✅ SSR-safe storage fallback
 const createNoopStorage = () => {
@@ -49,7 +38,8 @@ const storage = typeof window !== "undefined"
 const rootReducer = combineReducers({
   cart: cartReducer,
   popup: popupReducer,
-  language: languageSlice.reducer,
+  language: languageReducer,
+  apiData: apiReducer,
 });
 
 // ✅ redux-persist config
