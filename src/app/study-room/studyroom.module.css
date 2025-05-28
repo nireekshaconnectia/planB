@@ -64,6 +64,8 @@
     border-radius: 100px;
     display: flex;
     justify-content: center;
+    height: 42px;
+    width: 42px;
 }
 .showMenu:hover{
     background-color: #864622;

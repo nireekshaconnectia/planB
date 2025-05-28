@@ -18,5 +18,6 @@
     border-radius: 12px;
     margin:auto;
     flex: 1;
-    min-height: 600px;
+    max-height: 620px;
+    overflow: scroll;
 }

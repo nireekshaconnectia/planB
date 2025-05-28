@@ -13,9 +13,25 @@ export default function Categories() {
     const t = useTranslations();
 
     const fetchCategories = async () => {
-        const response = await fetch('/api/admin/categories');
-        setCategories(await response.json());
-    };
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`);
+        const json = await response.json();
+
+        const formatted = json.data.categories.map((cat) => ({
+            id: cat._id,
+            name: cat.name,
+            description: cat.description,
+            imageUrl: cat.image, // 💡 match what your component expects
+            createdAt: cat.createdAt,
+            updatedAt: cat.updatedAt,
+        }));
+
+        setCategories(formatted);
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+    }
+};
+
 
     const handleDelete = async (id) => {
         await fetch(`/api/admin/categories/${id}`, { method: 'DELETE' });

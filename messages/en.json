@@ -70,5 +70,7 @@
     "menu-items": "Menu Items",
     "study-rooms": "Study Rooms",
     "logging-out": "Logging out...",
-    "page-unavailable": "This page is unavailable."
+    "page-unavailable": "This page is unavailable.",
+    "add-new-category": "Add New Category",
+    "categories": "Categories"
 }

@@ -8,7 +8,7 @@ export default function Dashboard() {
     
     return (
         <div className={styles.dashboardWrapper}>
-            <h1 className={styles.title}>{t("dashboard")}</h1>
+            <h1 className={styles.title}>{t("Dashboard")}</h1>
             <DashboardCard />  
         </div>
     );

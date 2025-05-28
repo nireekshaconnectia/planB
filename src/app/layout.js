@@ -10,23 +10,23 @@ const poppins = Poppins({
   display: "swap",
 });
 
-export const metadata = {
-  title: 'Plan B Coffee',
-  description: 'Plan B Coffee - Your perfect coffee destination',
-  keywords: 'coffee, cafe, plan b, coffee shop, study room',
-  authors: [
-    { name: 'Plan B Coffee' },
-    { name: 'Weblexia', url: 'https://weblexia.in' }
-  ],
-  viewport: 'width=device-width, initial-scale=1',
-  robots: 'index, follow',
-  openGraph: {
-    title: 'Plan B Coffee',
-    description: 'Plan B Coffee - Your perfect coffee destination',
-    type: 'website',
-    locale: 'en_US',
-  },
-};
+// export const metadata = {
+//   title: 'Plan B Coffee',
+//   description: 'Plan B Coffee - Your perfect coffee destination',
+//   keywords: 'coffee, cafe, plan b, coffee shop, study room',
+//   authors: [
+//     { name: 'Plan B Coffee' },
+//     { name: 'Weblexia', url: 'https://weblexia.in' }
+//   ],
+//   viewport: 'width=device-width, initial-scale=1',
+//   robots: 'index, follow',
+//   openGraph: {
+//     title: 'Plan B Coffee',
+//     description: 'Plan B Coffee - Your perfect coffee destination',
+//     type: 'website',
+//     locale: 'en_US',
+//   },
+// };
 
 export default function RootLayout({ children }) {
   return (
