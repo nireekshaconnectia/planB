@@ -1,0 +1,204 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    height: 620px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 1.8rem;
+}
+.addButton, .submitButton, .cancelButton {
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #864622;
+    color: #864622;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.editButton,
+.deleteButton{
+    padding: 2.5px 15px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #864622;
+    color: #f44336;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.editButton {
+    color: #864622;
+}
+
+.editButton:hover {
+    background: #864622;
+    color: white;
+}
+
+.deleteButton {
+    color: #e74c3c;
+}
+
+.deleteButton:hover {
+    background: #c0392b;
+    color: white;
+}
+
+.deleteButton:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+.addButton:hover, .submitButton:hover {
+    background: #864622;
+    color:#fff;
+}
+
+.cancelButton {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.cancelButton:hover {
+    background: #e0e0e0;
+}
+
+.editButton {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.editButton:hover {
+    background: #e0e0e0;
+}
+
+.deleteButton {
+    background: #fff;
+    color: #c00;
+    border: 1px solid #c00;
+}
+
+.deleteButton:hover {
+    background: #ffeaea;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 1rem;
+}
+
+.table th, .table td {
+    border: 1px solid #eee;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.table th {
+    background: #f5f5f5;
+    font-weight: 500;
+    color: #333;
+}
+.actions{
+    display: flex;
+    gap: 5px;
+}
+.error {
+    color: #c00;
+    margin: 1rem 0;
+    background: #fee;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.toggleButton {
+    padding: 2.5px 15px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #28a745;
+    color: #28a745;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.toggleButton[disabled] {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.toggleButton:hover:not([disabled]) {
+    background: #218838;
+    color: white;
+}
+.table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 1rem;
+}
+.roomPhoto {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: block;
+    border: 1px solid #eee;
+}
+
+/* Modal styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.roomForm {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    min-width: 320px;
+    max-width: 400px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+.fieldGroup {
+    margin-bottom: 1.5rem;
+}
+
+.fieldGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}

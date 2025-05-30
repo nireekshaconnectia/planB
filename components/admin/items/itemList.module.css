@@ -1,0 +1,117 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #864622;
+}
+
+.imageContainer {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.details {
+    flex-grow: 1;
+}
+
+.details h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.details p {
+    margin: 0 0 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.price {
+    color: #2ecc71;
+    font-weight: 600;
+}
+
+.category {
+    color: #666;
+}
+
+.status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.available {
+    background: #e8f5e9;
+    color: #2ecc71;
+}
+
+.unavailable {
+    background: #ffebee;
+    color: #e74c3c;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.editButton,
+.deleteButton {
+    padding: 2.5px 15px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #864622;
+    color: #f44336;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.editButton {
+    color: #864622;
+}
+
+.editButton:hover {
+    background: #864622;
+    color: white;
+}
+
+.deleteButton {
+    color: #e74c3c;
+}
+
+.deleteButton:hover {
+    background: #c0392b;
+    color: white;
+}
+
+.deleteButton:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.empty {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 1.1rem;
+} 

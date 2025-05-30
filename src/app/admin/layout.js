@@ -16,16 +16,20 @@ export default function AdminLayout({ children }) {
     const t = useTranslations();
 
     useEffect(() => {
-        if (status === 'unauthenticated') {
+        if (status === 'loading') {
+            return;
+        }
+
+        if (status === 'unauthenticated' || !session?.user?.token) {
             router.push('/admin');
         }
-    }, [status, router]);
+    }, [status, session, router]);
 
     if (status === 'loading') {
         return <div>{t("loading")}</div>;
     }
 
-    if (!session) {
+    if (!session?.user?.token) {
         return <LoginForm />;
     }
 

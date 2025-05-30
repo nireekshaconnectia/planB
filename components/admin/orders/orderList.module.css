@@ -1,0 +1,213 @@
+
+.ordersList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.orderCard {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.orderHeader h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.orderType {
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+.tableNumber {
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.customerInfo {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.customerInfo p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.itemsList {
+    margin-bottom: 15px;
+}
+
+.orderItem {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.orderTotal {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    text-align: right;
+    font-weight: bold;
+}
+
+.statusControls {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.statusGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.statusGroup label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.statusGroup select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.cancelButton {
+    width: 100%;
+    padding: 8px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.cancelButton:hover {
+    background: #cc0000;
+}
+
+.error {
+    color: #ff4444;
+    text-align: center;
+    padding: 20px;
+    background: #ffebee;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.socketWarning {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #ffeeba;
+    text-align: center;
+}
+
+.connectionStatus {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.statusIndicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.statusIndicator span:first-child {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.connected {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.connected span:first-child {
+    background-color: #28a745;
+}
+
+.disconnected {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.disconnected span:first-child {
+    background-color: #dc3545;
+}
+
+.error {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.error span:first-child {
+    background-color: #ffc107;
+}
+
+.lastUpdate {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.reconnectAttempts {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-left: 8px;
+}
+
+.paymentStatus {
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.orderStatus {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: capitalize;
+    background-color: rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    min-width: 100px;
+    text-align: center;
+} 

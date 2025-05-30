@@ -1,8 +1,9 @@
+"use client";
 import styles from "./Backdrop.module.css"
 
 export default function Backdrop({ children, onClick }) {
   return (
-    <div id="backdrop" className={styles.backdrop} onClick={onClick}>
+    <div className={styles.backdrop} onClick={onClick}>
       {children}
     </div>
   );

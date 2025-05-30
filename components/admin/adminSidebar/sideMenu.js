@@ -9,10 +9,10 @@ import {
     MdOutlineSupportAgent,
     MdOutlineRestaurantMenu,
     MdOutlineMeetingRoom,
-    MdOutlineSettings,
     MdOutlinePeople,
     MdOutlineCategory,
-    MdOutlineFastfood
+    MdOutlineFastfood,
+    MdOutlineEventSeat
 } from "react-icons/md";
 import { IoExit } from "react-icons/io5";
 import { FaClipboardList, FaUsers } from "react-icons/fa";
@@ -43,19 +43,16 @@ export default function SideMenu({ onClose }) {
                         <div><MdOutlineFastfood /> {t('Menu Items')}</div>
                     </li>
                     <li onClick={() => handleMenuClick("/admin/study-rooms")}>
-                        <div><MdOutlineMeetingRoom /> {t('Study Rooms')}</div>
+                        <div><MdOutlineMeetingRoom /> {t('study-rooms')}</div>
                     </li>
                     <li onClick={() => handleMenuClick("/admin/orders")}>
                         <div><FaClipboardList /> {t('Orders')}</div>
                     </li>
+                    <li onClick={() => handleMenuClick("/admin/bookings")}>
+                        <div><MdOutlineEventSeat /> {t('Bookings')}</div>
+                    </li>
                     <li onClick={() => handleMenuClick("/admin/customers")}>
                         <div><FaUsers /> {t('Customers')}</div>
-                    </li>
-                    <li onClick={() => handleMenuClick("/admin/settings")}>
-                        <div><MdOutlineSettings /> {t('Settings')}</div>
-                    </li>
-                    <li onClick={() => handleMenuClick("/admin/support")}>
-                        <div><MdOutlineSupportAgent /> {t('Support')}</div>
                     </li>
                 </ul>
             </div>

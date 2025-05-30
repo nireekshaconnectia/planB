@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from 'next-intl';
+import CustomersList from '@/components/admin/customer/customersList';
 import styles from './customers.module.css';
 
 export default function Customers() {
@@ -8,7 +9,7 @@ export default function Customers() {
     return (
         <div className={styles.container}>
             <h1>{t("customers")}</h1>
-            {/* Components will be added here later */}
+            <CustomersList />
         </div>
     );
 }
