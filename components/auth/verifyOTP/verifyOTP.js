@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for redirection
 import { getAuth, onAuthStateChanged } from "firebase/auth"; // Firebase Auth
 import styles from "./verifyOTP.module.css"; // Import CSS module
+import { useSearchParams } from "next/navigation";
 
 const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
   const [otp, setOtp] = useState(""); 
   const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/";
   const router = useRouter(); // Initialize Next.js router
   const auth = getAuth(); // Get Firebase auth instance
 
@@ -15,7 +18,7 @@ const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("✅ User already logged in:", user);
-        router.push("/"); // Redirect to home if user is logged in
+       router.push(redirectTo);
       }
     });
 
@@ -62,7 +65,7 @@ const OTPPopup = ({ onClose, onResend, phoneNumber, confirmationResult }) => {
         localStorage.setItem("userData", JSON.stringify(userData.user)); // Store user data
   
         onClose(); // Close the OTP popup
-        router.push("/"); // Redirect to home
+        router.push(redirectTo);  // Redirect Back
       } else {
         setError("User verification failed. Try again.");
       }

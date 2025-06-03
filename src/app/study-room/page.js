@@ -110,7 +110,7 @@ const BookStudyRoom = () => {
   };
 
   return (
-    <>
+    <div>
     <SelectFirstPage isOpen={showFirstPage} onClose={() => setShowFirstPage(false)} />
     
     <div className={styles.container}>
@@ -228,7 +228,7 @@ const BookStudyRoom = () => {
         </button>
       </form>
     </div>
-    </>
+    </div>
   );
 };
 

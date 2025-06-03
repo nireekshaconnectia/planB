@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRequireAuth } from "@/lib/auth/useRequireAuth";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import useAuth from "@/lib/hooks/useAuth";
+
 
 function generateOrderId() {
   const timestamp = Date.now();
@@ -14,12 +16,14 @@ function generateOrderId() {
 
 const ConfirmOrder = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const cartItems = useSelector((state) => state.cart.items);
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const tableNumber = searchParams.get("table") || "A1";
   const orderType = searchParams.get("orderType") || "delivery";
-  useRequireAuth();
+  const currentPath = pathname + (searchParams ? `?${searchParams.toString()}` : "");
+  useAuth(currentPath);
 
   const totalPrice = Object.values(cartItems).reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -112,13 +116,18 @@ const ConfirmOrder = () => {
       const orderResult = await orderResponse.json();
 
       if (!orderResponse.ok || !orderResult.success) {
-        const errorMsg = orderResult?.error?.toLowerCase() || "";
-        if (errorMsg.includes("token has expired")) {
-          router.push("/logout");
+        const errorCode = orderResult?.code?.toUpperCase() || "";
+        const errorMsg = orderResult?.message || "Order creation failed";
+
+        if (
+          errorCode === "AUTH_TOKEN_INVALID" ||
+          errorCode === "AUTH_TOKEN_EXPIRED"
+        ) {
+          router.push(`/logout?redirectTo=${encodeURIComponent(router.asPath)}`);
           return;
         }
 
-        throw new Error("Order creation failed");
+        throw new Error(errorMsg);
       }
 
       window.location.href = paymentData.payUrl;
@@ -131,7 +140,12 @@ const ConfirmOrder = () => {
       ) {
         router.push("/logout");
       } else {
-        alert("❌ Failed to confirm order. Please try again.");
+        console.error("❌ Order confirmation error:", error);
+        alert(
+          `❌ Failed to confirm order.\n\nDetails: ${
+            error.message || "Unknown error"
+          }`
+        );
       }
     } finally {
       setIsLoading(false); // ✅ Reset loading if needed

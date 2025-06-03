@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import router for redirection
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Flags from "country-flag-icons/react/3x2";
 import BackButton from "@/components/backbutton/backbutton";
@@ -26,6 +27,8 @@ const LoginPage = () => {
   const [showOTPPopup, setShowOTPPopup] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/";
   const router = useRouter(); // Use router for navigation
   const t = useTranslations();
 
@@ -34,7 +37,7 @@ const LoginPage = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("✅ User is already logged in:", user);
-        router.push("/"); // Redirect to home page
+         router.push(redirectTo); // Redirect to home page
       }
     });
 
