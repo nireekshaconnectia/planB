@@ -106,7 +106,7 @@
     "deleting": "Deleting...",
     "available": "Available",
     "unavailable": "Unavailable",
-    "no-items": "No items found for this category",
+    "no-items": "No menu items found",
     "confirm-delete-item": "Are you sure you want to delete this item?",
     "invalid-image-type": "Please upload a valid image file (JPEG, PNG, or WebP)",
     "image-size-limit": "Image size should be less than 5MB",
@@ -143,12 +143,5 @@
     "address": "Address",
     "noAddressProvided": "No address provided",
     "viewOrders": "View Orders",
-    "notProvided": "Not provided",
-    "grid-view": "Grid View",
-    "list-view": "List View",
-    "switch-to-grid": "Switch to Grid View",
-    "switch-to-list": "Switch to List View",
-    "loading-items": "Loading items...",
-    "failed-to-load-items": "Failed to load items",
-    "failed-to-load-categories": "Failed to load categories"
+    "notProvided": "Not provided"
 }

@@ -8,24 +8,25 @@ import SkeletonItems from "@/components/skeleton/SkeletonItems";
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
 import Styles from "./itemslist.module.css";
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
 
 export default function Items() {
-  const [isGridView, setIsGridView] = useState(true);
+  const [isGridView, setIsGridView] = useState(false);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const { menu: foodItems, categories, loading, error } = useSelector((state) => state.apiData);
   const lang = useSelector((state) => state.language.lang);
-  const t = useTranslations();
 
   useEffect(() => {
     const fetchCategoriesAndItems = async () => {
       try {
         dispatch(setLoading(true));
         
+        // Only add language header for Arabic
         const headers = lang === 'ar' ? {
           'Accept-Language': lang
         } : {};
+
+        console.log('Fetching with language:', lang);
 
         const [categoryResponse, menuResponse] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`, { headers }),
@@ -38,6 +39,9 @@ export default function Items() {
 
         const categoryResult = await categoryResponse.json();
         const menuResult = await menuResponse.json();
+
+        console.log('Category API Response:', categoryResult);
+        console.log('Menu API Response:', menuResult);
 
         if (
           categoryResult?.data?.categories?.length > 0 &&
@@ -59,7 +63,15 @@ export default function Items() {
     fetchCategoriesAndItems();
   }, [dispatch, lang]);
 
+  // Add debug logging for categories
+  useEffect(() => {
+    console.log('Current categories in Redux:', categories);
+  }, [categories]);
+
   const handleQuantityChange = (item, quantity) => {
+    console.log('Adding to cart - Item data:', item);
+    console.log('Price type:', typeof item.price, 'Price value:', item.price);
+    
     if (!item.price || isNaN(Number(item.price))) {
       console.error('Invalid price for item:', item);
       return;
@@ -75,6 +87,7 @@ export default function Items() {
         description: item.description,
         categories: item.categories
       };
+      console.log('Dispatching to cart:', cartItem);
       dispatch(addToCart(cartItem));
     } else {
       dispatch(removeFromCart(item.slug));
@@ -88,7 +101,7 @@ export default function Items() {
   return (
     <div className="Items-List w-100 flex col g-20">
       <div className="list-header flex space-between">
-        <div className={Styles.listHeading}>{t('menu')}</div>
+        <div className={Styles.listHeading}>Menu</div>
         <div className="flex change-view">
           <button onClick={() => setIsGridView(true)}>
             <CiGrid2H />
@@ -148,7 +161,7 @@ export default function Items() {
                 })}
               </div>
             ) : (
-              <p>{t('no-items')}</p>
+              <p>No items found for this category</p>
             )}
           </div>
         );

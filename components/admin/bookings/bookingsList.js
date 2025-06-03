@@ -5,34 +5,11 @@ import { useSession } from 'next-auth/react';
 
 export default function BookingsList() {
     const [bookings, setBookings] = useState([]);
-    const [roomDetails, setRoomDetails] = useState({});
     const [statistics, setStatistics] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { data: session } = useSession();
     const t = useTranslations();
-
-    const fetchRoomDetails = useCallback(async (roomId) => {
-        if (!session?.user?.token || !roomId) return null;
-        
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${roomId}`, {
-                headers: {
-                    'Authorization': `Bearer ${session.user.token}`,
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch room details');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            console.error('Error fetching room details:', err);
-            return null;
-        }
-    }, [session?.user?.token]);
 
     const fetchBookings = useCallback(async () => {
         if (!session?.user?.token) return;
@@ -51,21 +28,6 @@ export default function BookingsList() {
             const result = await response.json();
             if (result.success) {
                 setBookings(result.data || []);
-                
-                // Fetch room details for each booking
-                const roomDetailsMap = {};
-                const uniqueRoomIds = [...new Set(result.data.map(booking => booking.room))];
-                
-                await Promise.all(
-                    uniqueRoomIds.map(async (roomId) => {
-                        const roomData = await fetchRoomDetails(roomId);
-                        if (roomData) {
-                            roomDetailsMap[roomId] = roomData;
-                        }
-                    })
-                );
-                
-                setRoomDetails(roomDetailsMap);
             } else {
                 throw new Error(result.message || 'Failed to fetch bookings');
             }
@@ -75,7 +37,7 @@ export default function BookingsList() {
         } finally {
             setLoading(false);
         }
-    }, [session?.user?.token, fetchRoomDetails]);
+    }, [session?.user?.token]);
 
     const fetchStatistics = useCallback(async () => {
         if (!session?.user?.token) return;
@@ -207,76 +169,73 @@ export default function BookingsList() {
 
             <div className={styles.bookingsList}>
                 {bookings && bookings.length > 0 ? (
-                    bookings.map((booking) => {
-                        const room = roomDetails[booking.room];
-                        return (
-                            <div key={booking._id} className={styles.bookingCard}>
-                                <div className={styles.bookingHeader}>
-                                    <h3>{t('Booking')} #{booking._id?.slice(-6) || 'N/A'}</h3>
-                                    <span className={`${styles.status} ${getStatusColor(booking.status)}`}>
-                                        {t(booking.status || 'Unknown')}
-                                    </span>
+                    bookings.map((booking) => (
+                        <div key={booking._id} className={styles.bookingCard}>
+                            <div className={styles.bookingHeader}>
+                                <h3>{t('Booking')} #{booking._id?.slice(-6) || 'N/A'}</h3>
+                                <span className={`${styles.status} ${getStatusColor(booking.status)}`}>
+                                    {t(booking.status || 'Unknown')}
+                                </span>
+                            </div>
+                            <div className={styles.bookingDetails}>
+                                <div className={styles.section}>
+                                    <h4>{t('Customer Details')}</h4>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Name')}:</strong>
+                                        <span>{booking.user?.name || 'N/A'}</span>
+                                    </div>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Email')}:</strong>
+                                        <span>{booking.user?.email || 'N/A'}</span>
+                                    </div>
                                 </div>
-                                <div className={styles.bookingDetails}>
-                                    <div className={styles.section}>
-                                        <h4>{t('Customer Details')}</h4>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Name')}:</strong>
-                                            <span>{booking.userId?.name || 'N/A'}</span>
-                                        </div>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Email')}:</strong>
-                                            <span>{booking.userId?.email || 'N/A'}</span>
-                                        </div>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Phone')}:</strong>
-                                            <span>{booking.userId?.phone || 'N/A'}</span>
-                                        </div>
-                                    </div>
 
-                                    <div className={styles.section}>
-                                        <h4>{t('Room Details')}</h4>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Room')}:</strong>
-                                            <span>{room?.name || 'N/A'}</span>
-                                        </div>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Capacity')}:</strong>
-                                            <span>{room?.capacity || 'N/A'} {t('persons')}</span>
-                                        </div>
-                                        {room?.facilities?.length > 0 && (
-                                            <div className={styles.facilities}>
-                                                <strong>{t('Facilities')}:</strong>
-                                                <div className={styles.facilityTags}>
-                                                    {room.facilities.map((facility, index) => (
-                                                        <span key={index} className={styles.facilityTag}>
-                                                            {facility}
-                                                        </span>
-                                                    ))}
-                                                </div>
+                                <div className={styles.section}>
+                                    <h4>{t('Room Details')}</h4>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Room')}:</strong>
+                                        <span>{booking.room?.name || 'N/A'}</span>
+                                    </div>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Capacity')}:</strong>
+                                        <span>{booking.room?.capacity || 'N/A'} {t('persons')}</span>
+                                    </div>
+                                    {booking.room?.amenities?.length > 0 && (
+                                        <div className={styles.facilities}>
+                                            <strong>{t('Amenities')}:</strong>
+                                            <div className={styles.facilityTags}>
+                                                {booking.room.amenities.map((amenity, index) => (
+                                                    <span key={index} className={styles.facilityTag}>
+                                                        {amenity}
+                                                    </span>
+                                                ))}
                                             </div>
-                                        )}
-                                    </div>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <div className={styles.section}>
-                                        <h4>{t('Booking Details')}</h4>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Date')}:</strong>
-                                            <span>{formatDate(booking.bookingDate)}</span>
-                                        </div>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Time Slot')}:</strong>
-                                            <span>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
-                                        </div>
-                                        <div className={styles.detail}>
-                                            <strong>{t('Created At')}:</strong>
-                                            <span>{formatDate(booking.createdAt)}</span>
-                                        </div>
+                                <div className={styles.section}>
+                                    <h4>{t('Booking Details')}</h4>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Date')}:</strong>
+                                        <span>{formatDate(booking.bookingDate)}</span>
+                                    </div>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Time Slot')}:</strong>
+                                        <span>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
+                                    </div>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Purpose')}:</strong>
+                                        <span>{booking.purpose || 'N/A'}</span>
+                                    </div>
+                                    <div className={styles.detail}>
+                                        <strong>{t('Created At')}:</strong>
+                                        <span>{formatDate(booking.createdAt)}</span>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })
+                        </div>
+                    ))
                 ) : (
                     <div className={styles.noBookings}>
                         {t('No bookings found')}
