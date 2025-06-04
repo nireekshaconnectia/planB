@@ -6,6 +6,7 @@ import BackButton from "@/components/backbutton/backbutton";
 import StudyRoomCheckoutForm from "@/components/auth/checkout/StudyRoomCheckoutForm";
 import CartCheckoutForm from "@/components/auth/checkout/CartCheckoutForm";
 import SelectTable from "@/components/selectStoreTable/selectStoreTable";
+import YouAreNotAllowed from "@/components/errors/youAreNotAllowed";
 import { useTranslations } from "next-intl";
 
 const CheckoutPage = () => {
@@ -44,7 +45,7 @@ const CheckoutPage = () => {
       ) : shouldShowCartCheckout ? (
         <CartCheckoutForm />
       ) : (
-        <SelectTable />
+        <YouAreNotAllowed />
       )}
     </div>
   );
