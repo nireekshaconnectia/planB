@@ -10,7 +10,7 @@ import Styles from "./itemslist.module.css";
 import Image from 'next/image';
 
 export default function Items() {
-  const [isGridView, setIsGridView] = useState(false);
+  const [isGridView, setIsGridView] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const { menu: foodItems, categories, loading, error } = useSelector((state) => state.apiData);

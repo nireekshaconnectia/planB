@@ -685,5 +685,7 @@ item css */
     .categorey-item{
         max-width: 60px;
     }
-    
+    .item-details p{
+        width:250px;
+    }
 }

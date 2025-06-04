@@ -86,18 +86,28 @@ const LanguageModal = ({ showModal, setShowModal }) => {
   };
 
   const changeLanguage = async (newLang) => {
-    dispatch(setLanguage(newLang));
-    await fetchDataWithLanguage(newLang);
+  dispatch(setLanguage(newLang));
+  await fetchDataWithLanguage(newLang);
 
-    // Set <html> attributes
-    if (typeof document !== "undefined") {
-      document.documentElement.lang = newLang;
-      document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
-    }
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = newLang;
 
-    router.refresh();
-    setShowModal(false);
-  };
+    const dirValue = newLang === "ar" ? "rtl" : "ltr";
+
+    // List of class names to apply the dir attribute to
+    const classNames = ["Items-List", "cartItems", "cartItem", "cartItemName", "cart-item" , "cart-checkout",  "cartItemPrice", "cartItemQuantity", "cartItemTotal" , "categorey-grid", "categorey-card", "categorey-card-title", "categorey-card-description", "categorey-card-image", "categorey-card-button"];
+
+    classNames.forEach((className) => {
+      const elements = document.querySelectorAll(`.${className}`);
+      elements.forEach((el) => {
+        el.setAttribute("dir", dirValue);
+      });
+    });
+  }
+
+  router.refresh();
+  setShowModal(false);
+};
 
   return (
     <>
