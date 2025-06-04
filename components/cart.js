@@ -44,12 +44,12 @@ export default function Cart() {
           {Object.keys(cartItems).length > 0 ? (
             Object.values(cartItems).map((item) => (
               <div className="cart-item" key={item.slug}>
-                <div className="flex space-between g-20 ">
+                <div className="flex space-between g-5 ">
                   <div className="cart-item-name">
                     <h4>{item.name}</h4>
                   </div>
                   <div className="cart-item-quantity">x {item.quantity}</div>
-                  <div className="cart-item-price">QAR {(item.price || 0).toFixed(2)}</div>
+                  <div className="cart-item-price">{(item.price || 0).toFixed(2)}</div>
                   <QuantitySelector
                     quantity={item.quantity}
                     onQuantityChange={(qty) => {

@@ -544,19 +544,20 @@ item css */
 
 .cart-item-name {
     flex: 2;
-    /* This takes up more space */
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
+    align-items: center;
+    display: flex;
 }
 
 .cart-item-quantity,
 .cart-item-price,
 .cart-item-total {
     flex: 1;
-    /* Equal width for quantity, price, and total */
     text-align: right;
-    /* Align numbers to the right */
     font-size: 14px;
+    align-items: center;
+    display: flex;
 }
 
 .cart-preview .total-items h4 {
@@ -687,5 +688,13 @@ item css */
     }
     .item-details p{
         width:250px;
+    }
+    .cart-item-quantity, .cart-item-price, .cart-item-total{
+        flex:0.5;
+        font-size: 12px;
+    }
+    .cart-item-name{
+        flex: 3.5;
+        font-size: 14px;
     }
 }
