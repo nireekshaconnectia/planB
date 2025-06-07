@@ -42,7 +42,7 @@ const LoginPage = () => {
     });
 
     return () => unsubscribe(); // Cleanup subscription
-  }, [router]);
+  }, [router , redirectTo]);
 
   const handleCountryCodeChange = (e) => {
     let inputCode = e.target.value.replace(/[^0-9+]/g, ""); // Allow only numbers & '+'

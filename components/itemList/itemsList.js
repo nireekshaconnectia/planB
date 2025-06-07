@@ -26,7 +26,7 @@ export default function Items() {
           'Accept-Language': lang
         } : {};
 
-        console.log('Fetching with language:', lang);
+        // console.log('Fetching with language:', lang);
 
         const [categoryResponse, menuResponse] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`, { headers }),
@@ -40,8 +40,8 @@ export default function Items() {
         const categoryResult = await categoryResponse.json();
         const menuResult = await menuResponse.json();
 
-        console.log('Category API Response:', categoryResult);
-        console.log('Menu API Response:', menuResult);
+        // console.log('Category API Response:', categoryResult);
+        // console.log('Menu API Response:', menuResult);
 
         if (
           categoryResult?.data?.categories?.length > 0 &&
@@ -63,14 +63,14 @@ export default function Items() {
     fetchCategoriesAndItems();
   }, [dispatch, lang]);
 
-  // Add debug logging for categories
+  // // Add debug logging for categories
   useEffect(() => {
-    console.log('Current categories in Redux:', categories);
+    //  console.log('Current categories in Redux:', categories);
   }, [categories]);
 
   const handleQuantityChange = (item, quantity) => {
-    console.log('Adding to cart - Item data:', item);
-    console.log('Price type:', typeof item.price, 'Price value:', item.price);
+    //  console.log('Adding to cart - Item data:', item);
+    //  console.log('Price type:', typeof item.price, 'Price value:', item.price);
     
     if (!item.price || isNaN(Number(item.price))) {
       console.error('Invalid price for item:', item);

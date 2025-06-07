@@ -1,18 +1,41 @@
 'use client';
 
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./checkout.module.css";
 import BackButton from "@/components/backbutton/backbutton";
 import StudyRoomCheckoutForm from "@/components/auth/checkout/StudyRoomCheckoutForm";
 import CartCheckoutForm from "@/components/auth/checkout/CartCheckoutForm";
-import SelectTable from "@/components/selectStoreTable/selectStoreTable";
 import YouAreNotAllowed from "@/components/errors/youAreNotAllowed";
+import SelectTable from "@/components/selectStoreTable/selectStoreTable";
 import { useTranslations } from "next-intl";
+
+const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
 
 const CheckoutPage = () => {
   const searchParams = useSearchParams();
   const t = useTranslations();
 
+  const [hasValidCafeTable, setHasValidCafeTable] = useState(false);
+
+  // ✅ Check localStorage for valid cafeTableData
+  useEffect(() => {
+    const stored = localStorage.getItem('cafeTableData');
+    if (!stored) return;
+
+    try {
+      const parsed = JSON.parse(stored);
+      const isValid = parsed?.value && Date.now() - parsed.timestamp < SIX_HOURS_MS;
+
+      if (isValid) {
+        setHasValidCafeTable(true);
+      }
+    } catch {
+      // Do nothing if JSON parsing fails
+    }
+  }, []);
+
+  // 🧠 Room Booking
   const bookingData = {
     roomId: searchParams.get("roomId"),
     roomName: searchParams.get("roomName"),
@@ -22,14 +45,14 @@ const CheckoutPage = () => {
     duration: searchParams.get("duration"),
     price: searchParams.get("price"),
   };
-
   const hasRoomBooking = Boolean(bookingData.roomId);
+
+  // 🛍️ Order Type & Table
   const orderType = searchParams.get("orderType");
   const table = searchParams.get("table");
 
-  // ✅ Proper logic to determine if we should show the cart checkout form
   const shouldShowCartCheckout =
-    orderType === "takeaway" || (orderType === "Dine In" && Boolean(table));
+    hasValidCafeTable && (orderType === "takeaway" || (orderType === "Dine In" && Boolean(table)));
 
   return (
     <div className={styles.checkout}>
@@ -44,6 +67,8 @@ const CheckoutPage = () => {
         <StudyRoomCheckoutForm bookingData={bookingData} />
       ) : shouldShowCartCheckout ? (
         <CartCheckoutForm />
+      ) : hasValidCafeTable ? (
+        <SelectTable />
       ) : (
         <YouAreNotAllowed />
       )}

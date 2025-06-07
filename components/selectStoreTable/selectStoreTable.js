@@ -1,67 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./selectStoretable.module.css";
-import { MdOutlineTableBar } from "react-icons/md";
-
-const tables = Array.from({ length: 10 }, (_, i) => ({ no: i + 1 }));
 
 export default function SelectTable() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [orderType, setOrderType] = useState(null);
+  const [tableNo, setTableNo] = useState(null);
+
+  // ✅ Get cafeTable from localStorage (with expiry check)
+  useEffect(() => {
+    const stored = localStorage.getItem("cafeTableData");
+    if (!stored) return;
+
+    try {
+      const parsed = JSON.parse(stored);
+      const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
+      const isValid = parsed?.value && Date.now() - parsed.timestamp < SIX_HOURS_MS;
+
+      if (isValid) {
+        setTableNo(parsed.value);
+      }
+    } catch {
+      // Ignore errors
+    }
+  }, []);
 
   const handleOrderTypeSelect = (type) => {
-    setOrderType(type);
-
-    if (type === "takeaway") {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("orderType", type);
-      router.push(`/checkout?${params.toString()}`);
+    if (!tableNo) {
+      alert("Table number not found. Please scan the QR again.");
+      return;
     }
-  };
 
-  const handleTableSelect = (tableNo) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("orderType", "Dine In");
+    params.set("orderType", type);
     params.set("table", tableNo);
     router.push(`/checkout?${params.toString()}`);
   };
 
   return (
     <div className={styles.tableList}>
-      <h2>Select your order type and table</h2>
+      <h2>Select your order type</h2>
 
       <div className={styles.orderTypeBtns}>
         <button
-          className={`${styles.orderBtn} ${orderType === "Dine In" ? styles.active : ""}`}
+          className={styles.orderBtn}
           onClick={() => handleOrderTypeSelect("Dine In")}
         >
           Dine In
         </button>
         <button
-          className={`${styles.orderBtn} ${orderType === "takeaway" ? styles.active : ""}`}
+          className={styles.orderBtn}
           onClick={() => handleOrderTypeSelect("takeaway")}
         >
           Takeaway
         </button>
       </div>
-
-      {orderType === "Dine In" && (
-        <div className={styles.tableItems}>
-          {tables.map((table) => (
-            <div
-              key={table.no}
-              className={styles.tableItem}
-              onClick={() => handleTableSelect(table.no)}
-            >
-              <MdOutlineTableBar size={50} />
-              <h3>Table {table.no}</h3>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

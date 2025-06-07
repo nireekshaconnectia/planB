@@ -2,12 +2,19 @@
 import { useEffect, useState } from "react";
 import styles from "./studyroom.module.css";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useRequireAuth } from "@/lib/auth/useRequireAuth";
 
 const StudyRoomCheckoutForm = ({ bookingData }) => {
-  const { roomId, roomName, date, startTime, endTime, duration, price } = bookingData;
+  const { roomId, roomName, date, startTime, endTime, duration, price } =
+    bookingData;
   const t = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const currentPath =
+    pathname + (searchParams ? `?${searchParams.toString()}` : "");
+  useRequireAuth(currentPath);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,9 +44,15 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
           const { name, email, phoneNumber } = data.data;
           setFormData({ name: name || "", phone: phoneNumber || "" });
           setUserEmail(email || "");
-        } else {
-          alert(t("profile-load-failed"));
+          setLoading(false);
+        } else if (data.code === "AUTH_TOKEN_INVALID") {
+          router.push("/login");
         }
+        // else {
+        //   // alert(t("profile-load-failed"));
+        //   alert(data.message);
+        //   console.log("Profile load failed:", data);
+        // }
       })
       .catch(() => alert(t("profile-fetch-error")))
       .finally(() => setLoading(false));
@@ -50,72 +63,82 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("userToken");
-    if (!token) {
-      alert(t("not-authenticated"));
-      router.push("/login");
+  e.preventDefault();
+  const token = localStorage.getItem("userToken");
+
+  if (!token) {
+    alert(t("not-authenticated"));
+    router.push("/login");
+    return;
+  }
+
+  try {
+    const bookingPayload = {
+      room: roomId,
+      bookingDate: date,
+      startTime,
+      endTime,
+      purpose: "Group Study Session",
+      status: "pending",
+      customerName: formData.name,
+      customerPhone: formData.phone,
+      customerEmail: userEmail,
+      amount: Number(price),
+      paymentStatus: "pending",
+    };
+
+    console.log("📦 Booking Payload:", bookingPayload);
+
+    const bookingRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/room-bookings/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bookingPayload),
+    });
+
+    const bookingJson = await bookingRes.json();
+    console.log("📨 Booking Response:", bookingJson);
+
+    // ✅ Use correct path to booking ID
+    if (!bookingRes.ok || !bookingJson?.data?.booking?._id) {
+      console.error("❌ Booking failed", bookingJson);
+      alert("Booking failed: " + (bookingJson.message || "Unknown error"));
       return;
     }
 
-    try {
-      // 1. Create booking
-      const bookingRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/room-bookings/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          room: roomId,
-          bookingDate: date,
-          startTime,
-          endTime,
-          purpose: "Group Study Session",
-          status: "pending",
-          customerName: formData.name,
-          customerPhone: formData.phone,
-          customerEmail: userEmail,
-          amount: Number(price),
-          paymentStatus: "pending"
-        }),
-      });
+    const bookingId = bookingJson.data.booking._id;
+    console.log("✅ Booking created. ID:", bookingId);
 
-      const bookingJson = await bookingRes.json();
-      if (!bookingRes.ok || !bookingJson?.data?._id) {
-        throw new Error("Booking failed");
-      }
+    // ✅ Use paymentInfo directly from response
+    const paymentPayload = bookingJson.data.paymentInfo;
 
-      const bookingId = bookingJson.data._id;
+    console.log("💸 Payment Payload:", paymentPayload);
 
-      // 2. Create payment
-      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: Number(price),
-          orderId: bookingId,
-          firstName: formData.name?.split(" ")[0] || "First",
-          lastName: formData.name?.split(" ")[1] || "Last",
-          phone: formData.phone,
-          email: userEmail,
-          bookingId: bookingId,
-          type: "study_room"
-        }),
-      });
+    const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(paymentPayload),
+    });
 
-      const paymentJson = await paymentRes.json();
-      if (!paymentRes.ok || !paymentJson?.data?.payUrl) {
-        throw new Error("Payment initiation failed");
-      }
+    const paymentJson = await paymentRes.json();
+    console.log("💰 Payment Response:", paymentJson);
 
-      // 3. Redirect to payment URL
-      window.location.href = paymentJson.data.payUrl;
-    } catch (err) {
-      console.error(err);
-      alert(t("booking-error"));
+    if (!paymentRes.ok || !paymentJson?.data?.payUrl) {
+      throw new Error("Payment initiation failed: " + (paymentJson.message || "No payUrl"));
     }
-  };
+
+    window.location.href = paymentJson.data.payUrl;
+  } catch (err) {
+    console.error("🔥 Booking or Payment error:", err);
+    alert(t("booking-error"));
+  }
+};
+
 
   if (loading) return <p>{t("loading-user-data")}</p>;
 
@@ -123,12 +146,25 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
     <div className={styles.checkoutForm}>
       <div className={styles.details}>
         <h2>{t("study-room-booking-details")}</h2>
-        <p><strong>{t("room")}:</strong> {roomName}</p>
-        <p><strong>{t("date")}:</strong> {date}</p>
-        <p><strong>{t("from")}:</strong> {startTime}</p>
-        <p><strong>{t("to")}:</strong> {endTime}</p>
-        <p><strong>{t("duration")}:</strong> {duration} {duration > 1 ? t("hours") : t("hour")}</p>
-        <p><strong>{t("total-price")}:</strong> {price} QAR</p>
+        <p>
+          <strong>{t("room")}:</strong> {roomName}
+        </p>
+        <p>
+          <strong>{t("date")}:</strong> {date}
+        </p>
+        <p>
+          <strong>{t("from")}:</strong> {startTime}
+        </p>
+        <p>
+          <strong>{t("to")}:</strong> {endTime}
+        </p>
+        <p>
+          <strong>{t("duration")}:</strong> {duration}{" "}
+          {duration > 1 ? t("hours") : t("hour")}
+        </p>
+        <p>
+          <strong>{t("total-price")}:</strong> {price} QAR
+        </p>
       </div>
 
       <form className={styles.formDetails} onSubmit={handleSubmit}>

@@ -17,10 +17,10 @@ export default function Cart() {
 
   // Debug logging
   useEffect(() => {
-    console.log('Current cart items:', cartItems);
+    // console.log('Current cart items:', cartItems);
     Object.entries(cartItems).forEach(([slug, item]) => {
-      console.log(`Item ${slug}:`, item);
-      console.log(`Price for ${slug}:`, item.price, typeof item.price);
+      // console.log(`Item ${slug}:`, item);
+      // console.log(`Price for ${slug}:`, item.price, typeof item.price);
     });
   }, [cartItems]);
 

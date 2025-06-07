@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRequireAuth } from "@/lib/auth/useRequireAuth";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import useAuth from "@/lib/hooks/useAuth";
 
 
 function generateOrderId() {
@@ -23,7 +22,7 @@ const ConfirmOrder = () => {
   const tableNumber = searchParams.get("table") || "A1";
   const orderType = searchParams.get("orderType") || "delivery";
   const currentPath = pathname + (searchParams ? `?${searchParams.toString()}` : "");
-  useAuth(currentPath);
+  useRequireAuth(currentPath);
 
   const totalPrice = Object.values(cartItems).reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -75,7 +74,8 @@ const ConfirmOrder = () => {
 
       const result = await res.json();
 
-      if (!res.ok || result.status !== "success") {
+      if (!res.ok || result.success !== true || !result.data?.payUrl) {
+        console.error("Payment initiation failed:", result);
         throw new Error("Payment initiation failed");
       }
 
