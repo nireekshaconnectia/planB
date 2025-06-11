@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./popupmodal.module.css";
+import styles from "./popup.module.css";
 import Backdrop from "../backdrop/backdrop";
 
 const PopupModal = ({ show, onClose, heading, content }) => {

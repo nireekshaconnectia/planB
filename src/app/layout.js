@@ -2,6 +2,7 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import "./style.css";
 import "./mobile.style.css";
+import logo from "@/assets/logo.png";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({

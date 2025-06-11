@@ -32,6 +32,9 @@ h2{
     font-family: "Haigrast Serif", Sans-serif;
     font-weight: 400;
 }
+p{
+  color: #111;
+}
 main{
   max-width: 600px;
   background-color: #fff;

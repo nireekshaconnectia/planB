@@ -1,0 +1,21 @@
+.itemContainer{
+  padding: 40px 20px;
+  color: #1a1a1a;
+}
+.description {
+    color: var(--text-secondary-color);
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 1.5em;
+    mix-blend-mode: unset !important;
+    text-overflow: unset !important;
+    overflow: unset !important;
+    width: 100% !important;
+    white-space: unset !important;
+}
+.itemContainer h3{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-heading-color);
+    margin-bottom: 10px;
+}

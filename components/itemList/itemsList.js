@@ -2,29 +2,43 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
-import { setMenuData, setCategoriesData, setLoading, setError } from "@/store/apiSlice";
+import {
+  setMenuData,
+  setCategoriesData,
+  setLoading,
+  setError,
+} from "@/store/apiSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems";
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
 import Styles from "./itemslist.module.css";
-import Image from 'next/image';
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Items() {
   const [isGridView, setIsGridView] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-  const { menu: foodItems, categories, loading, error } = useSelector((state) => state.apiData);
+  const {
+    menu: foodItems,
+    categories,
+    loading,
+    error,
+  } = useSelector((state) => state.apiData);
   const lang = useSelector((state) => state.language.lang);
 
   useEffect(() => {
     const fetchCategoriesAndItems = async () => {
       try {
         dispatch(setLoading(true));
-        
+
         // Only add language header for Arabic
-        const headers = lang === 'ar' ? {
-          'Accept-Language': lang
-        } : {};
+        const headers =
+          lang === "ar"
+            ? {
+                "Accept-Language": lang,
+              }
+            : {};
 
         // console.log('Fetching with language:', lang);
 
@@ -71,12 +85,12 @@ export default function Items() {
   const handleQuantityChange = (item, quantity) => {
     //  console.log('Adding to cart - Item data:', item);
     //  console.log('Price type:', typeof item.price, 'Price value:', item.price);
-    
+
     if (!item.price || isNaN(Number(item.price))) {
-      console.error('Invalid price for item:', item);
+      console.error("Invalid price for item:", item);
       return;
     }
-    
+
     if (quantity > 0) {
       const cartItem = {
         slug: item.slug,
@@ -85,9 +99,9 @@ export default function Items() {
         quantity: quantity,
         image: item.image,
         description: item.description,
-        categories: item.categories
+        categories: item.categories,
       };
-      console.log('Dispatching to cart:', cartItem);
+      console.log("Dispatching to cart:", cartItem);
       dispatch(addToCart(cartItem));
     } else {
       dispatch(removeFromCart(item.slug));
@@ -114,13 +128,15 @@ export default function Items() {
 
       {categories.map((category) => {
         const filteredItems = foodItems.filter((item) => {
-          return item.categories.some(
-            (cat) => cat.slug === category.slug
-          );
+          return item.categories.some((cat) => cat.slug === category.slug);
         });
 
         return (
-          <div key={category.slug} id={category.slug} className="category-section">
+          <div
+            key={category.slug}
+            id={category.slug}
+            className="category-section"
+          >
             <div className={Styles.category_title}>{category.name}</div>
 
             {filteredItems.length > 0 ? (
@@ -132,17 +148,22 @@ export default function Items() {
                       className={`item ${isGridView ? "grid-view" : "list"}`}
                       key={item.slug}
                     >
-                      <div className={"item-image flex"}>
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={560}
-                          height={350}
-                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
-                        />
-                      </div>
+                      <Link href={`/menu/${item.slug}`}>
+                        <div className={"item-image flex"}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={560}
+                            height={350}
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+                          />
+                        </div>
+                      </Link>
+
                       <div className="item-details">
-                        <h3>{item.name}</h3>
+                        <Link href={`/menu/${item.slug}`}>
+                          <h3>{item.name}</h3>
+                        </Link>
                         <div className="flex space-between">
                           <div className="item-price">
                             QAR {item.price?.toFixed(2) || "0.00"}
@@ -154,7 +175,9 @@ export default function Items() {
                             }
                           />
                         </div>
-                        <p>{item.description}</p>
+                        <Link href={`/menu/${item.slug}`}>
+                          <p>{item.description}</p>
+                        </Link>
                       </div>
                     </div>
                   );

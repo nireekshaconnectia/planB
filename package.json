@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.14.1",
     "@reduxjs/toolkit": "^2.5.1",
     "bcryptjs": "^3.0.2",
     "country-flag-icons": "^1.5.14",
