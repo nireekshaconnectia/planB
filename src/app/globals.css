@@ -1,8 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
+:root{
   --primary-font: 'Poppins', sans-serif;
   --text-font: 'Poppins', sans-serif;
   --foreground-rgb: 252, 186, 3;
@@ -58,6 +54,7 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Hide arrows for Firefox */
 input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 :target {
   scroll-margin-top: 150px; /* Adjust this value to match the height of your sticky header */
