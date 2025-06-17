@@ -19,20 +19,15 @@ const formatImageUrl = (url) => {
 function getInitialFormData(initialData) {
     return {
         name: initialData?.name || '',
+        nameAr: initialData?.nameAr || '',
         description: initialData?.description || '',
+        descriptionAr: initialData?.descriptionAr || '',
         price: initialData?.price || '',
         categories: initialData?.categories?.map(cat => typeof cat === 'object' ? cat._id : cat) || [],
         isAvailable: initialData?.isAvailable ?? true,
         image: null,
         imagePreview: initialData?.image ? formatImageUrl(initialData.image) : '',
-        nutritionalInfo: initialData?.nutritionalInfo || {
-            calories: 0,
-            protein: 0,
-            carbs: 0,
-            fat: 0
-        },
         preparationTime: initialData?.preparationTime || 5,
-        ingredients: initialData?.ingredients || []
     };
 }
 
@@ -44,7 +39,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
     const [formData, setFormData] = useState(getInitialFormData(initialData));
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [ingredientInput, setIngredientInput] = useState('');
 
     useEffect(() => {
         // Log initial data for debugging
@@ -64,7 +58,38 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
 
     useEffect(() => {
         setFormData(getInitialFormData(initialData));
-    }, [initialData]);
+
+        // Only fetch if editing (initialData has id)
+        if (initialData && initialData.id) {
+            const fetchBothLanguages = async () => {
+                try {
+                    const [enRes, arRes] = await Promise.all([
+                        fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/${initialData.id}`, {
+                            headers: { 'Accept-Language': 'en', 'Authorization': `Bearer ${session?.user?.token}` }
+                        }),
+                        fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/${initialData.id}`, {
+                            headers: { 'Accept-Language': 'ar', 'Authorization': `Bearer ${session?.user?.token}` }
+                        })
+                    ]);
+                    const enData = await enRes.json();
+                    const arData = await arRes.json();
+                    if (enData.success && arData.success) {
+                        setFormData(prev => ({
+                            ...prev,
+                            name: enData.data.name || '',
+                            description: enData.data.description || '',
+                            nameAr: arData.data.name || '',
+                            descriptionAr: arData.data.description || '',
+                            // keep other fields as is
+                        }));
+                    }
+                } catch (err) {
+                    console.error('Error fetching both language data:', err);
+                }
+            };
+            fetchBothLanguages();
+        }
+    }, [initialData, session]);
 
     const fetchCategories = async () => {
         try {
@@ -108,23 +133,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
         });
     };
 
-    const handleAddIngredient = () => {
-        if (ingredientInput.trim()) {
-            setFormData(prev => ({
-                ...prev,
-                ingredients: [...prev.ingredients, ingredientInput.trim()]
-            }));
-            setIngredientInput('');
-        }
-    };
-
-    const handleRemoveIngredient = (index) => {
-        setFormData(prev => ({
-            ...prev,
-            ingredients: prev.ingredients.filter((_, i) => i !== index)
-        }));
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -145,31 +153,22 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
             // Create a plain object instead of FormData
             const dataToSend = {
                 name: formData.name.trim(),
+                nameAr: formData.nameAr.trim(),
                 description: formData.description.trim(),
+                descriptionAr: formData.descriptionAr.trim(),
                 price: parseFloat(formData.price),
                 isAvailable: formData.isAvailable,
                 categories: formData.categories,
                 preparationTime: parseInt(formData.preparationTime),
-                ingredients: formData.ingredients,
-                nutritionalInfo: {
-                    calories: parseInt(formData.nutritionalInfo.calories) || 0,
-                    protein: parseInt(formData.nutritionalInfo.protein) || 0,
-                    carbs: parseInt(formData.nutritionalInfo.carbs) || 0,
-                    fat: parseInt(formData.nutritionalInfo.fat) || 0
-                }
             };
 
             // If there's a new image, use FormData
             if (formData.image) {
                 const formDataToSend = new FormData();
                 Object.keys(dataToSend).forEach(key => {
-                    if (key === 'categories' || key === 'ingredients') {
+                    if (key === 'categories') {
                         dataToSend[key].forEach(value => {
                             formDataToSend.append(`${key}[]`, value);
-                        });
-                    } else if (key === 'nutritionalInfo') {
-                        Object.keys(dataToSend[key]).forEach(nutKey => {
-                            formDataToSend.append(`nutritionalInfo[${nutKey}]`, dataToSend[key][nutKey]);
                         });
                     } else {
                         formDataToSend.append(key, dataToSend[key]);
@@ -210,20 +209,15 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     if (!initialData) {
                         setFormData({
                             name: '',
+                            nameAr: '',
                             description: '',
+                            descriptionAr: '',
                             price: '',
                             categories: [],
                             isAvailable: true,
                             image: null,
                             imagePreview: '',
-                            nutritionalInfo: {
-                                calories: 0,
-                                protein: 0,
-                                carbs: 0,
-                                fat: 0
-                            },
                             preparationTime: 5,
-                            ingredients: []
                         });
                     }
                 } else {
@@ -265,20 +259,15 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     if (!initialData) {
                         setFormData({
                             name: '',
+                            nameAr: '',
                             description: '',
+                            descriptionAr: '',
                             price: '',
                             categories: [],
                             isAvailable: true,
                             image: null,
                             imagePreview: '',
-                            nutritionalInfo: {
-                                calories: 0,
-                                protein: 0,
-                                carbs: 0,
-                                fat: 0
-                            },
                             preparationTime: 5,
-                            ingredients: []
                         });
                     }
                 } else {
@@ -302,22 +291,40 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
             {error && <div className={styles.error}>{error}</div>}
             
             <div className={styles.fieldGroup}>
-                <label>{t('item-name')}</label>
+                <label>{t('item-name-en') || 'Item Name (English)'}</label>
                 <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder={t('enter-item-name')}
+                    placeholder={t('enter-item-name-en') || 'Enter item name in English'}
                     required
                 />
             </div>
-
             <div className={styles.fieldGroup}>
-                <label>{t('description')}</label>
+                <label>{t('item-name-ar') || 'Item Name (Arabic)'}</label>
+                <input
+                    type="text"
+                    value={formData.nameAr}
+                    onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
+                    placeholder={t('enter-item-name-ar') || 'Enter item name in Arabic'}
+                    required
+                />
+            </div>
+            <div className={styles.fieldGroup}>
+                <label>{t('description-en') || 'Description (English)'}</label>
                 <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder={t('enter-description')}
+                    placeholder={t('enter-description-en') || 'Enter description in English'}
+                    required
+                />
+            </div>
+            <div className={styles.fieldGroup}>
+                <label>{t('description-ar') || 'Description (Arabic)'}</label>
+                <textarea
+                    value={formData.descriptionAr}
+                    onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
+                    placeholder={t('enter-description-ar') || 'Enter description in Arabic'}
                     required
                 />
             </div>
@@ -363,105 +370,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     onChange={(e) => setFormData({ ...formData, preparationTime: parseInt(e.target.value) })}
                     required
                 />
-            </div>
-
-            <div className={styles.fieldGroup}>
-                <label>Ingredients</label>
-                <div className={styles.ingredientsList}>
-                    {formData.ingredients.map((ingredient, index) => (
-                        <div key={index} className={styles.ingredientItem}>
-                            <span>{ingredient}</span>
-                            <button
-                                type="button"
-                                onClick={() => handleRemoveIngredient(index)}
-                                className={styles.removeButton}
-                            >
-                                ×
-                            </button>
-                        </div>
-                    ))}
-                </div>
-                <div className={styles.ingredientInput}>
-                    <input
-                        type="text"
-                        value={ingredientInput}
-                        onChange={(e) => setIngredientInput(e.target.value)}
-                        placeholder="Add an ingredient"
-                    />
-                    <button
-                        type="button"
-                        onClick={handleAddIngredient}
-                        className={styles.addButton}
-                    >
-                        Add
-                    </button>
-                </div>
-            </div>
-
-            <div className={styles.fieldGroup}>
-                <label>Nutritional Information</label>
-                <div className={styles.nutritionalInfo}>
-                    <div>
-                        <label>Calories</label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={formData.nutritionalInfo.calories}
-                            onChange={(e) => setFormData({
-                                ...formData,
-                                nutritionalInfo: {
-                                    ...formData.nutritionalInfo,
-                                    calories: parseInt(e.target.value)
-                                }
-                            })}
-                        />
-                    </div>
-                    <div>
-                        <label>Protein (g)</label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={formData.nutritionalInfo.protein}
-                            onChange={(e) => setFormData({
-                                ...formData,
-                                nutritionalInfo: {
-                                    ...formData.nutritionalInfo,
-                                    protein: parseInt(e.target.value)
-                                }
-                            })}
-                        />
-                    </div>
-                    <div>
-                        <label>Carbs (g)</label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={formData.nutritionalInfo.carbs}
-                            onChange={(e) => setFormData({
-                                ...formData,
-                                nutritionalInfo: {
-                                    ...formData.nutritionalInfo,
-                                    carbs: parseInt(e.target.value)
-                                }
-                            })}
-                        />
-                    </div>
-                    <div>
-                        <label>Fat (g)</label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={formData.nutritionalInfo.fat}
-                            onChange={(e) => setFormData({
-                                ...formData,
-                                nutritionalInfo: {
-                                    ...formData.nutritionalInfo,
-                                    fat: parseInt(e.target.value)
-                                }
-                            })}
-                        />
-                    </div>
-                </div>
             </div>
 
             <div className={styles.fieldGroup}>
