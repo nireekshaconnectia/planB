@@ -3,9 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRequireAuth } from "@/lib/auth/useRequireAuth";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-
 
 function generateOrderId() {
   const timestamp = Date.now();
@@ -13,16 +11,16 @@ function generateOrderId() {
   return `ORD-${timestamp}-${random}`;
 }
 
-const ConfirmOrder = () => {
+const ConfirmOrder = ({ guestInfo }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const cartItems = useSelector((state) => state.cart.items);
-  const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const tableNumber = searchParams.get("table") || "A1";
   const orderType = searchParams.get("orderType") || "delivery";
-  const currentPath = pathname + (searchParams ? `?${searchParams.toString()}` : "");
-  useRequireAuth(currentPath);
 
   const totalPrice = Object.values(cartItems).reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -30,9 +28,23 @@ const ConfirmOrder = () => {
   );
 
   const handleConfirmOrder = async () => {
-    setIsLoading(true); // ✅ Set loading to true
+    setIsLoading(true);
 
-    const userInfo = JSON.parse(localStorage.getItem("userProfile") || "{}");
+    const storedProfile = localStorage.getItem("userProfile");
+    let userInfo;
+
+    try {
+      userInfo = storedProfile ? JSON.parse(storedProfile) : null;
+    } catch (e) {
+      console.warn("Invalid user profile in localStorage");
+      userInfo = null;
+    }
+
+    // Prefer userProfile if logged in, else fallback to guestInfo (prop), then dummy
+    const name = userInfo?.name || guestInfo?.name || "Guest User";
+    const phone = userInfo?.phone || guestInfo?.phone || "+971000000000";
+    const email = userInfo?.email || guestInfo?.email || "guest@example.com";
+
     const orderId = generateOrderId();
 
     const items = Object.values(cartItems).map((item) => ({
@@ -46,27 +58,20 @@ const ConfirmOrder = () => {
 
     const paymentPayload = {
       amount: totalPrice.toFixed(2),
-      firstName: userInfo.name?.split(" ")[0] || "First",
-      lastName: userInfo.name?.split(" ")[1] || "Last",
-      phone: userInfo.phone || "+971000000000",
-      email: userInfo.email || "test@example.com",
+      firstName: name.split(" ")[0],
+      lastName: name.split(" ")[1] || "",
+      phone,
+      email,
       orderId,
     };
 
     try {
-      const firebaseToken = localStorage.getItem("userToken");
-
-      if (!firebaseToken) {
-        throw new Error("User is not authenticated");
-      }
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${firebaseToken}`,
           },
           body: JSON.stringify(paymentPayload),
         }
@@ -74,8 +79,7 @@ const ConfirmOrder = () => {
 
       const result = await res.json();
 
-      if (!res.ok || result.success !== true || !result.data?.payUrl) {
-        console.error("Payment initiation failed:", result);
+      if (!res.ok || !result.success || !result.data?.payUrl) {
         throw new Error("Payment initiation failed");
       }
 
@@ -87,7 +91,6 @@ const ConfirmOrder = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${firebaseToken}`,
           },
           body: JSON.stringify({
             orderId,
@@ -99,9 +102,9 @@ const ConfirmOrder = () => {
             deliveryAddress: "123 Main St",
             specialInstructions: "",
             user: {
-              name: userInfo.name,
-              email: userInfo.email,
-              phone: userInfo.phone,
+              name,
+              email,
+              phone,
             },
             payment: {
               transactionId: paymentData.transactionId,
@@ -116,39 +119,15 @@ const ConfirmOrder = () => {
       const orderResult = await orderResponse.json();
 
       if (!orderResponse.ok || !orderResult.success) {
-        const errorCode = orderResult?.code?.toUpperCase() || "";
-        const errorMsg = orderResult?.message || "Order creation failed";
-
-        if (
-          errorCode === "AUTH_TOKEN_INVALID" ||
-          errorCode === "AUTH_TOKEN_EXPIRED"
-        ) {
-          router.push(`/logout?redirectTo=${encodeURIComponent(router.asPath)}`);
-          return;
-        }
-
-        throw new Error(errorMsg);
+        throw new Error(orderResult?.message || "Order creation failed");
       }
 
       window.location.href = paymentData.payUrl;
     } catch (error) {
-      const errorMessage = error.message?.toLowerCase() || "";
-
-      if (
-        errorMessage.includes("not authenticated") ||
-        errorMessage.includes("unauthorized")
-      ) {
-        router.push("/logout");
-      } else {
-        console.error("❌ Order confirmation error:", error);
-        alert(
-          `❌ Failed to confirm order.\n\nDetails: ${
-            error.message || "Unknown error"
-          }`
-        );
-      }
+      alert(`❌ Failed to confirm order.\n\nDetails: ${error.message}`);
+      console.error("Order Error:", error);
     } finally {
-      setIsLoading(false); // ✅ Reset loading if needed
+      setIsLoading(false);
     }
   };
 
@@ -157,8 +136,6 @@ const ConfirmOrder = () => {
       <button onClick={handleConfirmOrder} disabled={isLoading}>
         {isLoading ? "Processing..." : "Confirm Order"}
       </button>
-
-      {/* ✅ Show loader only while loading */}
       {isLoading && <LoadingSpinner />}
     </div>
   );

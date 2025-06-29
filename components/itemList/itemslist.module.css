@@ -1,3 +1,10 @@
+.listHeading {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-heading-color);
+    margin-bottom: 10px;
+}
+
 .category_title{
     font-size: 18px;
     font-weight: 500;

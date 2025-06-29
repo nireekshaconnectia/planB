@@ -1,115 +1,39 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "@/store/cartSlice";
-import {
-  setMenuData,
-  setCategoriesData,
-  setLoading,
-  setError,
-} from "@/store/apiSlice";
 import QuantitySelector from "@/components/quantitySelector/quantitySelector";
 import SkeletonItems from "@/components/skeleton/SkeletonItems";
 import { CiBoxList, CiGrid2H } from "react-icons/ci";
 import Styles from "./itemslist.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { useApiData } from "@/lib/hooks/useApiData";
 
 export default function Items() {
   const [isGridView, setIsGridView] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-  const {
-    menu: foodItems,
-    categories,
-    loading,
-    error,
-  } = useSelector((state) => state.apiData);
-  const lang = useSelector((state) => state.language.lang);
-
-  useEffect(() => {
-    const fetchCategoriesAndItems = async () => {
-      try {
-        dispatch(setLoading(true));
-
-        // Only add language header for Arabic
-        const headers =
-          lang === "ar"
-            ? {
-                "Accept-Language": lang,
-              }
-            : {};
-
-        // console.log('Fetching with language:', lang);
-
-        const [categoryResponse, menuResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/categorey`, { headers }),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu`, { headers }),
-        ]);
-
-        if (!categoryResponse.ok || !menuResponse.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const categoryResult = await categoryResponse.json();
-        const menuResult = await menuResponse.json();
-
-        // console.log('Category API Response:', categoryResult);
-        // console.log('Menu API Response:', menuResult);
-
-        if (
-          categoryResult?.data?.categories?.length > 0 &&
-          menuResult?.data?.length > 0
-        ) {
-          dispatch(setCategoriesData(categoryResult.data.categories));
-          dispatch(setMenuData(menuResult.data));
-        } else {
-          dispatch(setCategoriesData([]));
-          dispatch(setMenuData([]));
-        }
-      } catch (err) {
-        dispatch(setError(err.message || "Unknown error"));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-    fetchCategoriesAndItems();
-  }, [dispatch, lang]);
-
-  // // Add debug logging for categories
-  useEffect(() => {
-    //  console.log('Current categories in Redux:', categories);
-  }, [categories]);
+  const { menu: foodItems, categories, loading, error } = useApiData();
 
   const handleQuantityChange = (item, quantity) => {
-    //  console.log('Adding to cart - Item data:', item);
-    //  console.log('Price type:', typeof item.price, 'Price value:', item.price);
-
-    if (!item.price || isNaN(Number(item.price))) {
-      console.error("Invalid price for item:", item);
-      return;
-    }
-
-    if (quantity > 0) {
-      const cartItem = {
-        slug: item.slug,
-        name: item.name,
-        price: Number(item.price),
-        quantity: quantity,
-        image: item.image,
-        description: item.description,
-        categories: item.categories,
-      };
-      console.log("Dispatching to cart:", cartItem);
-      dispatch(addToCart(cartItem));
-    } else {
+    if (quantity === 0) {
       dispatch(removeFromCart(item.slug));
+    } else {
+      dispatch(addToCart({ ...item, quantity }));
     }
   };
 
-  if (loading || error || categories.length === 0 || foodItems.length === 0) {
+  if (loading) {
     return <SkeletonItems />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!categories || categories.length === 0) {
+    return <div>No categories found</div>;
   }
 
   return (
@@ -155,7 +79,7 @@ export default function Items() {
                             alt={item.name}
                             width={560}
                             height={350}
-                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                           />
                         </div>
                       </Link>

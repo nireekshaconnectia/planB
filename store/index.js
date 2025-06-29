@@ -42,26 +42,33 @@ const rootReducer = combineReducers({
   apiData: apiReducer,
 });
 
-// ✅ redux-persist config
+// ✅ redux-persist config - Only persist cart and language, not API data
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart", "language"],
-  blacklist: ["popup"], // Don't persist popup state
+  whitelist: ["cart", "language"], // Only persist cart and language
+  blacklist: ["popup", "apiData"], // Don't persist popup and API data
+  serialize: true,
+  deserialize: true,
 };
 
 // ✅ Wrap reducer with persistence
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// ✅ Create store
+// ✅ Create store with optimized middleware
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredPaths: ['apiData'], // Ignore API data in serialization checks
+      },
+      immutableCheck: {
+        ignoredPaths: ['apiData'], // Ignore API data in immutability checks
       },
     }),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 // ✅ Create persistor
