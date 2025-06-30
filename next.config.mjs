@@ -5,7 +5,12 @@ const nextConfig = {
       defaultLocale: "en", // Set English as the default language
     },
     images: {
-      domains: ['www.planbqa.shop'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'www.planbqa.shop',
+        },
+      ],
     },
 };
   
