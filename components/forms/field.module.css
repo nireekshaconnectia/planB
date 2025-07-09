@@ -1,0 +1,121 @@
+.formGroup{
+    gap: 20px;
+}
+.textInput{
+    border-radius: 50px;
+    border: 1px solid #d1d5db;
+    color: #000;
+}
+.label{
+    margin-bottom :20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+}
+.phoneInput , .textInput{
+    padding: 1rem 2rem;
+    outline: none;
+    width: 100%;
+    background-color: #fff;
+}
+
+.submitButton , .skipButton {
+    width: 100%;
+    font-size: 16px;
+    line-height: 40px;
+    padding: 0.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.submitButton{
+    background-color: #864622;
+    color: white;
+}
+.skipButton {
+    background-color: #fff;
+    color: #1a1a1a;
+}
+.inputGroup{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 50px;
+    overflow: hidden;
+    color: #000;
+    gap: 10px;
+    background-color: #fff;
+}
+.countrySelector{
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 1rem 0.5rem;
+    color:#000;
+}
+.countrySelector input{
+    background: transparent;
+    width: 50px;
+}
+.formWrapper{
+    padding: 20px 0;
+}
+
+@media (max-width: 768px) {
+
+  .formGroup {
+    gap: 15px;
+  }
+
+  .label {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  
+
+  .inputGroup {
+    flex-direction: row;
+    padding-left: 10px;
+    gap: 6px;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+
+  .countrySelector {
+    padding: 0.9rem 0.5rem;
+  }
+
+  .countrySelector input {
+    font-size: 13px;
+    width: 40px;
+  }
+
+  .submitButton,
+  .skipButton {
+    font-size: 15px;
+    line-height: 38px;
+    padding: 0.5rem;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .textInput,
+  .phoneInput {
+    padding: 0.8rem 1rem;
+    font-size: 13px;
+  }
+
+  .submitButton,
+  .skipButton {
+    font-size: 14px;
+    line-height: 36px;
+  }
+
+  .countrySelector input {
+    width: 35px;
+  }
+}

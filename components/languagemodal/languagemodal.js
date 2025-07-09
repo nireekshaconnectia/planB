@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./languagemodal.module.css"; // Import module CSS
-import Backdrop from "../backdrop/backdrop";
+import PopupWrapper from "@/components/popup/popupWrapper";
 import { setLanguage } from "../../store/languageSlice";
 import {
   setMenuData,
@@ -13,7 +13,7 @@ import { addToCart } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-const LanguageModal = ({ showModal, setShowModal }) => {
+const LanguageModal = ({ showLpopup, closeLpopup }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const lang = useSelector((state) => state.language.lang); // Get current language from Redux
@@ -86,64 +86,66 @@ const LanguageModal = ({ showModal, setShowModal }) => {
   };
 
   const changeLanguage = async (newLang) => {
-  dispatch(setLanguage(newLang));
-  await fetchDataWithLanguage(newLang);
+    dispatch(setLanguage(newLang));
+    await fetchDataWithLanguage(newLang);
 
-  if (typeof document !== "undefined") {
-    document.documentElement.lang = newLang;
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = newLang;
 
-    const dirValue = newLang === "ar" ? "rtl" : "ltr";
+      const dirValue = newLang === "ar" ? "rtl" : "ltr";
 
-    // List of class names to apply the dir attribute to
-    const classNames = ["Items-List", "cartItems", "cartItem", "cartItemName", "cart-item" , "cart-checkout",  "cartItemPrice", "cartItemQuantity", "cartItemTotal" , "categorey-grid", "categorey-card", "categorey-card-title", "categorey-card-description", "categorey-card-image", "categorey-card-button"];
+      // List of class names to apply the dir attribute to
+      const classNames = [
+        "Items-List",
+        "cartItems",
+        "cartItem",
+        "cartItemName",
+        "cart-item",
+        "cart-checkout",
+        "cartItemPrice",
+        "cartItemQuantity",
+        "cartItemTotal",
+        "categorey-grid",
+        "categorey-card",
+        "categorey-card-title",
+        "categorey-card-description",
+        "categorey-card-image",
+        "categorey-card-button",
+      ];
 
-    classNames.forEach((className) => {
-      const elements = document.querySelectorAll(`.${className}`);
-      elements.forEach((el) => {
-        el.setAttribute("dir", dirValue);
+      classNames.forEach((className) => {
+        const elements = document.querySelectorAll(`.${className}`);
+        elements.forEach((el) => {
+          el.setAttribute("dir", dirValue);
+        });
       });
-    });
-  }
+    }
 
-  router.refresh();
-  setShowModal(false);
-};
+    router.refresh();
+    closeLpopup(false);
+  };
 
   return (
-    <>
-      {showModal && (
-        <>
-          <Backdrop onClick={() => setShowModal(false)} />
-          <div className={styles.langModal}>
-            <div className={styles.modalContent}>
-              <div className={styles.modalHead}>
-                <h2 className={styles.modalTitle}>{t("select-language")}</h2>
-                <span
-                  className={styles.close}
-                  onClick={() => setShowModal(false)}
-                >
-                  {t("cancel")}
-                </span>
-              </div>
-              <ul className={styles.languageList}>
-                <li
-                  onClick={() => changeLanguage("en")}
-                  className={lang === "en" ? styles.active : ""}
-                >
-                  {t("english")}
-                </li>
-                <li
-                  onClick={() => changeLanguage("ar")}
-                  className={lang === "ar" ? styles.active : ""}
-                >
-                  {t("arabic")}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </>
-      )}
-    </>
+    <PopupWrapper
+      isOpen={showLpopup}
+      onClose={() => closeLpopup(false)}
+      title={t("select-language")}
+    >
+      <ul className={styles.languageList}>
+        <li
+          onClick={() => changeLanguage("en")}
+          className={lang === "en" ? styles.active : ""}
+        >
+          {t("english")}
+        </li>
+        <li
+          onClick={() => changeLanguage("ar")}
+          className={lang === "ar" ? styles.active : ""}
+        >
+          {t("arabic")}
+        </li>
+      </ul>
+    </PopupWrapper>
   );
 };
 

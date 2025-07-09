@@ -16,7 +16,7 @@ import logo from "@/assets/logo.png"; // Adjust the path as necessary
 
 
 const Header = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showLangPopup, setShowLangPopup] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showFirstPage, setShowFirstPage] = useState(false);
   const [user, setUser] = useState(null);
@@ -90,7 +90,7 @@ const Header = () => {
         <div className="switch-language w-25">
           <div
             className="language-switcher flex g-5"
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowLangPopup(true)}
             style={{ cursor: "pointer" }}
             aria-label="Change language"
             role="button"
@@ -100,7 +100,7 @@ const Header = () => {
             <p>{languageMap[selectedLang]}</p> {/* 🔹 Show selected language */}
             <FaCaretDown />
           </div>
-          <LanguageModal showModal={showModal} setShowModal={setShowModal} />
+          <LanguageModal showLpopup={showLangPopup} closeLpopup={() => setShowLangPopup(false)} />
         </div>
       </div>
 

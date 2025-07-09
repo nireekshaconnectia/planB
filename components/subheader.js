@@ -47,10 +47,10 @@ export default function Subheader({ fburl }) {
       </div>
 
       {/* Delivery Options Popup */}
-      <DeliveryOptions 
-        isOpen={showDeliveryPopup} 
-        onClose={() => setShowDeliveryPopup(false)} 
-      />
+      <DeliveryOptions
+        showDPopup={showDeliveryPopup}
+        closeDPopup={() => setShowDeliveryPopup(false)}
+      /> 
     </>
   );
 }

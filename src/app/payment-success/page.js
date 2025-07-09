@@ -13,19 +13,13 @@ export default function PaymentSuccessPage() {
   const dispatch = useDispatch();
   const t = useTranslations();
 
-  const [token, setToken] = useState(null);
   const [status, setStatus] = useState("loading");
-  const [orderData, setOrderData] = useState(null); // 🆕 hold fetched order details
-
-  useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
-    setToken(userToken);
-  }, []);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     const orderId = searchParams.get("transId");
 
-    if (!orderId || !token) {
+    if (!orderId) {
       setStatus("error");
       return;
     }
@@ -33,18 +27,15 @@ export default function PaymentSuccessPage() {
     const fetchOrderStatus = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${process.env.NEXT_PUBLIC_API_URL}/orders/status/${orderId}`
         );
 
         const data = await res.json();
-
+        {
+          console.log("✅ Order Data:", data);
+        }
         if (res.ok && data?.success) {
-          setOrderData(data.order); // 🆕 Store order data
+          setOrderData(data.data);
           setStatus("success");
           dispatch(clearCart());
         } else {
@@ -57,15 +48,13 @@ export default function PaymentSuccessPage() {
     };
 
     fetchOrderStatus();
-  }, [dispatch, searchParams, token]);
+  }, [dispatch, searchParams]);
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
+    <div style={{ padding: "1rem", textAlign: "center" }}>
       {status === "loading" && <p>{t("verifying-payment")}</p>}
 
-      {status === "success" && (
-        <PaymentSuccess order={orderData} /> // Pass order data to your component
-      )}
+      {status === "success" && <PaymentSuccess orderData={orderData} />}
 
       {status === "error" && (
         <>

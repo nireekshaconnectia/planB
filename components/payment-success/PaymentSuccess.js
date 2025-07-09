@@ -1,31 +1,26 @@
 'use client';
-import React from 'react';
+import {react , useState} from 'react';
 import Lottie from "lottie-react"; // Import Lottie
 import styles from './paymentSuccess.module.css'; // Custom CSS
 import paymentSuccess from '@/assets/images/payment-success.json'; // Image for success
+import Receipt from '@/components/checkout/reciept/receipt';
+import GuestInfoForm from '../forms/UserForms/GuestInfoForm';
 
-const PaymentSuccess = () => {
+const PaymentSuccess = ({orderData}) => {
+  const [showGPopup, setShowGPopup] = useState(false);
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-      
         <div className={styles.icon}>
         <Lottie animationData={paymentSuccess} loop={true}/>
         </div>
-
+        
         <h2 className={styles.successTitle}>🎉 Payment Successful!</h2>
+        <Receipt order={orderData}/>
         <p className={styles.message}>
           Your order has been placed successfully. We are processing your payment and will notify you shortly.
         </p>
-
-        <div className={styles.buttons}>
-          <button className={styles.button} onClick={() => window.location.href = '/'}>
-            Go to Home
-          </button>
-          <button className={styles.button} onClick={() => window.location.href = '/order-history'}>
-            View Orders
-          </button>
-        </div>
+        <GuestInfoForm showGiPopup={showGPopup} closeGiPopup={() => setShowGPopup(false)}/>
       </div>
     </div>
   );

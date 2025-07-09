@@ -55,8 +55,8 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
         </ul>
       </div>
       <DeliveryOptions
-        isOpen={showDeliveryPopup}
-        onClose={() => setShowDeliveryPopup(false)}
+        showDPopup={showDeliveryPopup}
+        closeDPopup={() => setShowDeliveryPopup(false)}
       />
     </>
   );
