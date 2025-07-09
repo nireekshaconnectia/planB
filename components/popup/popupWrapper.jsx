@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from './PopupWrapper.module.css';
+import styles from './popupwrapper.module.css';
 
 const PopupWrapper = ({ isOpen, onClose, children, title }) => {
   const popupRef = useRef(null);
