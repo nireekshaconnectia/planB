@@ -1,0 +1,9 @@
+.secondHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f1f1f160;
+    font-size: 24px;
+    color: #864622;
+}

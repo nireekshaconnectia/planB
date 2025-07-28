@@ -22,6 +22,10 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
       onClose();
       router.push("/study-room");
     }
+    else if (option === "catering") {
+      onClose();
+      router.push("/catering");
+    }
   };
 
   if (!isOpen) return null;
@@ -45,6 +49,9 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
         <ul className={styles.languageList}>
           <li onClick={() => handleSelect("menu")}>
             {t("menu")}
+          </li>
+          <li onClick={() => handleSelect("catering")}>
+            {t("catering")}
           </li>
           <li onClick={() => handleSelect("study-room")}>
             {t("study-room")}

@@ -164,11 +164,11 @@
     "signOut": "Sign Out",
     "item-name-en":"Item Name",
     "enter-item-name-en": "Enter item name in English",
-    "item-name-ar": "اسم العنصر",
-    "enter-item-name-ar": "أدخل اسم العنصر باللغة العربية",
     "description-en": "Description",
-    "description-ar": "الوصف باللغة العربية",
     "enter-description-en": "Enter item description in English",
-    "enter-description-ar": "أدخل وصف العنصر باللغة العربية",
-    "item-image-upload": "Upload Item Image"
+    "item-image-upload": "Upload Item Image",
+    "catering": "Catering",
+    "selectFirstPage": "Select First Page",
+    "selectFirstPageDescription": "Please select where you want to go",
+    "selectFirstPageMenu": "Menu"
 }
