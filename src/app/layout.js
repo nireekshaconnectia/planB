@@ -3,10 +3,11 @@ import "./globals.css";
 import "./style.css";
 import "./mobile.style.css";
 import logo from "@/assets/logo.png";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
-  weight: ["400","500","600", "700"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -33,9 +34,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${poppins.className}`}>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBay68RGitmM3lQf3APu-XD_GJIMj9i1Tw&libraries=places`}
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

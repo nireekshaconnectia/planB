@@ -1,6 +1,8 @@
-'use client';
-import { useEffect, useState } from 'react';
-import styles from './catering.module.css';
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./catering.module.css";
 
 const fallbackPackages = [
   { persons: 20, price: 700 },
@@ -10,33 +12,39 @@ const fallbackPackages = [
   { persons: 100, price: 3300 },
 ];
 
-export default function CateringPackages() {
+export default function CateringPackages( { onNextStep }) {
   const [packages, setPackages] = useState([]);
-  const [error, setError] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/catering-packages')
+    fetch("/api/catering-packages")
       .then((res) => {
-        if (!res.ok) throw new Error('API failed');
+        if (!res.ok) throw new Error("API failed");
         return res.json();
       })
-      .then((data) => setPackages(data))
-      .catch(() => {
-        setError(true);
-        setPackages(fallbackPackages);
-      });
+      .then(setPackages)
+      .catch(() => setPackages(fallbackPackages));
   }, []);
+
+  const handleSelect = (pkg) => {
+    localStorage.setItem("selectedPackage", JSON.stringify(pkg));
+    onNextStep(); // ✅ Call parent function to go to next step
+  };
 
   return (
     <section className={styles.container}>
-      <ul>
+      <ul className={styles.packageList}>
         {packages.map((pkg, idx) => (
-          <li key={idx}>
-            {pkg.persons} Person - {pkg.price} QR
+          <li
+            key={idx}
+            className={styles.packageItem}
+            onClick={() => handleSelect(pkg)}
+          >
+            <h3>{pkg.persons} Person</h3>
+            <p>{pkg.price} QR</p>
           </li>
         ))}
       </ul>
-      
     </section>
   );
 }
