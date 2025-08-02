@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import styles from "./studyroom.module.css";
 import { HiUsers } from "react-icons/hi2";
 import { IoIosBriefcase } from "react-icons/io";
-import BackButton from "@/components/backbutton/backbutton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";

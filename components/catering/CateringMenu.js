@@ -20,7 +20,6 @@ const fallbackData = {
 
 export default function CateringMenu({ onNextStep }) {
   const [menu, setMenu] = useState({ mainItems: [], optionalItems: [] });
-  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     fetch('/api/catering-menu')
@@ -32,29 +31,16 @@ export default function CateringMenu({ onNextStep }) {
       .catch(() => setMenu(fallbackData));
   }, []);
 
-  const toggleSelect = (item) => {
-    setSelectedItems((prev) =>
-      prev.includes(item)
-        ? prev.filter((i) => i !== item)
-        : [...prev, item]
-    );
-  };
-
   const handleContinue = () => {
-    localStorage.setItem('selectedMenuItems', JSON.stringify(selectedItems));
+    localStorage.setItem('selectedMenuItems', JSON.stringify([])); // No selection
     onNextStep(); // 👉 Move to step 3 (policies)
   };
 
   return (
     <section className={styles.container}>
-
       <ul className={styles.menuGrid}>
         {menu.mainItems.map((item, idx) => (
-          <li
-            className={`${styles.menuListItem} ${selectedItems.includes(item) ? styles.selected : ''}`}
-            key={idx}
-            onClick={() => toggleSelect(item)}
-          >
+          <li className={styles.menuListItem} key={idx}>
             {item}
           </li>
         ))}
@@ -65,19 +51,14 @@ export default function CateringMenu({ onNextStep }) {
         <hr />
         <ul className={styles.optionalList}>
           {menu.optionalItems.map((item, idx) => (
-            <li
-              className={`${styles.menuListItem} ${selectedItems.includes(item) ? styles.selected : ''}`}
-              key={idx}
-              onClick={() => toggleSelect(item)}
-            >
+            <li className={styles.menuListItem} key={idx}>
               {item}
             </li>
           ))}
         </ul>
       </div>
-    <SecondaryButton text="Book Now" onClick={handleContinue}/>
 
-
+      <SecondaryButton text="Book Now" onClick={handleContinue} />
     </section>
   );
 }

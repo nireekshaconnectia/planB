@@ -170,5 +170,6 @@
     "catering": "Catering",
     "selectFirstPage": "Select First Page",
     "selectFirstPageDescription": "Please select where you want to go",
-    "selectFirstPageMenu": "Menu"
+    "selectFirstPageMenu": "Menu",
+    "select-package": "Select Package"
 }

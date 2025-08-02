@@ -47,9 +47,9 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
           <div className={styles.modalTitle}>PLAN B<div> coffee</div></div>
         </div>
         <ul className={styles.languageList}>
-          <li onClick={() => handleSelect("menu")}>
+          {/* <li onClick={() => handleSelect("menu")}>
             {t("menu")}
-          </li>
+          </li> */}
           <li onClick={() => handleSelect("catering")}>
             {t("catering")}
           </li>
