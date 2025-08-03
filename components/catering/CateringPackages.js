@@ -41,7 +41,7 @@ export default function CateringPackages( { onNextStep }) {
             onClick={() => handleSelect(pkg)}
           >
             <h3>{pkg.persons} Person</h3>
-            <p>{pkg.price} QR</p>
+            {/* <p>{pkg.price} QR</p> */}
           </li>
         ))}
       </ul>
