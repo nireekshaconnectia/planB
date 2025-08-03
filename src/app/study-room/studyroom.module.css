@@ -172,14 +172,7 @@
     gap: 0.75rem;
   }
 
-  .timeRow {
-    flex-direction: column;
-    gap: 1rem;
-  }
 
-  .timeRow > div {
-    width: 100%;
-  }
 
   .input,
   .submitButton {

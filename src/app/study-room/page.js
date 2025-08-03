@@ -23,17 +23,17 @@ const BookStudyRoom = () => {
   const t = useTranslations();
 
   useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
-    if (!userToken) {
-      router.push("/login");
-      return;
-    }
+    // const userToken = localStorage.getItem("userToken");
+    // if (!userToken) {
+    //   router.push("/login");
+    //   return;
+    // }
 
     const fetchRooms = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, {
           headers: {
-            'Authorization': `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
           },
         });
         const result = await res.json();

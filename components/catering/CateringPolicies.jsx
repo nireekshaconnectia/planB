@@ -9,9 +9,9 @@ const fallbackPolicies = [
   "For quality purposes, no cups other than Plan B paper cups can be used.",
   "Our standard service duration is 4 hours, any extra hour will be charged 150 per hour.",
   "Installation of the cart will take up to 30 min which will be excluded from the agreed hours.",
-  "Payment of full amount must be paid if reservation was made within 48hrs from the expected date of the event, through “skip cash”.",
-  "In case of cancelation up to two days before the event, a service charge of 30% will be deducted.",
-  "Delivery charge is 150QR for inside Doha & 200QR outside Doha.",
+  "Payment of full amount will be taken when checkout.",
+  "In case of cancellation within 48 hours from the event, a service charge of 30% will be deducted.",
+  "in case of cancellation within 24 hours from the event, the customer will be charged the full amount.",
 ];
 
 export default function CateringPolicies({ onNextStep }) {
@@ -22,7 +22,6 @@ export default function CateringPolicies({ onNextStep }) {
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.heading}>Catering Policies</h2>
       <ul className={styles.policyList}>
         {fallbackPolicies.map((policy, index) => (
           <li key={index} className={styles.policyItem}>
@@ -38,7 +37,8 @@ export default function CateringPolicies({ onNextStep }) {
         ))}
       </ul>
         <p className={styles.note}>
-            Please read and accept our policies before proceeding.
+            Please read and accept our policies before proceeding.<br />
+            For booking changes or request for customized cups please contact the shop directly.
         </p>
       <SecondaryButton text="I Accept & Continue" onClick={handleAccept} />
     </section>
