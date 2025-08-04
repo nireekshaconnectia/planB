@@ -183,7 +183,7 @@ const BookStudyRoom = () => {
               timeIntervals={30}
               timeCaption="Start Time"
               dateFormat="HH:mm"
-              minTime={new Date(1970, 0, 1, 9, 0)}
+              minTime={new Date(1970, 0, 1, 8, 0)}
               maxTime={new Date(1970, 0, 1, 22, 0)}
               className={styles.input}
               placeholderText={t("from")}

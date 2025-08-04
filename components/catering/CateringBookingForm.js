@@ -239,7 +239,7 @@ export default function BookingForm() {
             placeholderText={t('select-date')}
           />
           <DatePicker
-            selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
+            selected={startTime ? new Date(`1970-01-01T${startTime}`) : new Date(1970, 0, 1, 8, 0)}
             onChange={(date) => {
               const hours = date.getHours().toString().padStart(2, '0');
               const mins = date.getMinutes().toString().padStart(2, '0');
@@ -250,7 +250,7 @@ export default function BookingForm() {
             timeIntervals={30}
             timeCaption={t('select-time')}
             dateFormat="HH:mm"
-            minTime={new Date(1970, 0, 1, 9, 0)}
+            minTime={new Date(1970, 0, 1, 8, 0)}
             maxTime={new Date(1970, 0, 1, 22, 0)}
             className={styles.input}
             placeholderText={t('select-time')}
