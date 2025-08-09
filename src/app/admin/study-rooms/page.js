@@ -111,6 +111,7 @@ export default function StudyRooms() {
                         <tr>
                             <th>Name</th>
                             <th>Capacity</th>
+                            <th>Price</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -120,6 +121,7 @@ export default function StudyRooms() {
                             <tr key={room._id}>
                                 <td>{room.name}</td>
                                 <td>{room.capacity}</td>
+                                <td>{room.price}</td>
                                 <td>
                                     <button
                                         className={styles.toggleButton}

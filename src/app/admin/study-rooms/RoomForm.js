@@ -8,6 +8,7 @@ export default function RoomForm({ onSave, onClose, initialData }) {
     const [formData, setFormData] = useState({
         name: initialData?.name || "",
         capacity: initialData?.capacity || 1,
+        price: initialData?.price || 1,
         isAvailable: initialData?.isAvailable ?? true,
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +21,6 @@ export default function RoomForm({ onSave, onClose, initialData }) {
             [name]: type === "checkbox" ? checked : value,
         }));
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -39,6 +39,7 @@ export default function RoomForm({ onSave, onClose, initialData }) {
                 body: JSON.stringify({
                     name: formData.name,
                     capacity: Number(formData.capacity),
+                    price: Number(formData.price),
                     isAvailable: formData.isAvailable,
                 }),
             });
@@ -77,6 +78,17 @@ export default function RoomForm({ onSave, onClose, initialData }) {
                         name="capacity"
                         min="1"
                         value={formData.capacity}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className={styles.fieldGroup}>
+                    <label>Price</label>
+                    <input
+                        type="number"
+                        name="price"
+                        min="1"
+                        value={formData.price}
                         onChange={handleChange}
                         required
                     />

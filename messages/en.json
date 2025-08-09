@@ -171,5 +171,18 @@
     "selectFirstPage": "Select First Page",
     "selectFirstPageDescription": "Please select where you want to go",
     "selectFirstPageMenu": "Menu",
-    "select-package": "Select Package"
+    "select-package": "Select Package",
+    "Bookings": "Bookings",
+    "bookingDetails": "Booking Details",
+    "bookingDate": "Booking Date",
+    "bookingTime": "Booking Time",
+    "bookingDuration": "Booking Duration",
+    "bookingRoom": "Booking Room",
+    "bookingName": "Booking Name",
+    "bookingPhone": "Booking Phone",
+    "bookingStatus": "Booking Status",
+    "bookingConfirmed": "Booking Confirmed",
+    "bookingPending": "Booking Pending",
+    "bookingCancelled": "Booking Cancelled",
+    "bookingCompleted": "Booking Completed"
 }

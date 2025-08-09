@@ -90,14 +90,16 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
           <strong>{t("date")}:</strong> {date}
         </p>
         <p>
+          <strong>{t("duration")}:</strong> {duration} {duration > 1 ? t("hours") : t("hour")}
+        </p>
+        <br />
+        <p>
           <strong>{t("from")}:</strong> {startTime}
         </p>
         <p>
           <strong>{t("to")}:</strong> {endTime}
         </p>
-        <p>
-          <strong>{t("duration")}:</strong> {duration} {duration > 1 ? t("hours") : t("hour")}
-        </p>
+        
         <p>
           <strong>{t("total-price")}:</strong> {price} QAR
         </p>
