@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import styles from "./studyroom.module.css";
+import { PhoneField } from "@/components/forms/fields/PhoneField";
 import { useTranslations } from "next-intl";
 
 const StudyRoomCheckoutForm = ({ bookingData }) => {
-  const { roomId, roomName, date, startTime, endTime, duration, price } = bookingData;
+  const { roomId, roomName, date, startTime, endTime, duration, price } =
+    bookingData;
   const t = useTranslations();
 
   const [formData, setFormData] = useState({
@@ -36,13 +38,16 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
 
       console.log("📦 Booking Payload:", bookingPayload);
 
-      const bookingRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/room-bookings/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookingPayload),
-      });
+      const bookingRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/room-bookings/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingPayload),
+        }
+      );
 
       const bookingJson = await bookingRes.json();
       console.log("📨 Booking Response:", bookingJson);
@@ -57,19 +62,24 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
 
       console.log("💸 Payment Payload:", paymentPayload);
 
-      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paymentPayload),
-      });
+      const paymentRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(paymentPayload),
+        }
+      );
 
       const paymentJson = await paymentRes.json();
       console.log("💰 Payment Response:", paymentJson);
 
       if (!paymentRes.ok || !paymentJson?.data?.payUrl) {
-        throw new Error("Payment initiation failed: " + (paymentJson.message || "No payUrl"));
+        throw new Error(
+          "Payment initiation failed: " + (paymentJson.message || "No payUrl")
+        );
       }
 
       window.location.href = paymentJson.data.payUrl;
@@ -90,7 +100,8 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
           <strong>{t("date")}:</strong> {date}
         </p>
         <p>
-          <strong>{t("duration")}:</strong> {duration} {duration > 1 ? t("hours") : t("hour")}
+          <strong>{t("duration")}:</strong> {duration}{" "}
+          {duration > 1 ? t("hours") : t("hour")}
         </p>
         <br />
         <p>
@@ -99,7 +110,7 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
         <p>
           <strong>{t("to")}:</strong> {endTime}
         </p>
-        
+
         <p>
           <strong>{t("total-price")}:</strong> {price} QAR
         </p>
@@ -114,17 +125,31 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
             value={formData.name}
             onChange={handleChange}
             required
+            className={styles.inputField}
           />
         </div>
 
         <div>
           <label>{t("phone")}:</label>
-          <input
+          {/* <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
             required
+          /> */}
+          <PhoneField
+            name="phone"
+            value={formData.phone}
+            onChange={({ countryCode, phoneNumber }) =>
+              setFormData((prev) => ({
+                ...prev,
+                phone: `${countryCode}${phoneNumber}`, // store full number
+              }))
+            }
+            error={null}
+            required
+            countryCode="+974"
           />
         </div>
 
