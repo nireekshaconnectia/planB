@@ -79,7 +79,7 @@
 
 .languageList li:hover {
     background: #864622;
-    color: #111; /* Keep text color consistent; no white */
+    color: #fff; /* Keep text color consistent; no white */
 }
 
 @media only screen and (max-width: 600px) {
