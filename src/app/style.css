@@ -738,4 +738,8 @@ item css */
         flex: 3.5;
         font-size: 14px;
     }
+    .featured-image-container {
+        width: 60px;
+        height: 60px;
+    }
 }

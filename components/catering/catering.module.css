@@ -181,6 +181,17 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.priceSummaryli{
+  max-width: 350px;
+  min-width: 300px;
+  margin: auto;
+}
+.priceSummaryli li{
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #111;
+}
   @media (max-width: 600px) {
     .policyItem{
       font-size: 14px;

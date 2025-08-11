@@ -272,23 +272,34 @@ export default function BookingForm() {
           style={{ position: "relative", marginBottom: "1rem" }}
         >
           <h3>{t("price-summary")}</h3>
-          <p>
-            {t("package")}: {selectedPackage ? `${t("persons")} ${selectedPackage.persons}` : 0}
-            
-          </p>
-          <p>
-            {t("price")}:{" QR "}
-            {selectedPackage ? selectedPackage.price : "0 QR"}
-          </p>
+          
+          <ul className={styles.priceSummaryli} >
+            <li>
+              <p>{t("package")}: </p>
+              <p>
+                {selectedPackage
+                  ? `${selectedPackage.persons} ${t("persons")}`
+                  : "0"}
+              </p>
+            </li>
+            <li>
+              
+            <p>{t("price")}:{""}</p>
+            <p>{selectedPackage ? selectedPackage.price + " QR": "0 QR"}</p>
+          
+            </li>
+            <li>
+              <p>{t("delivery")}:</p><p> {DELIVERY_CHARGE + " QR "} </p>
+            </li>
+            <br /><hr /><br />
+            <li>
+              <strong><p>{t("total")}:{""}</p></strong>
+              <p>{selectedPackage ? selectedPackage.price + DELIVERY_CHARGE + " QR" : 0}</p>
+            </li>
+          </ul>
 
-          <p>{t("delivery")}: {"QR " +DELIVERY_CHARGE} </p>
-          <hr />
-          <p>
-            <strong>
-              {t("total")}:{" QR "}
-              {selectedPackage ? selectedPackage.price + DELIVERY_CHARGE : 0} 
-            </strong>
-          </p>
+          
+          
         </div>
 
         <SecondaryButton
