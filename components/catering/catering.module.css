@@ -170,7 +170,17 @@
     appearance: auto;
     width: 100%;
   }
-
+.priceSummary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f9f4f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
   @media (max-width: 600px) {
     .policyItem{
       font-size: 14px;

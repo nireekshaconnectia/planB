@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { countryCodeMap } from "@/lib/countryCodeMap"; // same structure as you used
 import { usePhoneField } from "@/lib/form/usePhoneField";
 import styles from "../field.module.css";
+import { useTranslations } from "next-intl";
 
 export const PhoneField = ({
   value,
@@ -20,6 +21,7 @@ export const PhoneField = ({
       onChange({ countryCode, phoneNumber });
     }
   }, [countryCode, phoneNumber, onChange]);
+  const t = useTranslations();
 
   return (
     <div className={styles.inputGroup}>
@@ -42,7 +44,7 @@ export const PhoneField = ({
         type="text"
         value={phoneNumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
-        placeholder="Phone Number"
+        placeholder={t("phone-number")}
       />
 
       {error && <div className="error-text">{error}</div>}

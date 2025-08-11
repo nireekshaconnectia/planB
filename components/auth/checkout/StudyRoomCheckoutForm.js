@@ -126,6 +126,7 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
             onChange={handleChange}
             required
             className={styles.inputField}
+            placeholder={t("name")}
           />
         </div>
 

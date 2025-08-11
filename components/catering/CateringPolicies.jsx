@@ -3,15 +3,16 @@
 import styles from './catering.module.css';
 import Image from 'next/image';
 import { SecondaryButton } from '@/components/buttons/Buttons';
+import { useTranslations } from 'next-intl';
 
 const fallbackPolicies = [
-  "Coffee cart must be on Ground floor and in an appropriate setting.",
-  "For quality purposes, no cups other than Plan B paper cups can be used.",
-  "Our standard service duration is 4 hours, any extra hour will be charged 150 per hour.",
-  "Installation of the cart will take up to 30 min which will be excluded from the agreed hours.",
-  "Payment of full amount will be taken when checkout.",
-  "In case of cancellation within 48 hours from the event, a service charge of 30% will be deducted.",
-  "in case of cancellation within 24 hours from the event, the customer will be charged the full amount.",
+  "policy1",
+  "policy2",
+  "policy3",
+  "policy4",
+  "policy5",
+  "policy6",
+  "policy7"
 ];
 
 export default function CateringPolicies({ onNextStep }) {
@@ -19,6 +20,7 @@ export default function CateringPolicies({ onNextStep }) {
     localStorage.setItem('acceptedPolicies', 'true');
     onNextStep(); // ✅ Go to Step 4 (Booking Form)
   };
+  const t = useTranslations();
 
   return (
     <section className={styles.container}>
@@ -32,15 +34,15 @@ export default function CateringPolicies({ onNextStep }) {
               height={24}
               className={styles.policyIcon}
             />
-            <span>{policy}</span>
+            <span>{t(`policies.${policy}`)}</span>
           </li>
         ))}
       </ul>
         <p className={styles.note}>
-            Please read and accept our policies before proceeding.<br />
-            For booking changes or request for customized cups please contact the shop directly.
+            {t("policies.accept")}<br />
+            {t("policies.terms")}
         </p>
-      <SecondaryButton text="I Accept & Continue" onClick={handleAccept} />
+      <SecondaryButton text={t("policies.iaccept")} onClick={handleAccept} />
     </section>
   );
 }

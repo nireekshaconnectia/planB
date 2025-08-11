@@ -57,15 +57,17 @@
 }
 
 @media (max-width: 600px) {
+    .checkoutForm {
+        max-width: 350px;
+    }
     .formDetails label {
         font-size: 14px;
         font-weight: 500;
     }
     .formDetails div {
-        width: 47%;
+        width: 100%;
     }
-    .formDetails input,
-    .formDetails textarea {
+    .formDetails .inputField {
         height: 46px;
     }
 

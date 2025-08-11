@@ -14,12 +14,34 @@
     margin: auto;
     z-index: 999;
     position: fixed;
+    color: #111;
 }
 
 .modalHead {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+}
+
+.langTopBar {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.languageSwitcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.languageText {
+    margin: 0;
 }
 
 .modalTitle {
@@ -57,7 +79,7 @@
 
 .languageList li:hover {
     background: #864622;
-    color: white;
+    color: #111; /* Keep text color consistent; no white */
 }
 
 @media only screen and (max-width: 600px) {

@@ -1,8 +1,9 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./catering.module.css";
+import { useTranslations } from "next-intl";
+
 
 const fallbackPackages = [
   { persons: 20, price: 700 },
@@ -15,7 +16,7 @@ const fallbackPackages = [
 export default function CateringPackages( { onNextStep }) {
   const [packages, setPackages] = useState([]);
   const router = useRouter();
-
+  const t = useTranslations();
   useEffect(() => {
     fetch("/api/catering-packages")
       .then((res) => {
@@ -40,7 +41,7 @@ export default function CateringPackages( { onNextStep }) {
             className={styles.packageItem}
             onClick={() => handleSelect(pkg)}
           >
-            <h3>{pkg.persons} Person</h3>
+            <h3>{pkg.persons} {t("person")}</h3>
             {/* <p>{pkg.price} QR</p> */}
           </li>
         ))}

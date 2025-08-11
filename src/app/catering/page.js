@@ -7,13 +7,13 @@ import CateringMenu from "@/components/catering/CateringMenu";
 import CateringPolicies from "@/components/catering/CateringPolicies";
 import CateringBookingForm from "@/components/catering/CateringBookingForm";
 import { SecondaryButton } from "@/components/buttons/Buttons";
-
+import { useTranslations } from "next-intl";
 export default function Catering() {
   const [step, setStep] = useState(1);
-
+  const t = useTranslations();
   return (
     <section className={styles.catering}>
-      <SecondHeader />
+      <SecondHeader title={t("catering")} />
 
       {step === 1 && <CateringPackages onNextStep={() => setStep(2)} />}
 

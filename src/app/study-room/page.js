@@ -142,7 +142,7 @@ const BookStudyRoom = () => {
               >
                 <div className={styles.roomContent}>
                   <Icon className={styles.icon} />
-                  <h2 className={styles.roomName}>{room.name}</h2>
+                  <h2 className={styles.roomName}>{t(`${room.name}`)}</h2>
                   <p className={styles.capacity}>
                     {t("capacity-text", {
                       count: room.capacity,
@@ -181,7 +181,7 @@ const BookStudyRoom = () => {
               showTimeSelect
               showTimeSelectOnly
               timeIntervals={30}
-              timeCaption="Start Time"
+              timeCaption={t("start-time")}
               dateFormat="HH:mm"
               minTime={new Date(1970, 0, 1, 8, 0)}
               maxTime={new Date(1970, 0, 1, 22, 0)}
@@ -201,7 +201,7 @@ const BookStudyRoom = () => {
               showTimeSelect
               showTimeSelectOnly
               timeIntervals={30}
-              timeCaption="End Time"
+              timeCaption={t("end-time")}
               dateFormat="HH:mm"
               minTime={getMinEndTime()}
               maxTime={new Date(1970, 0, 1, 23, 0)}
