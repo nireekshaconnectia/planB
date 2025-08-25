@@ -221,19 +221,6 @@ const BookStudyRoom = () => {
                                             onClick={
                                                 () => setIsGalleryOpen(true)
                                             }/>
-                                        <PopupWrapper isOpen={isGalleryOpen}
-                                            onClose={
-                                                () => setIsGalleryOpen(false)
-                                            }
-                                            title={
-                                                t("gallery")
-                                        }>
-                                            
-                                                <ImageSlider images={images}
-                                                    autoPlay={true}
-                                                    autoPlayTime={5000}/>
-                                            
-                                        </PopupWrapper>
                                     </div>
                                 </div>
                             );
@@ -241,6 +228,19 @@ const BookStudyRoom = () => {
                     } </div>
                 )
             }
+
+                {/* Centralized gallery popup to avoid multiple instances/listeners */}
+                <PopupWrapper isOpen={isGalleryOpen}
+                    onClose={
+                        () => setIsGalleryOpen(false)
+                    }
+                    title={
+                        t("gallery")
+                }>
+                    <ImageSlider images={images}
+                        autoPlay={true}
+                        autoPlayTime={5000}/>
+                </PopupWrapper>
 
                 <form onSubmit={handleSubmit}
                     className={

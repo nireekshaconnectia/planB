@@ -17,30 +17,19 @@ const PopupWrapper = ({ isOpen, onClose, children, title }) => {
     }
   }, [isOpen, shouldRender]);
 
-  // Click outside to close
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        onClose?.();
-      }
-    };
-
-    if (shouldRender) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [shouldRender, onClose]);
+  // Close when clicking on the overlay; keep clicks inside content open
+  const handleOverlayMouseDown = () => {
+    onClose?.();
+  };
 
   if (!shouldRender) return null;
 
   return (
-    <div className={styles['popup-overlay']}>
+    <div className={styles['popup-overlay']} onMouseDown={handleOverlayMouseDown}>
       <div
         ref={popupRef}
         className={`${styles['popup-content']} ${isClosing ? styles['popup-exit'] : styles['popup-enter']}`}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className={styles.popupHead}>
           <span className={styles.popupTitle}>{title}</span>
