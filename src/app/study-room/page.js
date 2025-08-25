@@ -21,6 +21,8 @@ const BookStudyRoom = () => {
     const [date, setDate] = useState(null);
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const [availability, setAvailability] = useState(null);
+    const [availabilityLoading, setAvailabilityLoading] = useState(false);
     const [showFirstPage, setShowFirstPage] = useState(false);
     const router = useRouter();
     const t = useTranslations();
@@ -57,6 +59,68 @@ const BookStudyRoom = () => {
         fetchRooms();
     }, [router]);
 
+    // Helpers for time handling (HH:mm <-> minutes)
+    const timeStrToMinutes = (hhmm) => {
+        const [h, m] = hhmm.split(":").map(Number);
+        return h * 60 + m;
+    };
+
+    const minutesToDate = (minutes) => new Date(1970, 0, 1, Math.floor(minutes / 60), minutes % 60);
+
+    const isoToLocalMinutes = (iso) => {
+        // Example: 2025-08-26T10:00:00+03:00 → take HH:MM between 'T' and '+'
+        const match = iso.match(/T(\d{2}:\d{2}):\d{2}[+-]\d{2}:\d{2}$/);
+        if (match) {
+            return timeStrToMinutes(match[1]);
+        }
+        // Fallback to Date parsing (browser local) if format changes
+        const d = new Date(iso);
+        return d.getHours() * 60 + d.getMinutes();
+    };
+
+    // Fetch availability when room and date selected
+    useEffect(() => {
+        const loadAvailability = async () => {
+            if (!selectedRoom || !date) {
+                setAvailability(null);
+                return;
+            }
+            try {
+                setAvailabilityLoading(true);
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, "0");
+                const d = String(date.getDate()).padStart(2, "0");
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${selectedRoom._id}/availability?date=${y}-${m}-${d}`, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data?.message || 'Failed to load availability');
+
+                const openStartMin = timeStrToMinutes(data.openHours.start);
+                const openEndMin = timeStrToMinutes(data.openHours.end);
+                const blockedRangesMinutes = (data.blockedRanges || []).map((range) => ({
+                    start: timeStrToMinutes(range.startTime),
+                    end: timeStrToMinutes(range.endTime),
+                    bookingId: range.bookingId
+                }));
+                setAvailability({
+                    timezone: data.timezone,
+                    slotIntervalMinutes: data.slotIntervalMinutes || 30,
+                    openStartMin,
+                    openEndMin,
+                    unavailableMinutes: blockedRangesMinutes,
+                });
+            } catch (e) {
+                console.error(e);
+                setAvailability(null);
+            } finally {
+                setAvailabilityLoading(false);
+            }
+        };
+
+        loadAvailability();
+    }, [selectedRoom, date]);
+
     const getRoomIcon = (name, capacity) => {
         if (name.toLowerCase().includes("conference") || capacity >= 10) 
             return IoIosBriefcase;
@@ -73,18 +137,18 @@ const BookStudyRoom = () => {
         const start = startHour + startMin / 60;
         const end = endHour + endMin / 60;
         const duration = end - start;
-        return duration >= 1 ? duration : 0;
+        return duration >= 1 ? duration : 0; // Allow 1 hour or more
     };
 
     const handleStartTimeChange = (value) => {
         setStartTime(value);
         const [hour, min] = value.split(":").map(Number);
         const minEndHour = hour + 1;
+        const minEndMin = min;
         if (!endTime || parseInt(endTime.split(":")[0]) < minEndHour) {
             const paddedHour = String(minEndHour).padStart(2, "0");
-            setEndTime(`${paddedHour}:${
-                min.toString().padStart(2, "0")
-            }`);
+            const paddedMin = String(minEndMin).padStart(2, "0");
+            setEndTime(`${paddedHour}:${paddedMin}`);
         }
     };
 
@@ -94,6 +158,49 @@ const BookStudyRoom = () => {
         }
         const [h, m] = startTime.split(":").map(Number);
         return new Date(1970, 0, 1, h + 1, m);
+    };
+
+    const isWithinOpenHours = (minutes) => {
+        if (!availability) return true;
+        return minutes >= availability.openStartMin && minutes <= availability.openEndMin;
+    };
+
+    const overlapsUnavailable = (startMin, endMin) => {
+        if (!availability) return false;
+        return availability.unavailableMinutes.some((u) => startMin < u.end && endMin > u.start);
+    };
+
+    const startTimeFilter = (dateObj) => {
+        if (!availability) return true;
+        const candidateMin = dateObj.getHours() * 60 + dateObj.getMinutes();
+        if (!isWithinOpenHours(candidateMin)) return false;
+        
+        // Check if this start time falls within any booked period
+        const isBooked = availability.unavailableMinutes.some((u) => {
+            return candidateMin >= u.start && candidateMin < u.end;
+        });
+        
+        return !isBooked;
+    };
+
+    const endTimeFilter = (dateObj) => {
+        if (!availability) return true;
+        if (!startTime) return true;
+        const endMin = dateObj.getHours() * 60 + dateObj.getMinutes();
+        const [sh, sm] = startTime.split(":").map(Number);
+        const startMin = sh * 60 + sm;
+        
+        // Must be at least 1 hour after start
+        if (endMin <= startMin + 60) return false;
+        
+        if (!isWithinOpenHours(endMin)) return false;
+        
+        // Check if this end time falls within any booked period
+        const isBooked = availability.unavailableMinutes.some((u) => {
+            return endMin > u.start && endMin <= u.end;
+        });
+        
+        return !isBooked;
     };
 
     const handleSubmit = (e) => {
@@ -108,7 +215,7 @@ const BookStudyRoom = () => {
         const query = new URLSearchParams({
             roomId: selectedRoom._id,
             roomName: selectedRoom.name,
-            date: date.toISOString().split("T")[0],
+            date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`,
             startTime,
             endTime,
             duration: duration.toString(),
@@ -295,11 +402,12 @@ const BookStudyRoom = () => {
                                 }
                                 dateFormat="HH:mm"
                                 minTime={
-                                    new Date(1970, 0, 1, 8, 0)
+                                    availability ? minutesToDate(availability.openStartMin) : new Date(1970, 0, 1, 8, 0)
                                 }
                                 maxTime={
-                                    new Date(1970, 0, 1, 22, 0)
+                                    availability ? minutesToDate(availability.openEndMin) : new Date(1970, 0, 1, 22, 0)
                                 }
+                                filterTime={startTimeFilter}
                                 className={
                                     styles.input
                                 }
@@ -335,8 +443,9 @@ const BookStudyRoom = () => {
                                 getMinEndTime()
                             }
                             maxTime={
-                                new Date(1970, 0, 1, 23, 0)
+                                availability ? minutesToDate(availability.openEndMin) : new Date(1970, 0, 1, 23, 0)
                             }
+                            filterTime={endTimeFilter}
                             className={
                                 styles.input
                             }
