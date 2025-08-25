@@ -18,6 +18,7 @@ export default function BookingForm() {
   const [currentLocation, setCurrentLocation] = useState("");
   const [detailedAddress, setDetailedAddress] = useState("");
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedOptional, setSelectedOptional] = useState([]);
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
@@ -39,9 +40,15 @@ export default function BookingForm() {
   useEffect(() => {
     const pkg = localStorage.getItem("selectedPackage");
     const policies = localStorage.getItem("acceptedPolicies");
+    const selectedOptionalRaw = localStorage.getItem("selectedMenuItems");
 
     if (pkg) setSelectedPackage(JSON.parse(pkg));
     setAcceptedPolicies(policies === "true");
+    try {
+      setSelectedOptional(selectedOptionalRaw ? JSON.parse(selectedOptionalRaw) : []);
+    } catch {
+      setSelectedOptional([]);
+    }
   }, []);
 
   const handleUseCurrentLocation = () => {
@@ -120,6 +127,8 @@ export default function BookingForm() {
       },
       policyAccepted: true,
       numberOfPeople: selectedPackage.persons,
+      selectedPackage: selectedPackage.name,
+      selectedOptional: selectedOptional ,
       deliveryCharge: DELIVERY_CHARGE,
       subtotal,
       total,
@@ -188,6 +197,7 @@ export default function BookingForm() {
       setStartTime("");
       localStorage.removeItem("selectedPackage");
       localStorage.removeItem("acceptedPolicies");
+      localStorage.removeItem("selectedMenuItems");
 
       // Redirect to payment page
       window.location.href = paymentResult.data.payUrl;

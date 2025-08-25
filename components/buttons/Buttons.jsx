@@ -17,6 +17,13 @@ export function SecondaryButton({ text, onClick, type = 'button' }) {
     </button>
   );
 }
+export function SecondarySmButton({ text, onClick, type = 'button' }) {
+  return (
+    <button type={type} className={styles.secondarySm} onClick={onClick}>
+      {text}
+    </button>
+  );
+}
 
 export function PrimarySmButton({ text, onClick, type = 'button' }) {
   return (

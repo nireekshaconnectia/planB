@@ -38,6 +38,7 @@
     "proceed-to-checkout": "Proceed to Checkout",
     "selected-duration": "Selected Duration",
     "duration-error": "Duration must be at least 1 hour.",
+    "gallery": "Gallery",
     "study-room-1": "Study Room 1",
     "study-room-2": "Study Room 2",
     "meeting-room": "Meeting Room",
@@ -163,6 +164,7 @@
     "current-location": "Click to Use Current Location",
     "detailed-address": "Detailed Address (Zone, Street, House No)",
     "phone-number": "Phone Number",
+    
 
 
     "hour": "Hour",

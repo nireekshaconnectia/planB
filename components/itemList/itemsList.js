@@ -9,12 +9,13 @@ import Styles from "./itemslist.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useApiData } from "@/lib/hooks/useApiData";
-
+import { useTranslations } from "next-intl";
 export default function Items() {
   const [isGridView, setIsGridView] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const { menu: foodItems, categories, loading, error } = useApiData();
+  const t = useTranslations();
 
   const handleQuantityChange = (item, quantity) => {
     if (quantity === 0) {
@@ -39,7 +40,7 @@ export default function Items() {
   return (
     <div className="Items-List w-100 flex col g-20">
       <div className="list-header flex space-between">
-        <div className={Styles.listHeading}>Menu</div>
+        <div className={Styles.listHeading}>{t("menu")}</div>
         <div className="flex change-view">
           <button onClick={() => setIsGridView(true)}>
             <CiGrid2H />

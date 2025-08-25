@@ -103,6 +103,7 @@
 .optionalSection li {
   margin-bottom: 0.5rem;
   font-size: 1.05rem;
+  max-width: 300px;
 }
 
 
@@ -205,4 +206,18 @@
     font-size: 13px;
     height: auto;
     }
+  }
+
+  .menuListItem {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  
+  
+  /* Selected state */
+  .optionalList .selected , .optionalList .menuListItem:hover {  /* or your theme color */
+    border: 1px solid #864622;
+    border-radius: 100px;
   }

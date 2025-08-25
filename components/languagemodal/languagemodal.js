@@ -142,7 +142,7 @@ const LanguageModal = ({ showLpopup, closeLpopup }) => {
           onClick={() => changeLanguage("ar")}
           className={lang === "ar" ? styles.active : ""}
         >
-          {t("arabic")}
+          العربية 
         </li>
       </ul>
     </PopupWrapper>

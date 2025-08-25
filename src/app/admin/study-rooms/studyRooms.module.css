@@ -69,31 +69,43 @@
     background: #f5f5f5;
     color: #666;
     border: 1px solid #ddd;
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .cancelButton:hover {
     background: #e0e0e0;
 }
 
-.editButton {
-    background: #f5f5f5;
-    color: #333;
-    border: 1px solid #ddd;
+.submitButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid #864622;
+    color: #864622;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    background: white;
 }
 
-.editButton:hover {
-    background: #e0e0e0;
+.submitButton:hover {
+    background: #864622;
+    color: white;
 }
 
-.deleteButton {
-    background: #fff;
-    color: #c00;
-    border: 1px solid #c00;
+.submitButton:disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    border-color: #ccc;
 }
 
-.deleteButton:hover {
-    background: #ffeaea;
-}
+
 
 .table {
     width: 100%;
@@ -118,12 +130,115 @@
     gap: 5px;
 }
 .error {
-    color: #c00;
-    margin: 1rem 0;
     background: #fee;
-    padding: 0.75rem 1rem;
+    color: #c00;
+    padding: 1rem;
     border-radius: 4px;
+    margin-bottom: 1rem;
     font-size: 1rem;
+}
+
+/* Amenities styling */
+.amenityInput {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.amenityInput input {
+    flex: 1;
+}
+
+.addButton {
+    padding: 0.5rem 1rem;
+    background: #864622;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.addButton:hover {
+    background: #6d3317;
+}
+
+.amenitiesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.amenityItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f5f5f5;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+}
+
+.removeButton {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0 0.25rem;
+    margin-left: 0.25rem;
+}
+
+.removeButton:hover {
+    color: #c00;
+}
+
+/* Checkbox styling */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.checkbox label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+/* Image preview styling */
+.imagePreviewGrid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.imagePreview {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagePreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .toggleButton {
@@ -180,10 +295,12 @@
 .roomForm {
     background: #fff;
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 16px;
     min-width: 320px;
-    max-width: 400px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .fieldGroup {
@@ -199,6 +316,90 @@
 
 .buttonGroup {
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     gap: 1rem;
+    margin-top: 2rem;
 }
+.roomForm .fieldGroup{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.roomForm .fieldGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.roomForm input[type="text"],
+.roomForm input[type="number"],
+.roomForm textarea,
+.roomForm input[type="file"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.roomForm textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.roomForm input[type="file"] {
+    border: 2px dashed #ddd;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+.roomForm h2 {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+
+  
+  
+  .removeButton {
+    background: transparent;
+    border: none;
+    color: red;
+    font-size: 14px;
+    margin-left: 6px;
+    cursor: pointer;
+  }
+    
+  .imagePreview {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .clickableImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .imagePreview:hover .clickableImage {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  

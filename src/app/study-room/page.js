@@ -1,234 +1,392 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import styles from "./studyroom.module.css";
-import { HiUsers } from "react-icons/hi2";
-import { IoIosBriefcase } from "react-icons/io";
+import {HiUsers} from "react-icons/hi2";
+import {IoIosBriefcase} from "react-icons/io";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useTranslations } from "next-intl";
-import { IoMdArrowBack } from "react-icons/io";
+import {useTranslations} from "next-intl";
+import {IoMdArrowBack} from "react-icons/io";
 import SelectFirstPage from "@/components/selectFirstPage/SelectFirstPage";
+import {SecondarySmButton} from "@/components/buttons/Buttons";
+import PopupWrapper from "@/components/popup/popupWrapper";
+import ImageSlider from "@/components/ImageSlider/ImageSlider";
 
 const BookStudyRoom = () => {
-  const [studyRooms, setStudyRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [date, setDate] = useState(null);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [showFirstPage, setShowFirstPage] = useState(false);
-  const router = useRouter();
-  const t = useTranslations();
+    const [studyRooms, setStudyRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [date, setDate] = useState(null);
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
+    const [showFirstPage, setShowFirstPage] = useState(false);
+    const router = useRouter();
+    const t = useTranslations();
+    const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+    const images = selectedRoom ?. images || [];
 
-  useEffect(() => {
-    // const userToken = localStorage.getItem("userToken");
-    // if (!userToken) {
-    //   router.push("/login");
-    //   return;
-    // }
+    useEffect(() => {
+        // const userToken = localStorage.getItem("userToken");
+        // if (!userToken) {
+        // router.push("/login");
+        // return;
+        // }
 
-    const fetchRooms = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const result = await res.json();
-        if (result.success) {
-          setStudyRooms(result.data.filter((room) => room.isAvailable));
-        }
-      } catch (error) {
-        console.error("Failed to fetch rooms:", error);
-      } finally {
-        setLoading(false);
-      }
+        const fetchRooms = async () => {
+            try {
+                const res = await fetch(`${
+                    process.env.NEXT_PUBLIC_API_URL
+                }/rooms`, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const result = await res.json();
+                if (result.success) {
+                    setStudyRooms(result.data.filter((room) => room.isAvailable));
+                }
+            } catch (error) {
+                console.error("Failed to fetch rooms:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRooms();
+    }, [router]);
+
+    const getRoomIcon = (name, capacity) => {
+        if (name.toLowerCase().includes("conference") || capacity >= 10) 
+            return IoIosBriefcase;
+        
+        return HiUsers;
     };
 
-    fetchRooms();
-  }, [router]);
+    const calculateDuration = () => {
+        if (!startTime || !endTime) 
+            return 0;
+        
+        const [startHour, startMin] = startTime.split(":").map(Number);
+        const [endHour, endMin] = endTime.split(":").map(Number);
+        const start = startHour + startMin / 60;
+        const end = endHour + endMin / 60;
+        const duration = end - start;
+        return duration >= 1 ? duration : 0;
+    };
 
-  const getRoomIcon = (name, capacity) => {
-    if (name.toLowerCase().includes("conference") || capacity >= 10) return IoIosBriefcase;
-    return HiUsers;
-  };
+    const handleStartTimeChange = (value) => {
+        setStartTime(value);
+        const [hour, min] = value.split(":").map(Number);
+        const minEndHour = hour + 1;
+        if (!endTime || parseInt(endTime.split(":")[0]) < minEndHour) {
+            const paddedHour = String(minEndHour).padStart(2, "0");
+            setEndTime(`${paddedHour}:${
+                min.toString().padStart(2, "0")
+            }`);
+        }
+    };
 
-  const calculateDuration = () => {
-    if (!startTime || !endTime) return 0;
-    const [startHour, startMin] = startTime.split(":").map(Number);
-    const [endHour, endMin] = endTime.split(":").map(Number);
-    const start = startHour + startMin / 60;
-    const end = endHour + endMin / 60;
-    const duration = end - start;
-    return duration >= 1 ? duration : 0;
-  };
+    const getMinEndTime = () => {
+        if (!startTime) {
+            return new Date(1970, 0, 1, 10, 0);
+        }
+        const [h, m] = startTime.split(":").map(Number);
+        return new Date(1970, 0, 1, h + 1, m);
+    };
 
-  const handleStartTimeChange = (value) => {
-    setStartTime(value);
-    const [hour, min] = value.split(":").map(Number);
-    const minEndHour = hour + 1;
-    if (!endTime || parseInt(endTime.split(":")[0]) < minEndHour) {
-      const paddedHour = String(minEndHour).padStart(2, "0");
-      setEndTime(`${paddedHour}:${min.toString().padStart(2, "0")}`);
-    }
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const duration = calculateDuration();
 
-  const getMinEndTime = () => {
-    if (!startTime) {
-      return new Date(1970, 0, 1, 10, 0);
-    }
-    const [h, m] = startTime.split(":").map(Number);
-    return new Date(1970, 0, 1, h + 1, m);
-  };
+        if (!selectedRoom || !date || duration < 1) {
+            alert(t("select-valid-room-date-time"));
+            return;
+        }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const duration = calculateDuration();
+        const query = new URLSearchParams({
+            roomId: selectedRoom._id,
+            roomName: selectedRoom.name,
+            date: date.toISOString().split("T")[0],
+            startTime,
+            endTime,
+            duration: duration.toString(),
+            price: (selectedRoom.price * duration).toString()
+        });
 
-    if (!selectedRoom || !date || duration < 1) {
-      alert(t("select-valid-room-date-time"));
-      return;
-    }
+        router.push(`/checkout?${
+            query.toString()
+        }`);
+    };
+    const handleBackClick = () => {
+        setShowFirstPage(true);
+    };
 
-    const query = new URLSearchParams({
-      roomId: selectedRoom._id,
-      roomName: selectedRoom.name,
-      date: date.toISOString().split("T")[0],
-      startTime,
-      endTime,
-      duration: duration.toString(),
-      price: (selectedRoom.price * duration).toString(),
-    });
+    return (
+        <div>
+            <SelectFirstPage isOpen={showFirstPage}
+                onClose={
+                    () => setShowFirstPage(false)
+                }/>
 
-    router.push(`/checkout?${query.toString()}`);
-  };
-  const handleBackClick = () => {
-    setShowFirstPage(true);
-  };
-
-  return (
-    <div>
-    <SelectFirstPage isOpen={showFirstPage} onClose={() => setShowFirstPage(false)} />
-    
-    <div className={styles.container}>
-      <div className={styles.pageHead}>
-        <div className={styles.showMenu}>
-          <IoMdArrowBack
-                      onClick={handleBackClick}
-                      style={{ cursor: "pointer" }}
-                      aria-label="Open first page"
-                      role="button"
-                      tabIndex="0"
-                    />
-        </div>
-        <h1 className={styles.title}>{t("book-a-room")}</h1>
-      </div>
-
-      {loading ? (
-        <p>{t("loading-rooms")}</p>
-      ) : (
-        <div className={styles.grid}>
-          {studyRooms.map((room) => {
-            const Icon = getRoomIcon(room.name, room.capacity);
-            const isSelected = selectedRoom?._id === room._id;
-
-            return (
-              <div
-                key={room._id}
-                onClick={() => setSelectedRoom(room)}
-                className={`${styles.roomCard} ${isSelected ? styles.selected : ""}`}
-              >
-                <div className={styles.roomContent}>
-                  <Icon className={styles.icon} />
-                  <h2 className={styles.roomName}>{t(`${room.name}`)}</h2>
-                  <p className={styles.capacity}>
-                    {t("capacity-text", {
-                      count: room.capacity,
-                      person: room.capacity > 1 ? t("persons") : t("person")
-                    })}
-                  </p>
-                  <p className={styles.price}>{room.price} {t("price-per-hour")}</p>
+            <div className={
+                styles.container
+            }>
+                <div className={
+                    styles.pageHead
+                }>
+                    <div className={
+                        styles.showMenu
+                    }>
+                        <IoMdArrowBack onClick={handleBackClick}
+                            style={
+                                {
+                                    cursor: "pointer"
+                                }
+                            }
+                            aria-label="Open first page"
+                            role="button"
+                            tabIndex="0"/>
+                    </div>
+                    <h1 className={
+                        styles.title
+                    }>
+                        {
+                        t("book-a-room")
+                    }</h1>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label className={styles.label}>{t("select-date")}:</label>
-        <DatePicker
-          selected={date}
-          onChange={(d) => setDate(d)}
-          dateFormat="yyyy-MM-dd"
-          minDate={new Date()}
-          className={styles.input}
-          placeholderText={t("select-date")}
-        />
+                {
+                loading ? (
+                    <p>{
+                        t("loading-rooms")
+                    }</p>
+                ) : (
+                    <div className={
+                        styles.grid
+                    }>
+                        {
+                        studyRooms.map((room) => {
+                            const Icon = getRoomIcon(room.name, room.capacity);
+                            const isSelected = selectedRoom ?. _id === room._id;
 
-        <div className={styles.timeRow}>
-          <div>
-            <label className={styles.label}>{t("from")}:</label>
-            <DatePicker
-              selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
-              onChange={(date) => {
-                const hours = date.getHours().toString().padStart(2, "0");
-                const mins = date.getMinutes().toString().padStart(2, "0");
-                handleStartTimeChange(`${hours}:${mins}`);
-              }}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={30}
-              timeCaption={t("start-time")}
-              dateFormat="HH:mm"
-              minTime={new Date(1970, 0, 1, 8, 0)}
-              maxTime={new Date(1970, 0, 1, 22, 0)}
-              className={styles.input}
-              placeholderText={t("from")}
-            />
-          </div>
-          <div>
-            <label className={styles.label}>{t("to")}:</label>
-            <DatePicker
-              selected={endTime ? new Date(`1970-01-01T${endTime}`) : null}
-              onChange={(date) => {
-                const hours = date.getHours().toString().padStart(2, "0");
-                const mins = date.getMinutes().toString().padStart(2, "0");
-                setEndTime(`${hours}:${mins}`);
-              }}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={30}
-              timeCaption={t("end-time")}
-              dateFormat="HH:mm"
-              minTime={getMinEndTime()}
-              maxTime={new Date(1970, 0, 1, 23, 0)}
-              className={styles.input}
-              placeholderText={t("to")}
-            />
-          </div>
-        </div>
+                            return (
+                                <div key={
+                                        room._id
+                                    }
+                                    onClick={
+                                        () => setSelectedRoom(room)
+                                    }
+                                    className={
+                                        `${
+                                            styles.roomCard
+                                        } ${
+                                            isSelected ? styles.selected : ""
+                                        }`
+                                }>
+                                    <div className={
+                                        styles.roomContent
+                                    }>
+                                        <Icon className={
+                                            styles.icon
+                                        }/>
+                                        <h2 className={
+                                            styles.roomName
+                                        }>
+                                            {
+                                            t(`${
+                                                room.name
+                                            }`)
+                                        }</h2>
+                                        <p className={
+                                            styles.capacity
+                                        }>
+                                            {
+                                            t("capacity-text", {
+                                                count: room.capacity,
+                                                person: room.capacity > 1 ? t("persons") : t("person")
+                                            })
+                                        } </p>
+                                        <p className={
+                                            styles.price
+                                        }>
+                                            {
+                                            room.price
+                                        }
+                                            {
+                                            t("price-per-hour")
+                                        }</p>
+                                        <SecondarySmButton text="Gallery"
+                                            onClick={
+                                                () => setIsGalleryOpen(true)
+                                            }/>
+                                        <PopupWrapper isOpen={isGalleryOpen}
+                                            onClose={
+                                                () => setIsGalleryOpen(false)
+                                            }
+                                            title={
+                                                t("gallery")
+                                        }>
+                                            
+                                                <ImageSlider images={images}
+                                                    autoPlay={true}
+                                                    autoPlayTime={5000}/>
+                                            
+                                        </PopupWrapper>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    } </div>
+                )
+            }
 
-        {calculateDuration() > 0 && (
-          <p className={styles.durationInfo}>
-            {t("selected-duration")}: {calculateDuration()} {t("hour")}
-            {calculateDuration() > 1 ? "s" : ""}
-          </p>
-        )}
+                <form onSubmit={handleSubmit}
+                    className={
+                        styles.form
+                }>
+                    <label className={
+                        styles.label
+                    }>
+                        {
+                        t("select-date")
+                    }:</label>
+                    <DatePicker selected={date}
+                        onChange={
+                            (d) => setDate(d)
+                        }
+                        dateFormat="yyyy-MM-dd"
+                        minDate={
+                            new Date()
+                        }
+                        className={
+                            styles.input
+                        }
+                        placeholderText={
+                            t("select-date")
+                        }/>
 
-        {calculateDuration() === 0 && startTime && endTime && (
-          <p className={styles.errorMessage}>{t("duration-error")}</p>
-        )}
+                    <div className={
+                        styles.timeRow
+                    }>
+                        <div>
+                            <label className={
+                                styles.label
+                            }>
+                                {
+                                t("from")
+                            }:</label>
+                            <DatePicker selected={
+                                    startTime ? new Date(`1970-01-01T${startTime}`) : null
+                                }
+                                onChange={
+                                    (date) => {
+                                        const hours = date.getHours().toString().padStart(2, "0");
+                                        const mins = date.getMinutes().toString().padStart(2, "0");
+                                        handleStartTimeChange(`${hours}:${mins}`);
+                                    }
+                                }
+                                showTimeSelect
+                                showTimeSelectOnly
+                                timeIntervals={30}
+                                timeCaption={
+                                    t("start-time")
+                                }
+                                dateFormat="HH:mm"
+                                minTime={
+                                    new Date(1970, 0, 1, 8, 0)
+                                }
+                                maxTime={
+                                    new Date(1970, 0, 1, 22, 0)
+                                }
+                                className={
+                                    styles.input
+                                }
+                                placeholderText={
+                                    t("from")
+                                }/>
+                        </div>
+                    <div>
+                        <label className={
+                            styles.label
+                        }>
+                            {
+                            t("to")
+                        }:</label>
+                        <DatePicker selected={
+                                endTime ? new Date(`1970-01-01T${endTime}`) : null
+                            }
+                            onChange={
+                                (date) => {
+                                    const hours = date.getHours().toString().padStart(2, "0");
+                                    const mins = date.getMinutes().toString().padStart(2, "0");
+                                    setEndTime(`${hours}:${mins}`);
+                                }
+                            }
+                            showTimeSelect
+                            showTimeSelectOnly
+                            timeIntervals={30}
+                            timeCaption={
+                                t("end-time")
+                            }
+                            dateFormat="HH:mm"
+                            minTime={
+                                getMinEndTime()
+                            }
+                            maxTime={
+                                new Date(1970, 0, 1, 23, 0)
+                            }
+                            className={
+                                styles.input
+                            }
+                            placeholderText={
+                                t("to")
+                            }/>
+                    </div>
+            </div>
 
-        <button type="submit" className={styles.submitButton}>
-          {t("proceed-to-checkout")}
-        </button>
-      </form>
+            {
+            calculateDuration() > 0 && (
+                <p className={
+                    styles.durationInfo
+                }>
+                    {
+                    t("selected-duration")
+                }: {
+                    calculateDuration()
+                }
+                    {
+                    t("hour")
+                }
+                    {
+                    calculateDuration() > 1 ? "s" : ""
+                } </p>
+            )
+        }
+
+            {
+            calculateDuration() === 0 && startTime && endTime && (
+                <p className={
+                    styles.errorMessage
+                }>
+                    {
+                    t("duration-error")
+                }</p>
+            )
+        }
+
+            <button type="submit"
+                className={
+                    styles.submitButton
+            }>
+                {
+                t("proceed-to-checkout")
+            } </button>
+        </form>
     </div>
-    </div>
-  );
+</div>
+    );
 };
 
 export default BookStudyRoom;
