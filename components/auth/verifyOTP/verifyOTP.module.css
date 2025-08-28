@@ -14,7 +14,7 @@
   .otpPopup {
     position: fixed;
     bottom: 0;
-    background-color: #e8d1a7;
+    background-color: var(--bg-color-primary);
     padding: 2rem;
     border-radius: 18px 18px 0px 0px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

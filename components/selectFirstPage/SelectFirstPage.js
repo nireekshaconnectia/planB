@@ -56,7 +56,8 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
               height={100}
             />
           </div>
-          <div className={styles.modalTitle}>PLAN B<div> coffee</div></div>
+          <div className={styles.modalTitle}>PLAN B<div> 
+          Specialty coffee</div></div>
           <div className={styles.langTopBar}>
             <div
               className={styles.languageSwitcher}

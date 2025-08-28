@@ -33,7 +33,7 @@
     color: white;
 }
 .skipButton {
-    background-color:#e8d1a7;
+    background-color:var(--bg-color-primary);
     color: #1a1a1a;
 }
 .inputGroup{

@@ -1,8 +1,7 @@
 .langModal { 
-    background: #e8d1a7;
+    background: var(--bg-color-primary);
     width: 100%;
     max-width: 620px;
-    border-radius: 18px 18px 0px 0px;
     padding: 50px 20px;
     height: 100vh;
     font-size: 20px;

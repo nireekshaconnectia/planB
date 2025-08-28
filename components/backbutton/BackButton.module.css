@@ -2,7 +2,7 @@
     padding: 10px;
     font-size: 20px;
     color: #442d1d;
-    background-color:#e8d1a7;
+    background-color:var(--bg-color-primary);
     border: none;
     border-radius: 5px;
     cursor: pointer;

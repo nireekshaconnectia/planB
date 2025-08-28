@@ -3,7 +3,7 @@
     left:0;
     top: 0;
     color: #000;
-    background-color: #e8d1a7;
+    background-color: var(--bg-color-primary);
     width: 400px;
     height: 100%;
     z-index: 999;

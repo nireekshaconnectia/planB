@@ -1,7 +1,7 @@
 .checkout{
     height: 100%;
     min-height: 100vh;
-    background-color: #e8d1a7;
+    background-color: var(--bg-color-primary);
     padding: 20px 10px;
     color: #111;
 }

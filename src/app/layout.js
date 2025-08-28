@@ -30,7 +30,6 @@ export const metadata = {
     },
     sizes: [16,32],
   },
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
     title: 'Plan B Coffee',
