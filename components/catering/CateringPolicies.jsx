@@ -32,6 +32,7 @@ export default function CateringPolicies({ onNextStep }) {
               alt="Policy Icon"
               width={24}
               height={24}
+              style={{borderRadius: '200px'}}
               className={styles.policyIcon}
             />
             <span>{t(`policies.${policy}`)}</span>

@@ -16,7 +16,7 @@
     padding: 1rem 2rem;
     outline: none;
     width: 100%;
-    background-color: #fff;
+    background-color:#fff;
 }
 
 .submitButton , .skipButton {
@@ -29,11 +29,11 @@
     cursor: pointer;
 }
 .submitButton{
-    background-color: #864622;
+    background-color: #442d1d;
     color: white;
 }
 .skipButton {
-    background-color: #fff;
+    background-color:#e8d1a7;
     color: #1a1a1a;
 }
 .inputGroup{
@@ -45,7 +45,7 @@
     overflow: hidden;
     color: #000;
     gap: 10px;
-    background-color: #fff;
+    background-color:#fff;
 }
 .countrySelector{
     display: flex;

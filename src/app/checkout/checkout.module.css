@@ -1,7 +1,7 @@
 .checkout{
     height: 100%;
     min-height: 100vh;
-    background-color: #f1f1f1;
+    background-color: #e8d1a7;
     padding: 20px 10px;
     color: #111;
 }
@@ -11,6 +11,6 @@
 }
 .pageHead h1{
     font-size: 24px;
-    color: #864622;
+    color: #442d1d;
     margin-bottom: 20px;
 }

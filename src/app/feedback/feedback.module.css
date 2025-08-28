@@ -40,6 +40,7 @@
     border: 1px solid black;
     border-radius: 50px;
     overflow: hidden;
+    background-color: #fff;
 }
 
 .countrySelector {
@@ -58,11 +59,12 @@
     padding: 1rem 0.5rem;
     outline: none;
     width: 100%;
+    background-color: #fff;
 }
 
 .continueButton {
     width: 100%;
-    background-color: #864622;
+    background-color: #442d1d;
     color: white;
     font-size: 16px;
     line-height: 40px;

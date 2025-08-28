@@ -1,5 +1,5 @@
 .container {
-  background-color: #f1f1f1;
+  background-color: #e8d1a7;
   padding: 2rem;
   border-radius: 8px;
   font-family: Verdana, Geneva, sans-serif;
@@ -47,12 +47,12 @@
   font-size: 0.9rem;
 }
 .packageItem:hover {
-  background: linear-gradient(to right, #f9f4f0, #f1f1f1);
+  background: linear-gradient(to right, #f9f4f0, #e8d1a7);
   cursor: pointer;
-  border-left: 2px solid #864622;
+  border-left: 2px solid #442d1d;
 }
 .packageItem:hover h3 {
-  color: #864622;
+  color: #442d1d;
   text-decoration: underline;
   transform: scale(1.1);
 }
@@ -149,7 +149,7 @@
 
 /* Catering form */
 .currentLocationBtn{
-  background-color: #864622;
+  background-color: #442d1d;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -218,6 +218,6 @@
   
   /* Selected state */
   .optionalList .selected , .optionalList .menuListItem:hover {  /* or your theme color */
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
     border-radius: 100px;
   }

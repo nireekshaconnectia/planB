@@ -14,7 +14,7 @@
 .logoContainer h2{
     font-size: 40px;
     font-weight: 700;
-    color: #864622;
+    color: #442d1d;
     text-align: center;
 }
 .loginContainer form{
@@ -41,7 +41,7 @@
     color: #000;
 }
 .loginContainer button[type="submit"]{
-    background-color: #864622;
+    background-color: #442d1d;
     color: #fff;
     opacity: 1; transition: opacity 3s ease-in-out;
 }

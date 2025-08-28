@@ -20,8 +20,8 @@
 
 .editBtn {
     font-size: 14px;
-    border: 1px solid #864622;
-    color: #864622;
+    border: 1px solid #442d1d;
+    color: #442d1d;
     border-radius: 50px;
     padding: 5px 20px;
     margin-top: 20px;
@@ -30,8 +30,8 @@
 
 .submitBtn {
     font-size: 14px;
-    border: 1px solid #864622;
-    color: #864622;
+    border: 1px solid #442d1d;
+    color: #442d1d;
     border-radius: 50px;
     padding: 5px 20px;
     margin-top: 20px;
@@ -46,10 +46,10 @@
     display: flex;
     justify-content: space-between;
     padding: 20px 10px;
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
     margin-bottom: 20px;
     border-radius: 6px;
-    color: #864622;
+    color: #442d1d;
 }
 
 .addressContent {

@@ -7,9 +7,9 @@
     gap: 10px;
 }
 .button{
-    color: #864622;
+    color: #442d1d;
     width: 100%;
-  border: 1px solid #864622;
+  border: 1px solid #442d1d;
   font-size: 18px;
   border-radius: 12px;
   line-height: 60px;
@@ -26,7 +26,7 @@
 .successTitle{
     font-size: 28px;
     text-align: center;
-    color: #864622;
+    color: #442d1d;
 }
 
 @media (max-width: 768px) {

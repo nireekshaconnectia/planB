@@ -1,5 +1,5 @@
 .langModal { 
-    background: #f1f1f1;
+    background: #e8d1a7;
     width: 100%;
     max-width: 620px;
     border-radius: 18px 18px 0px 0px;
@@ -47,14 +47,17 @@
     font-size: 40px;
     font-weight: 600;
     text-align: center;
-    color: #864622;
+    color: #442d1d;
     width: 100%;
     line-height: 55px;
 }
 
 .logoContainer img{
-    max-width: 80px;
-    width: 100px;
+    max-width: 90px;
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 200px;
     text-align: center;
 }
 
@@ -68,7 +71,7 @@
 .languageList li {
     font-size: 16px;
     font-weight: 500;
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
     border-radius: 100px;
     padding: 16px 60px;
     cursor: pointer;
@@ -78,11 +81,15 @@
 }
 
 .languageList li:hover {
-    background: #864622;
+    background: #442d1d;
     color: #fff; /* Keep text color consistent; no white */
 }
 
 @media only screen and (max-width: 600px) {
+    .logoContainer img{
+        width: 70px;
+        height: 70px;
+    }
     .langModal{
         padding: 20px 20px;
         align-items: normal;
@@ -91,7 +98,7 @@
         font-size: 24px;
         font-weight: 600;
         text-align: center;
-        color: #864622;
+        color: #442d1d;
         width: 100%;
         line-height: 34px;
     }

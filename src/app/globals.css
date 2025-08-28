@@ -8,7 +8,7 @@
   --foreground-rgb: 252, 186, 3;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 252, 186, 3;
-  --primary-heading-color: #864622;
+  --primary-heading-color: #442d1d;
   --text-secondary-color:#CF8E56;
 }
 
@@ -37,7 +37,7 @@ p{
 }
 main{
   max-width: 600px;
-  background-color: #fff;
+  background-color:#fff;
   margin: auto;
   transition: max-width 0.3s ease;
   min-height: 100vh;

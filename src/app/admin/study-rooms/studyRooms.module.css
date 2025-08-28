@@ -20,8 +20,8 @@
     border-radius: 20px;
     font-size: 16px;
     font-weight: 500;
-    border: 1px solid #864622;
-    color: #864622;
+    border: 1px solid #442d1d;
+    color: #442d1d;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
@@ -32,18 +32,18 @@
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
     color: #f44336;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .editButton {
-    color: #864622;
+    color: #442d1d;
 }
 
 .editButton:hover {
-    background: #864622;
+    background: #442d1d;
     color: white;
 }
 
@@ -61,7 +61,7 @@
     cursor: not-allowed;
 }
 .addButton:hover, .submitButton:hover {
-    background: #864622;
+    background: #442d1d;
     color:#fff;
 }
 
@@ -86,15 +86,15 @@
     border-radius: 20px;
     font-size: 16px;
     font-weight: 500;
-    border: 1px solid #864622;
-    color: #864622;
+    border: 1px solid #442d1d;
+    color: #442d1d;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
     background: white;
 }
 
 .submitButton:hover {
-    background: #864622;
+    background: #442d1d;
     color: white;
 }
 
@@ -151,7 +151,7 @@
 
 .addButton {
     padding: 0.5rem 1rem;
-    background: #864622;
+    background: #442d1d;
     color: white;
     border: none;
     border-radius: 4px;

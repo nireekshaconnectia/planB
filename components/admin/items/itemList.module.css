@@ -11,7 +11,7 @@
     padding: 1rem;
     background: white;
     border-radius: 8px;
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
 }
 
 .imageContainer {
@@ -80,18 +80,18 @@
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    border: 1px solid #864622;
+    border: 1px solid #442d1d;
     color: #f44336;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .editButton {
-    color: #864622;
+    color: #442d1d;
 }
 
 .editButton:hover {
-    background: #864622;
+    background: #442d1d;
     color: white;
 }
 

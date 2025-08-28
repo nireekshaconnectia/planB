@@ -80,9 +80,9 @@ span {
 }
 .site-logo img{
     border-radius: 200px;
-    height: 100px;
-    width:100px;
-    object-fit: contain
+    height: 90px;
+    width:90px;
+    object-fit: cover;
 }
 .user-login{
     background: white;
@@ -387,9 +387,9 @@ item css */
 
  .item-price {
     font-size: 12px;
-    background: #f1f1f1;
+    background: #e8d1a7;
     padding: 2px 8px 2px 8px;
-    border: 1px solid #f1f1f1;
+    border: 1px solid #e8d1a7;
     border-radius: 8px;
     line-height: 24px;
 }
@@ -464,7 +464,7 @@ item css */
     padding: 5px;
 }
 .change-view button:hover{
-    background-color: #fff;
+    background-color:#e8d1a7;
     box-shadow: 0px 4px 20px 0px rgb(0, 0, 0, 0.1);
 
 }
@@ -475,7 +475,7 @@ item css */
     max-width: 580px;
     width: 100%;
     margin: auto;
-    background-color: #fff;
+    background-color:#fff;
     color: white;
     cursor: pointer;
     box-shadow: 0px 4px 20px 0px #0000001c;
@@ -488,7 +488,7 @@ item css */
 
 .popup-header {
     padding: 10px;
-    background-color: #fff;
+    background-color:#fff;
     color: #000;
     display: flex;
     justify-content: space-between;
@@ -520,7 +520,7 @@ item css */
 
 .popup-open {
     bottom: 0;
-    width: 100vw;
+    /* width: 100vw; */
     display: flex;
     justify-content: center;
     /* Slide up into view */
@@ -537,7 +537,7 @@ item css */
     bottom: 0px;
     max-width: 580px;
     width: 100%;
-    background-color: #fff;
+    background-color:#e8d1a7;
     color: white;
     padding: 10px 20px;
     display: flex;
@@ -546,6 +546,7 @@ item css */
     box-shadow: 0px 4px 20px 0px #0000001c;
     border-radius: 20px 20px 0px 0px;
     z-index: 99;
+    margin: 0px 10px;
 }
 
 .cart-preview>div {
@@ -672,7 +673,7 @@ item css */
 .SideMenu{
     width: 300px;
     height: 100vh;
-    background-color: #fff;
+    background-color:#e8d1a7;
     color: black;
     position: fixed;
     left: 0;
@@ -684,25 +685,25 @@ item css */
     justify-content: space-between;
 }
 .cart-checkout button{
-    color: #864622;
+    color: #442d1d;
     font-weight: 700;
 }
 .showMenu{
     padding: 10px;
     font-size: 20px;
-    color: #864622;
-    background-color: #fff;
+    color: #442d1d;
+    background-color:#fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    border:1px solid #864622;
+    border:1px solid #442d1d;
     border-radius: 100px;
     display: flex;
     justify-content: center;
 }
 .showMenu:hover{
-    background-color: #864622;
+    background-color: #442d1d;
     color:#fff;
 }
 .not-found-page{
@@ -724,6 +725,10 @@ item css */
     color: #2a2a2a;
 }
 @media only screen and (max-width: 600px) {
+    .site-logo img{
+        width: 80px;
+        height: 80px;
+    }
     .categorey-item{
         max-width: 60px;
     }

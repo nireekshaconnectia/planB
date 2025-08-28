@@ -64,7 +64,7 @@
     font-size: 16px;
 }
 .loginModal button[type="submit"]{
-    background-color: #864622;
+    background-color: #442d1d;
     color: #fff;
     opacity: 1; transition: opacity 3s ease-in-out;
 }

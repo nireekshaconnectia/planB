@@ -10,7 +10,7 @@
   width: 350px;
   padding: 20px;
   border: 1px solid #ddd;
-  background-color: #fff;
+  background-color:#e8d1a7;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   text-align: left;
@@ -66,14 +66,14 @@
   color: #4CAF50;
   font-size: 15px;
   padding: 10px 20px;
-  border: 1px solid #8646223b;
+  border: 1px solid #442d1d3b;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .downloadButton:hover {
-  background-color: #864622;
+  background-color: #442d1d;
   color: #fff;
 }
 .receiptItem {
@@ -93,7 +93,7 @@
   padding-top: 10px;
 }
 .addtional a{
-  color: #864622;
+  color: #442d1d;
 }
 @media (max-width: 768px) {
   .receiptWrapper {
