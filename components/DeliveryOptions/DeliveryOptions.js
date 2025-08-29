@@ -1,6 +1,7 @@
 "use client";
 import styles from "./DeliveryOptions.module.css"; // Import CSS module
 import PopupWrapper from "@/components/popup/popupWrapper";
+import Image from "next/image";
 
 const DeliveryOptions = ({ showDPopup, closeDPopup }) => {
   const talabat = () => {
@@ -23,10 +24,18 @@ const DeliveryOptions = ({ showDPopup, closeDPopup }) => {
       title='Select delivery platform'
       >
         <ul className={styles.languageList}>
-          <li onClick={talabat}>Talabat</li>
-          <li onClick={Snoonu}>Snoonu</li>
-          <li onClick={rafeeq}>Rafeeq</li>
-          <li onClick={deliveroo}>Deliveroo</li>
+          <li onClick={talabat} className={styles.deliveryOption}>Talabat 
+            <Image src="/images/talabat.jpg" alt="Talabat" width={24} height={24} className={styles.deliveryImage} />
+          </li>
+          <li onClick={Snoonu} className={styles.deliveryOption}>Snoonu
+            <Image src="/images/snoonu.jpg" alt="Snoonu" width={24} height={24} className={styles.deliveryImage} />
+          </li>
+          <li onClick={rafeeq} className={styles.deliveryOption}>Rafeeq
+            <Image src="/images/rafeeq.webp" alt="Rafeeq" width={24} height={24} className={styles.deliveryImage} />
+          </li>
+          <li onClick={deliveroo} className={styles.deliveryOption}>Deliveroo
+            <Image src="/images/deliveroo.png" alt="Deliveroo" width={24} height={24} className={styles.deliveryImage} />
+          </li>
         </ul>
     </PopupWrapper>
   );

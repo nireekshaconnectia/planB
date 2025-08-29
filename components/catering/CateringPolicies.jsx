@@ -28,10 +28,10 @@ export default function CateringPolicies({ onNextStep }) {
         {fallbackPolicies.map((policy, index) => (
           <li key={index} className={styles.policyItem}>
             <Image
-              src="/logo.png"
+              src="/option.png"
               alt="Policy Icon"
-              width={24}
-              height={24}
+              width={34}
+              height={34}
               style={{borderRadius: '200px'}}
               className={styles.policyIcon}
             />
