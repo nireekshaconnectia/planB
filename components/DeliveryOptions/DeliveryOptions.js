@@ -31,7 +31,7 @@ const DeliveryOptions = ({ showDPopup, closeDPopup }) => {
             <Image src="/images/snoonu.jpg" alt="Snoonu" width={24} height={24} className={styles.deliveryImage} />
           </li>
           <li onClick={rafeeq} className={styles.deliveryOption}>Rafeeq
-            <Image src="/images/rafeeq.webp" alt="Rafeeq" width={24} height={24} className={styles.deliveryImage} />
+            <Image src="/images/rafeeq.png" alt="Rafeeq" width={24} height={24} className={styles.deliveryImage} />
           </li>
           <li onClick={deliveroo} className={styles.deliveryOption}>Deliveroo
             <Image src="/images/deliveroo.png" alt="Deliveroo" width={24} height={24} className={styles.deliveryImage} />
