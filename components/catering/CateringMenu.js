@@ -21,7 +21,7 @@ const fallbackData = {
 
 export default function CateringMenu({ onNextStep }) {
   const [menu, setMenu] = useState({ mainItems: [], optionalItems: [] });
-  const [selectedOptional, setSelectedOptional] = useState(null); // 👈 single value
+  const [selectedOptional, setSelectedOptional] = useState([]); // ✅ Array for multi-select
   const t = useTranslations();
 
   useEffect(() => {
@@ -34,17 +34,19 @@ export default function CateringMenu({ onNextStep }) {
       .catch(() => setMenu(fallbackData));
   }, []);
 
+  // ✅ Toggle selection (multi-select supported)
   const toggleOptional = (item) => {
-    setSelectedOptional((prev) => (prev === item ? null : item)); 
-    // 👆 same item select → deselect, otherwise select new one
+    setSelectedOptional((prev) =>
+      prev.includes(item)
+        ? prev.filter((i) => i !== item) // Deselect if already selected
+        : [...prev, item] // Add if not selected
+    );
   };
 
+  // ✅ Save selections and go next
   const handleContinue = () => {
-    localStorage.setItem(
-      'selectedMenuItems',
-      JSON.stringify(selectedOptional ? [selectedOptional] : []) // 👈 save as array for consistency
-    );
-    onNextStep(); // 👉 Move to next step (policies)
+    localStorage.setItem('selectedMenuItems', JSON.stringify(selectedOptional));
+    onNextStep();
   };
 
   return (
@@ -65,8 +67,8 @@ export default function CateringMenu({ onNextStep }) {
             <li
               key={idx}
               className={`${styles.menuListItem} ${
-                selectedOptional === item ? styles.selected : ''
-              }`}
+                selectedOptional.includes(item) ? styles.selected : ''
+              }`} // ✅ Highlight fix
               onClick={() => toggleOptional(item)}
             >
               {t(item)}
