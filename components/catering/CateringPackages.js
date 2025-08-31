@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./catering.module.css";
 import { useTranslations } from "next-intl";
-
+import Link from "next/link";
 
 const fallbackPackages = [
   { persons: 20, price: 700 },
@@ -48,9 +48,9 @@ export default function CateringPackages( { onNextStep }) {
       </ul>
       <div className={styles.note}>
           <h3>{t("note")}</h3>
-          <p>
+          <Link href="tel:+97430187770">
             {t("note-text")}
-          </p>
+          </Link>
         </div>
     </section>
   );
