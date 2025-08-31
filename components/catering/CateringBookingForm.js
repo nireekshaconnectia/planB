@@ -276,12 +276,7 @@ export default function BookingForm() {
             placeholderText={t("select-time")}
           />
         </div>
-        <div>
-          <h3>{t("note")}</h3>
-          <p>
-            {t("note-text")}
-          </p>
-        </div>
+        
         <div
           className={styles.priceSummary}
           style={{ position: "relative", marginBottom: "1rem" }}

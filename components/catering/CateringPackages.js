@@ -46,6 +46,12 @@ export default function CateringPackages( { onNextStep }) {
           </li>
         ))}
       </ul>
+      <div>
+          <h3>{t("note")}</h3>
+          <p>
+            {t("note-text")}
+          </p>
+        </div>
     </section>
   );
 }

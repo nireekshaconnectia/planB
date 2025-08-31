@@ -76,7 +76,7 @@ export default function CateringMenu({ onNextStep }) {
           ))}
         </ul>
       </div>
-
+          
       <SecondaryButton text={t('book-now')} onClick={handleContinue} />
     </section>
   );

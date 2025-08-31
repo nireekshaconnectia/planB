@@ -30,8 +30,8 @@ export default function CateringPolicies({ onNextStep }) {
             <Image
               src="/option.png"
               alt="Policy Icon"
-              width={34}
-              height={34}
+              width={30}
+              height={30}
               style={{borderRadius: '200px'}}
               className={styles.policyIcon}
             />
