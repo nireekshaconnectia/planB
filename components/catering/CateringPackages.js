@@ -46,7 +46,7 @@ export default function CateringPackages( { onNextStep }) {
           </li>
         ))}
       </ul>
-      <div>
+      <div className={styles.note}>
           <h3>{t("note")}</h3>
           <p>
             {t("note-text")}
