@@ -9,6 +9,7 @@ import { SecondaryButton } from "@/components/buttons/Buttons";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 const DELIVERY_CHARGE = 170;
 
@@ -281,6 +282,12 @@ export default function BookingForm() {
           className={styles.priceSummary}
           style={{ position: "relative", marginBottom: "1rem" }}
         >
+          <div className={styles.InfoNote}>
+          <h3>{t("note")}</h3>
+          <Link href="tel:+97430187770">
+            {t("note-text")}
+          </Link>
+        </div>
           <h3>{t("price-summary")}</h3>
           
           <ul className={styles.priceSummaryli} >

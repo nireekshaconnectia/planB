@@ -46,7 +46,7 @@ export default function CateringPackages( { onNextStep }) {
           </li>
         ))}
       </ul>
-      <div className={styles.note}>
+      <div className={styles.InfoNote}>
           <h3>{t("note")}</h3>
           <Link href="tel:+97430187770">
             {t("note-text")}
