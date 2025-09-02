@@ -286,12 +286,6 @@ export default function BookingForm() {
           className={styles.priceSummary}
           style={{ position: "relative", marginBottom: "1rem" }}
         >
-          <div className={styles.InfoNote}>
-          <h3>{t("note")}</h3>
-          <Link href="tel:+97430187770">
-            {t("note-text")}
-          </Link>
-        </div>
           <h3>{t("price-summary")}</h3>
           
           <ul className={styles.priceSummaryli} >
@@ -314,13 +308,13 @@ export default function BookingForm() {
             </li>
             {additionalNote.trim() && (
               <li>
-                <p>{t("additional-note")}:</p>
+                <p>{t("add-note")}:</p>
                 <p>{additionalNote}</p>
               </li>
             )}
             {!additionalNote.trim() && (
               <li className={styles.addNote}>
-                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("additional-note")}</p>
+                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("add-note")}</p>
               </li>
             )}
             {additionalNote.trim() && (
