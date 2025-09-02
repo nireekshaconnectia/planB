@@ -10,6 +10,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import AdditionalNote from "@/components/forms/UserForms/additionalNote";
+import PopupWrapper from "@/components/popup/popupWrapper";
 
 const DELIVERY_CHARGE = 170;
 
@@ -23,6 +25,8 @@ export default function BookingForm() {
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
+  const [additionalNote, setAdditionalNote] = useState("");
+  const [showAdditionalNotePopup, setShowAdditionalNotePopup] = useState(false);
   const t = useTranslations();
 
   const autocompleteRef = useRef(null);
@@ -139,7 +143,7 @@ export default function BookingForm() {
         email: fixedEmail,
         phone: phone.countryCode + phone.phoneNumber,
       },
-      specialInstructions: "",
+      specialInstructions: additionalNote,
       deliveryDate: date ? date.toISOString() : null,
       deliveryTime: startTime || null,
       paymentDetails: {
@@ -148,7 +152,6 @@ export default function BookingForm() {
         status: "pending",
       },
     };
-
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,
@@ -196,6 +199,7 @@ export default function BookingForm() {
       setDetailedAddress("");
       setDate(null);
       setStartTime("");
+      setAdditionalNote("");
       localStorage.removeItem("selectedPackage");
       localStorage.removeItem("acceptedPolicies");
       localStorage.removeItem("selectedMenuItems");
@@ -308,7 +312,26 @@ export default function BookingForm() {
             <li>
               <p>{t("delivery")}:</p><p> {DELIVERY_CHARGE + " QR "} </p>
             </li>
+            {additionalNote.trim() && (
+              <li>
+                <p>{t("additional-note")}:</p>
+                <p>{additionalNote}</p>
+              </li>
+            )}
+            {!additionalNote.trim() && (
+              <li className={styles.addNote}>
+                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("additional-note")}</p>
+              </li>
+            )}
+            {additionalNote.trim() && (
+              <li className={styles.addNote}>
+                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("update-note")}</p>
+              </li>
+            )}
             <br /><hr /><br />
+            
+            
+            
             <li>
               <strong><p>{t("total")}:{""}</p></strong>
               <p>{selectedPackage ? selectedPackage.price + DELIVERY_CHARGE + " QR" : 0}</p>
@@ -325,6 +348,17 @@ export default function BookingForm() {
           style={{ width: "100%" }}
         />
       </form>
+
+      <PopupWrapper
+        isOpen={showAdditionalNotePopup}
+        onClose={() => setShowAdditionalNotePopup(false)}
+        title="Additional Note"
+      >
+        <AdditionalNote
+        note={additionalNote} 
+        setNote={setAdditionalNote} 
+        setShowAdditionalNotePopup={setShowAdditionalNotePopup} />
+      </PopupWrapper>
     </section>
   );
 }

@@ -194,6 +194,14 @@
     font-size: 16px;
     color: #111;
 }
+.addNote{
+  color: #442d1d;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
   @media (max-width: 600px) {
     .policyItem{
       font-size: 14px;

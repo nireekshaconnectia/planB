@@ -231,5 +231,8 @@
     "end-time": "End Time",
     "select-time": "Select Time",
     "note": "Note",
-    "note-text": "For more than 100 cups please contact us on ( +974 30187770 )."
+    "note-text": "For more than 100 cups please contact us on ( +974 30187770 ).",
+    "additional-note": "Additional Note",
+    "add-note": "Add Note",
+    "update-note": "Update Note"
 }
