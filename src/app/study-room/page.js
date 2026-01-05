@@ -191,7 +191,7 @@ const BookStudyRoom = () => {
         const startMin = sh * 60 + sm;
         
         // Must be at least 1 hour after start
-        if (endMin <= startMin + 60) return false;
+        if (endMin < startMin + 60) return false;
         
         if (!isWithinOpenHours(endMin)) return false;
         

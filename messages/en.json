@@ -164,7 +164,15 @@
     "current-location": "Click to Use Current Location",
     "detailed-address": "Detailed Address (Zone, Street, House No)",
     "phone-number": "Phone Number",
-    
+    "catering-orders": "Catering Orders",
+    "catering-order-details": "Catering Order Details",
+    "catering-order-date": "Catering Order Date",
+    "catering-order-time": "Catering Order Time",
+    "catering-order-status": "Catering Order Status",
+    "catering-order-total": "Catering Order Total",
+    "catering-order-items": "Catering Order Items",
+    "catering-order-item-name": "Catering Order Item Name",
+    "catering-order-item-quantity": "Catering Order Item Quantity",
 
 
     "hour": "Hour",

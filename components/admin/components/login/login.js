@@ -42,7 +42,7 @@ export default function LoginForm() {
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
         <div className={styles.logoContainer}>
-          <Image src={logo} alt="Logo" width={150} height={150} />
+          <Image src={logo} alt="Logo" width={150} height={150} className={styles.logo}/>
         </div>
         <h1>Admin Login</h1>
         {error && <div className={styles.error}>{error}</div>}

@@ -11,11 +11,17 @@
     margin: auto;
     object-fit: cover;
 }
-.logoContainer h2{
+.logoContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loginContainer h1{
     font-size: 40px;
     font-weight: 700;
     color: #442d1d;
     text-align: center;
+    margin: auto;
 }
 .loginContainer form{
     padding: 20px;
@@ -59,7 +65,7 @@
         width: 80px;
         height: 80px;
     }
-    .logoContainer h2{
+    .loginContainer h1{
         font-size: 30px;
     }
     .loginContainer label{
