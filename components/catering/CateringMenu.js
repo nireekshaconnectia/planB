@@ -45,7 +45,9 @@ export default function CateringMenu({ onNextStep }) {
 
   // ✅ Save selections and go next
   const handleContinue = () => {
+    console.log('📋 CateringMenu - Selected Optional Items:', selectedOptional);
     localStorage.setItem('selectedMenuItems', JSON.stringify(selectedOptional));
+    console.log('💾 CateringMenu - Saved to localStorage:', JSON.parse(localStorage.getItem('selectedMenuItems')));
     onNextStep();
   };
 

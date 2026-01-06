@@ -28,6 +28,7 @@ export default function BookingsList() {
             const result = await response.json();
             if (result.success) {
                 setBookings(result.data || []);
+                
             } else {
                 throw new Error(result.message || 'Failed to fetch bookings');
             }
@@ -182,11 +183,11 @@ export default function BookingsList() {
                                     <h4>{t('Customer Details')}</h4>
                                     <div className={styles.detail}>
                                         <strong>{t('Name')}:</strong>
-                                        <span>{booking.user?.name || 'N/A'}</span>
+                                        <span>{booking.user?.name || booking.firstName || booking.customerName || 'N/A'}</span>
                                     </div>
                                     <div className={styles.detail}>
-                                        <strong>{t('Email')}:</strong>
-                                        <span>{booking.user?.email || 'N/A'}</span>
+                                        <strong>{t('Phone')}:</strong>
+                                        <span>{booking.user?.phone || booking.phone || booking.customerPhone || 'N/A'}</span>
                                     </div>
                                 </div>
 
@@ -215,21 +216,21 @@ export default function BookingsList() {
                                 </div>
 
                                 <div className={styles.section}>
-                                    <h4>{t('Booking Details')}</h4>
+                                    <h4>{t('booking-details')}</h4>
                                     <div className={styles.detail}>
                                         <strong>{t('Date')}:</strong>
                                         <span>{formatDate(booking.bookingDate)}</span>
                                     </div>
                                     <div className={styles.detail}>
-                                        <strong>{t('Time Slot')}:</strong>
+                                        <strong>{t('time-slot')}:</strong>
                                         <span>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
                                     </div>
                                     <div className={styles.detail}>
-                                        <strong>{t('Purpose')}:</strong>
+                                        <strong>{t('purpose')}:</strong>
                                         <span>{booking.purpose || 'N/A'}</span>
                                     </div>
                                     <div className={styles.detail}>
-                                        <strong>{t('Created At')}:</strong>
+                                        <strong>{t('created-at')}:</strong>
                                         <span>{formatDate(booking.createdAt)}</span>
                                     </div>
                                 </div>

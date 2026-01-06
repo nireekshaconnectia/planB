@@ -50,7 +50,8 @@ export default function BookingForm() {
     if (pkg) setSelectedPackage(JSON.parse(pkg));
     setAcceptedPolicies(policies === "true");
     try {
-      setSelectedOptional(selectedOptionalRaw ? JSON.parse(selectedOptionalRaw) : []);
+      const parsedOptional = selectedOptionalRaw ? JSON.parse(selectedOptionalRaw) : [];
+      setSelectedOptional(parsedOptional);
     } catch {
       setSelectedOptional([]);
     }
@@ -112,6 +113,17 @@ export default function BookingForm() {
       return;
     }
 
+    // Validate delivery date and time are provided
+    if (!date) {
+      alert("Please select a delivery date");
+      return;
+    }
+
+    if (!startTime || startTime.trim() === "") {
+      alert("Please select a delivery time");
+      return;
+    }
+
     const subtotal = selectedPackage.price;
     const total = subtotal + DELIVERY_CHARGE;
     const orderId = generateOrderId();
@@ -145,13 +157,14 @@ export default function BookingForm() {
       },
       specialInstructions: additionalNote,
       deliveryDate: date ? date.toISOString() : null,
-      deliveryTime: startTime || null,
+      deliveryTime: startTime && startTime.trim() !== "" ? startTime.trim() : null,
       paymentDetails: {
         paymentMethod: "online",
         amountPaid: total,
         status: "pending",
       },
     };
+
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,

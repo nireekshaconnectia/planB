@@ -1,7 +1,6 @@
-export default function CateringOrders() {
-    return (
-        <div>
-            <h1>Catering Orders</h1>
-        </div>
-    );
+"use client";
+import CateringOrders from "@/components/admin/Catering/CateringOrders";
+
+export default function CateringOrdersPage() {
+    return <CateringOrders />;
 }

@@ -173,6 +173,10 @@
     "catering-order-items": "Catering Order Items",
     "catering-order-item-name": "Catering Order Item Name",
     "catering-order-item-quantity": "Catering Order Item Quantity",
+    "booking-details": "Booking Details",
+    "time-slot": "Time Slot",
+    "purpose": "Purpose",
+    "created-at": "Created At",
 
 
     "hour": "Hour",

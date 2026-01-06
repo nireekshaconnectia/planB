@@ -160,6 +160,10 @@
     "Hot chocolate": "الشوكولاتة الساخنة",
     "Acai lemonade": "اساي ليمونيد",
     "Catering Packages": "عروض الضيافة",
+    "booking-details": "تفاصيل الحجز",
+    "time-slot": "وقت الحجز",
+    "purpose": "الغرض",
+    "created-at": "تاريخ الحجز",
 
     "policies":{
         "title": "سياسات الضيافة",
