@@ -21,13 +21,13 @@ export default function OrderList() {
 
         const initializeSocket = () => {
             try {
-                const socketUrl = process.env.NEXT_SOCKET_URL || 'http://localhost:5000';
+                const socketUrl = process.env.NEXT_SOCKET_URL || 'https://planbapi-8lef5.ondigitalocean.app';
                 console.log('Attempting to connect to socket server at:', socketUrl);
                 
                 // Initialize socket connection with more robust options
                 newSocket = io(socketUrl, {
                     cors: {
-                        origin: process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000',
+                        origin: process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://planbqa.shop',
                         methods: ["GET", "POST"]
                     },
                     reconnectionAttempts: 5,
@@ -313,11 +313,11 @@ export default function OrderList() {
                             {order.items.map((item, index) => (
                                 <div key={index} className={styles.orderItem}>
                                     <span>{item.quantity}x {item.foodName}</span>
-                                    <span>QAR {item.totalPrice}</span>
+                                    <span>₹{item.totalPrice}</span>
                                 </div>
                             ))}
                             <div className={styles.orderTotal}>
-                                <strong>Total:</strong> QAR {order.orderTotal}
+                                <strong>Total:</strong> ₹{order.orderTotal}
                             </div>
                         </div>
 
