@@ -313,11 +313,11 @@ export default function OrderList() {
                             {order.items.map((item, index) => (
                                 <div key={index} className={styles.orderItem}>
                                     <span>{item.quantity}x {item.foodName}</span>
-                                    <span>₹{item.totalPrice}</span>
+                                    <span>QR {item.totalPrice}</span>
                                 </div>
                             ))}
                             <div className={styles.orderTotal}>
-                                <strong>Total:</strong> ₹{order.orderTotal}
+                                <strong>Total:</strong> QR {order.orderTotal}
                             </div>
                         </div>
 
