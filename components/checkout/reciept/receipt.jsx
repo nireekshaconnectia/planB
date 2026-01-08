@@ -75,7 +75,7 @@ const Receipt = ({ order }) => {
             <IoMdDownload />
           </button>
         </div>
-        <div className={styles.addtional}><p>Continue at <a href="https://www.planbqa.shop/" target="_blank">planbcafe.qa</a></p></div>
+        <div className={styles.addtional}><p>Continue at <a href="https://www.planbqa.shop/">planbqa.shop</a></p></div>
       </div>
     </div>
   );
