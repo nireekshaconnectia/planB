@@ -18,7 +18,7 @@ const PaymentSuccess = ({orderData}) => {
         <h2 className={styles.successTitle}>🎉 Payment Successful!</h2>
         <Receipt order={orderData}/>
         <p className={styles.message}>
-          Your order has been placed successfully. We are processing your payment and will notify you shortly.
+          Your order has been placed successfully. We are processing your Order and will notify you shortly.
         </p>
         <GuestInfoForm showGiPopup={showGPopup} closeGiPopup={() => setShowGPopup(false)}/>
       </div>
