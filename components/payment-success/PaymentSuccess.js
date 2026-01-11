@@ -19,6 +19,7 @@ const PaymentSuccess = ({orderData}) => {
         <Receipt order={orderData}/>
         <p className={styles.message}>
           Your order has been placed successfully. We are processing your Order and will notify you shortly.
+          for any further assistance, please contact us at <a href="tel:+97430187770">+97 430187770</a>
         </p>
         <GuestInfoForm showGiPopup={showGPopup} closeGiPopup={() => setShowGPopup(false)}/>
       </div>
