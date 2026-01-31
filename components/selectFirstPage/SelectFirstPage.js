@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SelectFirstPage.module.css";
 import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
+import SupportPopup from "@/components/support/supportPopup";
 import { useTranslations } from "next-intl";
 import Image from 'next/image';
 import LanguageModal from "@/components/languagemodal/languagemodal";
@@ -14,6 +15,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
   const [showLangPopup, setShowLangPopup] = useState(false);
+  const [showSupportPopup, setShowSupportPopup] = useState(false);
   const t = useTranslations(); // ✅ Initialize translations here
   const selectedLang = useSelector((state) => state.language.lang) || "en";
 
@@ -86,6 +88,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
           <li onClick={location}>{t("location")}</li>
           <li onClick={loyalty}>{t("loyalty card")}</li>
           <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>{t("delivery platforms")}</li>
+          <li onClick={() => setShowSupportPopup(true)} style={{ cursor: "pointer" }}>{t("support")}</li>
         </ul>
         
       </div>
@@ -94,6 +97,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
         showDPopup={showDeliveryPopup}
         closeDPopup={() => setShowDeliveryPopup(false)}
       />
+      <SupportPopup showSupportPopup={showSupportPopup} closeSupportPopup={() => setShowSupportPopup(false)} />
     </>
   );
 };
