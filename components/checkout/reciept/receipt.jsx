@@ -76,7 +76,7 @@ const Receipt = ({ order }) => {
           </button>
         </div>
         <div className={styles.addtional}><p>Continue at <Link href="/">planbqa.shop</Link></p></div>
-        <div className={styles.addtional}><p>For any queries, contact us at <Link href="tel:+97430187770">+97 430187770</Link></p></div>
+        <div className={styles.addtional}><p>For any queries or Cancellation, contact us at <Link href="tel:+97430187770">+97 430187770</Link></p></div>
       </div>
     </div>
   );

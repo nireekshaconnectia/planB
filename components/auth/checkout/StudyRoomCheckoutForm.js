@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./studyroom.module.css";
 import { PhoneField } from "@/components/forms/fields/PhoneField";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 const StudyRoomCheckoutForm = ({ bookingData }) => {
   const { roomId, roomName, date, startTime, endTime, duration, price } =
@@ -153,7 +154,9 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
             countryCode="+974"
           />
         </div>
-
+        <div className={styles.addtional}>
+          <input type="checkbox" name="terms" id="terms" required />
+          <p>For any queries or Cancellation, contact us at <Link href="tel:+97430187770">(+97 430187770)</Link></p></div>
         <button type="submit" className={styles.submitButton}>
           {t("confirm-booking")}
         </button>

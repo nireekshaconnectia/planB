@@ -56,6 +56,23 @@
     color: #fff;
 }
 
+.addtional {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-direction: row !important;
+}
+.addtional input {
+    width: 20px;
+    height: 20px;
+}
+.addtional p {
+    font-size: 14px;
+    font-weight: 500;
+}
+
 @media (max-width: 600px) {
     .checkoutForm {
         max-width: 350px;
