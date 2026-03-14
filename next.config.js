@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+        
     // Suppress hydration warnings
     onDemandEntries: {
         // period (in ms) where the server will keep pages in the buffer
@@ -37,5 +38,8 @@ const nextConfig = {
     poweredByHeader: false,
     generateEtags: false,
 }
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+  })
 
 module.exports = nextConfig 

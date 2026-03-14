@@ -9,9 +9,9 @@ const LanguageWrapper = ({ children }) => {
   // Memoize messages loading to prevent unnecessary re-imports
   const messages = useMemo(() => {
     try {
-      return require(`/messages/${lang}.json`);
+      return require(`../messages/${lang}.json`);
     } catch (error) {
-      return require(`/messages/en.json`); // Fallback to English
+      return require(`../messages/en.json`); // Fallback to English
     }
   }, [lang]);
 
