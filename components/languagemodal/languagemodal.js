@@ -39,7 +39,7 @@ const LanguageModal = ({ showLpopup, closeLpopup }) => {
       ]);
 
       if (!menuResponse.ok || !categoriesResponse.ok) {
-        throw new Error("Failed to fetch data");
+        throw Error("Failed to fetch data");
       }
 
       const menuData = await menuResponse.json();
