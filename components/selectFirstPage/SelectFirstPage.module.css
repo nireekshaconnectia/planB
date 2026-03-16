@@ -1,7 +1,7 @@
 .langModal { 
     background: var(--bg-color-primary);
     width: 100%;
-    max-width: 620px;
+    max-width: 100%;
     padding: 50px 20px;
     height: 100vh;
     font-size: 20px;

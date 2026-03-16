@@ -38,14 +38,14 @@ p{
   color: #111;
 }
 main{
-  max-width: 600px;
+  max-width: 100%;
   background-color:#fff;
   margin: auto;
   transition: max-width 0.3s ease;
   min-height: 100vh;
 }
 .main-mobile {
-  max-width: 600px;
+  max-width: 100%;
 }
 button:focus-visible , input:focus-visible, optgroup:focus-visible, select:focus-visible, textarea:focus-visible{
   outline: none;

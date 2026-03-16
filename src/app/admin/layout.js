@@ -35,7 +35,7 @@ export default function AdminLayout({ children }) {
 
     return (
         <AdminThemeProvider>
-            <body className={styles.body}>
+            <div className={styles.body}>
                 <main>
                     <SideMenu />
                     <ThemeToggle />
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }) {
                         {children}
                     </div>
                 </main>
-            </body>
+            </div>
         </AdminThemeProvider>
     );
 }
