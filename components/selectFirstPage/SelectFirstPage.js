@@ -5,24 +5,13 @@ import styles from "./SelectFirstPage.module.css";
 import DeliveryOptions from "@/components/DeliveryOptions/DeliveryOptions";
 import SupportPopup from "@/components/support/supportPopup";
 import { useTranslations } from "next-intl";
-import Image from 'next/image';
-import LanguageModal from "@/components/languagemodal/languagemodal";
-import { useSelector } from "react-redux";
-import { TbWorld } from "react-icons/tb";
-import { FaCaretDown } from "react-icons/fa";
+import Header from "../layout/Header";
 
 const SelectFirstPage = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
-  const [showLangPopup, setShowLangPopup] = useState(false);
   const [showSupportPopup, setShowSupportPopup] = useState(false);
-  const t = useTranslations(); // ✅ Initialize translations here
-  const selectedLang = useSelector((state) => state.language.lang) || "en";
-
-  const languageMap = {
-    en: "English",
-    ar: "العربية",
-  };
+  const t = useTranslations();
 
   const location = () => window.open("https://maps.app.goo.gl/aSjhu1mveHaVqtKq5", "_blank");
   const loyalty = () => window.open("https://loyalty.is/j3aifc", "_blank");
@@ -34,70 +23,92 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
     } else if (option === "study-room") {
       onClose();
       router.push("/study-room");
-    }
-    else if (option === "catering") {
+    } else if (option === "catering") {
       onClose();
       router.push("/catering");
     }
   };
 
   if (!isOpen) return null;
-  
 
   return (
     <>
-      <div className={styles.langModal}>
-        <div className={styles.modalHead}>
-          
-          <div className={styles.logoContainer}>
-            <Image
-              src="/logo.png"
-              alt="Site Logo"
-              className="logo-image m-auto"
-              width={100}
-              height={100}
-            />
+      <div className={styles.pageContainer}>
+        <div className={styles.headerFadeIn}>
+          <Header />
+        </div>
+        
+        <div className={styles.gridWrapper}>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo1.jpg" alt="Coffee" />
           </div>
-          <div className={styles.modalTitle}>PLAN B<div> 
-          Specialty coffee</div></div>
-          <div className={styles.langTopBar}>
-            <div
-              className={styles.languageSwitcher}
-              onClick={() => setShowLangPopup(true)}
-              aria-label="Change language"
-              role="button"
-              tabIndex="0"
-            >
-              <TbWorld />
-              <p className={styles.languageText}>{languageMap[selectedLang]}</p>
-              <FaCaretDown />
-            </div>
-            <LanguageModal showLpopup={showLangPopup} closeLpopup={() => setShowLangPopup(false)} />
+
+          <div className={styles.textSquare}>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commado viverra maecenas accumsan lacus vel facilisis.
+            </p>
+          </div>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo2.jpg" alt="Coffee" />
+          </div>
+
+          <div className={styles.actionSquare} onClick={() => handleSelect("catering")}>
+            <h3>{t("catering")}</h3>
+            <button className={styles.pillBtn}>CLICK HERE</button>
+          </div>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo3.jpg" alt="Coffee" />
+          </div>
+
+          <div className={styles.actionSquare} onClick={() => handleSelect("study-room")}>
+            <h3>{t("study-room")}</h3>
+            <button className={styles.pillBtn}>CLICK HERE</button>
+          </div>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo4.jpg" alt="Coffee" />
+          </div>
+
+          <div className={styles.actionSquare} onClick={loyalty}>
+            <h3>{t("loyalty card")}</h3>
+            <button className={styles.pillBtn}>CLICK HERE</button>
+          </div>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo5.jpg" alt="Coffee" />
+          </div>
+
+          <div className={styles.actionSquare} onClick={() => setShowDeliveryPopup(true)}>
+            <h3>{t("delivery platforms")}</h3>
+            <button className={styles.pillBtn}>CLICK HERE</button>
+          </div>
+
+          <div className={styles.imageSquare}>
+            <img src="/home/logo6.jpg" alt="Coffee" />
+          </div>
+
+          <div className={styles.actionSquare} onClick={location}>
+            <h3>{t("location")}</h3>
+            <button className={styles.pillBtn}>CLICK HERE</button>
           </div>
         </div>
-        <ul className={styles.languageList}>
-          {/* <li onClick={() => handleSelect("menu")}>
-            {t("menu")}
-          </li> */}
-          <li onClick={() => handleSelect("catering")}>
-            {t("catering")}
-          </li>
-          <li onClick={() => handleSelect("study-room")}>
-            {t("study-room")}
-          </li>
-          <li onClick={location}>{t("location")}</li>
-          <li onClick={loyalty}>{t("loyalty card")}</li>
-          <li onClick={() => setShowDeliveryPopup(true)} style={{ cursor: "pointer" }}>{t("delivery platforms")}</li>
-          <li onClick={() => setShowSupportPopup(true)} style={{ cursor: "pointer" }}>{t("support")}</li>
-        </ul>
-        
+
+        <div className={styles.supportFooter} onClick={() => setShowSupportPopup(true)}>
+            {t("support")}
+        </div>
       </div>
-      
+
       <DeliveryOptions
         showDPopup={showDeliveryPopup}
         closeDPopup={() => setShowDeliveryPopup(false)}
       />
-      <SupportPopup showSupportPopup={showSupportPopup} closeSupportPopup={() => setShowSupportPopup(false)} />
+      <SupportPopup 
+        showSupportPopup={showSupportPopup} 
+        closeSupportPopup={() => setShowSupportPopup(false)} 
+      />
     </>
   );
 };

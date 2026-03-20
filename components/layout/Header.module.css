@@ -1,0 +1,105 @@
+.header {
+    width: 100%;
+    background: #e7d5b4;
+    padding: 15px 20px;
+    position: relative;
+    z-index: 10; 
+}
+
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftSection, .rightSection {
+    flex: 1;
+}
+
+.rightSection {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; 
+}
+
+.brandSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 5px;
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.logoImage {
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.brandText {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.mainTitle {
+    font-size: 64px;
+    font-weight: 600;
+    color: #8B4513;
+    letter-spacing: 1px;
+}
+
+.subTitle {
+    font-size: 32px;
+    font-weight: 500;
+    color: #8B4513;
+    margin-top: -18;
+    font-family: 'Brush Script MT', cursive, sans-serif;
+}
+
+.languageSwitcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: rgba(68, 45, 29, 0.05);
+    border-radius: 50px;
+    transition: background 0.3s ease;
+}
+
+.languageSwitcher:hover {
+    background: rgba(68, 45, 29, 0.1);
+}
+
+.languageText {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #442d1d;
+}
+
+@media only screen and (max-width: 600px) {
+    .mainTitle {
+        font-size: 36px;
+    }
+    .subTitle {
+        font-size: 24px;
+    }
+    .logoImage {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    .languageText {
+        display: none; 
+    }
+}
