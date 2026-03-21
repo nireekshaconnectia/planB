@@ -46,7 +46,8 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
 
           <div className={styles.textSquare}>
             <p>
-              Premium specialty coffee spotoffering stunning skyline views, a Modern ambiance, and a curated menu of coffee, breakfast, and desserts—perfect for relaxing, working, or casual meetups.
+              Premium specialty coffee spot offering stunning skyline views with Modern ambiance and a curated menu of coffee, breakfast, and desserts
+Perfect for relaxing, working, or casual meetups.
             </p>
           </div>
 
