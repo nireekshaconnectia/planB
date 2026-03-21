@@ -88,7 +88,34 @@
     color: #442d1d;
 }
 
+.backButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8B4513; /* Matching your theme color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.backButton:hover {
+    background: rgba(139, 69, 19, 0.1);
+}
+
+/* Adjust leftSection to ensure vertical alignment */
+.leftSection {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
 @media only screen and (max-width: 600px) {
+    .backButton {
+        padding: 5px;
+    }
     .mainTitle {
         font-size: 36px;
     }

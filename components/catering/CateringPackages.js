@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import styles from "./catering.module.css";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import Header from "../layout/Header";
+import Image from "next/image";
+import { IoPersonCircleOutline } from "react-icons/io5";
 
 const fallbackPackages = [
   { persons: 20, price: 700 },
@@ -13,10 +16,10 @@ const fallbackPackages = [
   { persons: 100, price: 3300 },
 ];
 
-export default function CateringPackages( { onNextStep }) {
+export default function CateringPackages({ onNextStep }) {
   const [packages, setPackages] = useState([]);
-  const router = useRouter();
   const t = useTranslations();
+
   useEffect(() => {
     fetch("/api/catering-packages")
       .then((res) => {
@@ -29,29 +32,58 @@ export default function CateringPackages( { onNextStep }) {
 
   const handleSelect = (pkg) => {
     localStorage.setItem("selectedPackage", JSON.stringify(pkg));
-    onNextStep(); // ✅ Call parent function to go to next step
+    onNextStep();
   };
 
   return (
-    <section className={styles.container}>
-      <ul className={styles.packageList}>
+    <section className={styles.pageContainer}>
+      <Header />
+      
+      {/* Banner Section */}
+      <div className={styles.bannerWrapper}>
+        <Image 
+          src="/banner.jpg" 
+          alt="Catering Banner" 
+          fill
+          className={styles.bannerImage}
+          priority
+        />
+      
+      </div>
+
+        <div className={styles.titleWrapper}>
+         <h1 className={styles.mainTitle}>{t("catering")}</h1>
+      </div>
+
+       <div className={styles.listWrapper}>
         {packages.map((pkg, idx) => (
-          <li
+          <div
             key={idx}
-            className={styles.packageItem}
+            className={styles.packagePill}
             onClick={() => handleSelect(pkg)}
+            style={{ animationDelay: `${idx * 0.1}s` }}
           >
-            <h3>{pkg.persons} {t("person")}</h3>
-            {/* <p>{pkg.price} QR</p> */}
-          </li>
+            <div className={styles.iconContainer}>
+                <IoPersonCircleOutline />
+            </div>
+            <div className={styles.pillText}>
+                <span className={styles.number}>{pkg.persons}</span>
+                <span className={styles.label}>{t("persons")}</span>
+            </div>
+          </div>
         ))}
-      </ul>
-      <div className={styles.InfoNote}>
-          <h3>{t("note")}</h3>
-          <Link href="tel:+97430187770">
-            {t("note-text")}
+      </div>
+
+      {/* Note Section - White Card Styling */}
+      <div className={styles.noteCard}>
+          <h3 className={styles.noteTitle}>{t("note")}</h3>
+          <p className={styles.noteDescription}>
+            {t("for_more_than_100_cups")}
+          </p>
+          <Link href="tel:+97430187770" className={styles.phoneLink}>
+            ( +974 30187770 )
           </Link>
-        </div>
+      </div>
     </section>
   );
 }

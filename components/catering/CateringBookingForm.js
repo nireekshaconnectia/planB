@@ -9,38 +9,32 @@ import { SecondaryButton } from "@/components/buttons/Buttons";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import Header from "../layout/Header";
 import AdditionalNote from "@/components/forms/UserForms/additionalNote";
 import PopupWrapper from "@/components/popup/popupWrapper";
 
 const DELIVERY_CHARGE = 170;
 
 export default function BookingForm() {
+  const t = useTranslations();
+
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState({ countryCode: "+974", phoneNumber: "" });
   const [currentLocation, setCurrentLocation] = useState("");
   const [detailedAddress, setDetailedAddress] = useState("");
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [selectedOptional, setSelectedOptional] = useState([]);
-  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [additionalNote, setAdditionalNote] = useState("");
+  
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedOptional, setSelectedOptional] = useState([]);
+  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
+
   const [showAdditionalNotePopup, setShowAdditionalNotePopup] = useState(false);
-  const t = useTranslations();
 
-  const autocompleteRef = useRef(null);
-  const detailedAddressRef = useRef(null);
-
-  function generateOrderId() {
-    const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 1000);
-    return `CTR-${timestamp}-${random}`;
-  }
-
-  const handleStartTimeChange = (value) => {
-    setStartTime(value);
-  };
+  useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
 
   useEffect(() => {
     const pkg = localStorage.getItem("selectedPackage");
@@ -57,6 +51,12 @@ export default function BookingForm() {
     }
   }, []);
 
+  function generateOrderId() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    return `CTR-${timestamp}-${random}`;
+  }
+
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation not supported");
@@ -66,7 +66,6 @@ export default function BookingForm() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-
         if (!window.google?.maps?.Geocoder) {
           alert("Google Maps API not loaded");
           return;
@@ -91,38 +90,17 @@ export default function BookingForm() {
     );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (
-      !fullName.trim() ||
-      !phone.phoneNumber.trim() ||
-      !detailedAddress.trim()
-    ) {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+
+    if (!fullName.trim() || !phone.phoneNumber.trim() || !detailedAddress.trim()) {
       alert("Please fill all required fields");
       return;
     }
-
-    if (!selectedPackage) {
-      alert("Please select a package first");
-      return;
-    }
-
-    if (!acceptedPolicies) {
-      alert("Please accept the policies before booking");
-      return;
-    }
-
-    // Validate delivery date and time are provided
-    if (!date) {
-      alert("Please select a delivery date");
-      return;
-    }
-
-    if (!startTime || startTime.trim() === "") {
-      alert("Please select a delivery time");
-      return;
-    }
+    if (!selectedPackage) { alert("Please select a package first"); return; }
+    if (!acceptedPolicies) { alert("Please accept policies"); return; }
+    if (!date || !startTime) { alert("Please select delivery date and time"); return; }
 
     const subtotal = selectedPackage.price;
     const total = subtotal + DELIVERY_CHARGE;
@@ -135,236 +113,194 @@ export default function BookingForm() {
       phone: phone.countryCode + phone.phoneNumber,
       email: fixedEmail,
       location: currentLocation,
-      address: {
-        line1: detailedAddress,
-        city: "Doha",
-        state: "",
-        postalCode: "",
-        country: "Qatar",
-      },
+      address: { line1: detailedAddress, city: "Doha", country: "Qatar" },
       policyAccepted: true,
       numberOfPeople: selectedPackage.persons,
       selectedPackage: selectedPackage.name,
-      selectedOptional: selectedOptional ,
+      selectedOptional,
       deliveryCharge: DELIVERY_CHARGE,
       subtotal,
       total,
       amount: total,
-      user: {
-        name: fullName,
-        email: fixedEmail,
-        phone: phone.countryCode + phone.phoneNumber,
-      },
+      user: { name: fullName, email: fixedEmail, phone: phone.countryCode + phone.phoneNumber },
       specialInstructions: additionalNote,
       deliveryDate: date ? date.toISOString() : null,
-      deliveryTime: startTime && startTime.trim() !== "" ? startTime.trim() : null,
-      paymentDetails: {
-        paymentMethod: "online",
-        amountPaid: total,
-        status: "pending",
-      },
+      deliveryTime: startTime,
+      paymentDetails: { paymentMethod: "online", amountPaid: total, status: "pending" },
     };
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(paymentPayload),
-        }
-      );
-
+      // Step 1: Create Order
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentPayload),
+      });
       const result = await res.json();
+      if (!result.success) { alert("Order creation failed"); return; }
 
-      if (!result.success) {
-        alert("Order creation failed");
-        return;
-      }
-
-      const paymentRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/payment/create`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: total,
-            firstName: fullName.split(" ")[0],
-            lastName: fullName.split(" ").slice(1).join(" ") || "",
-            phone: phone.countryCode + phone.phoneNumber,
-            email: fixedEmail,
-            orderId,
-          }),
-        }
-      );
+      // Step 2: Get Payment URL
+      const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: total,
+          firstName: fullName.split(" ")[0],
+          lastName: fullName.split(" ").slice(1).join(" ") || "",
+          phone: phone.countryCode + phone.phoneNumber,
+          email: fixedEmail,
+          orderId,
+        }),
+      });
 
       const paymentResult = await paymentRes.json();
-
       if (!paymentResult.success || !paymentResult.data?.payUrl) {
         alert("Failed to initiate payment");
         return;
       }
 
-      // ✅ Reset form before redirect
-      setFullName("");
-      setPhone({ countryCode: "+974", phoneNumber: "" });
-      setCurrentLocation("");
-      setDetailedAddress("");
-      setDate(null);
-      setStartTime("");
-      setAdditionalNote("");
       localStorage.removeItem("selectedPackage");
       localStorage.removeItem("acceptedPolicies");
       localStorage.removeItem("selectedMenuItems");
-
-      // Redirect to payment page
       window.location.href = paymentResult.data.payUrl;
     } catch (err) {
-      console.error("Booking/Payment error:", err);
+      console.error("Booking error:", err);
       alert("Something went wrong. Please try again.");
     }
   };
 
+  
+
   return (
-    <section className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.bookingForm}>
-        <TextField
-          placeholder={t("full-name")}
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-          style={{ position: "relative", marginBottom: "1rem" }}
-        />
+    <section className={styles.pageContainer}>
+      <Header />
+      
+      <div className={styles.titleWrapper}>
+        <h1 className={styles.mainTitle}>{t("booking_details")}</h1>
+      </div>
 
-        <PhoneField value={phone} onChange={setPhone} />
-
-        <div style={{ position: "relative", marginBottom: "1rem" }}>
-          <TextField
-            value={currentLocation}
-            onChange={() => {}}
-            placeholder={t("current-location")}
-            readOnly
-          />
-          <button
-            type="button"
-            onClick={handleUseCurrentLocation}
-            className={styles.currentLocationBtn}
-            style={{ position: "absolute", right: 0, top: 0, height: "100%" }}
-          >
-            <IoLocationOutline />
-          </button>
-        </div>
-
-        <TextField
-          placeholder={t("detailed-address")}
-          value={detailedAddress}
-          onChange={(e) => setDetailedAddress(e.target.value)}
-          required
-          style={{ position: "relative", marginBottom: "1rem" }}
-        />
-
-        <div className={styles.dateTimeRow}>
-          <DatePicker
-            selected={date}
-            onChange={(d) => setDate(d)}
-            dateFormat="yyyy-MM-dd"
-            minDate={new Date()}
-            className={styles.input}
-            placeholderText={t("select-date")}
-          />
-          <DatePicker
-            selected={
-              startTime
-                ? new Date(`1970-01-01T${startTime}`)
-                : new Date(1970, 0, 1, 8, 0)
-            }
-            onChange={(date) => {
-              const hours = date.getHours().toString().padStart(2, "0");
-              const mins = date.getMinutes().toString().padStart(2, "0");
-              handleStartTimeChange(`${hours}:${mins}`);
-            }}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={30}
-            timeCaption={t("select-time")}
-            dateFormat="HH:mm"
-            minTime={new Date(1970, 0, 1, 8, 0)}
-            maxTime={new Date(1970, 0, 1, 22, 0)}
-            className={styles.input}
-            placeholderText={t("select-time")}
-          />
-        </div>
-        
-        <div
-          className={styles.priceSummary}
-          style={{ position: "relative", marginBottom: "1rem" }}
-        >
-          <h3>{t("price-summary")}</h3>
+      <form className={styles.formWrapper} onSubmit={handleSubmit}>
+        <div className={styles.desktopSplitLayout}>
           
-          <ul className={styles.priceSummaryli} >
-            <li>
-              <p>{t("package")}: </p>
-              <p>
-                {selectedPackage
-                  ? `${selectedPackage.persons} ${t("persons")}`
-                  : "0"}
-              </p>
-            </li>
-            <li>
+          {/* LEFT COLUMN: INPUTS */}
+          <div className={styles.inputColumn}>
+            <TextField
+              placeholder={t("full-name")}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+
+            <PhoneField value={phone} onChange={setPhone} />
+
+            <div className={styles.inputWithIcon}>
+              <TextField
+                value={currentLocation}
+                onChange={() => {}}
+                placeholder={t("current-location")}
+                readOnly
+              />
+              <button
+                type="button"
+                onClick={handleUseCurrentLocation}
+                className={styles.iconInlayBtn}
+              >
+                <IoLocationOutline />
+              </button>
+            </div>
+
+            <TextField
+              placeholder={t("detailed-address")}
+              value={detailedAddress}
+              onChange={(e) => setDetailedAddress(e.target.value)}
+              required
+            />
+
+            <div className={styles.dateTimeRow}>
+              <DatePicker
+                selected={date}
+                onChange={(d) => setDate(d)}
+                dateFormat="yyyy-MM-dd"
+                minDate={new Date()}
+                className={styles.styledDateInput}
+                placeholderText={t("select-date")}
+              />
+              <DatePicker
+                selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
+                onChange={(date) => {
+                  const hours = date.getHours().toString().padStart(2, "0");
+                  const mins = date.getMinutes().toString().padStart(2, "0");
+                  setStartTime(`${hours}:${mins}`);
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={30}
+                dateFormat="HH:mm"
+                className={styles.styledDateInput}
+                placeholderText={t("select-time")}
+              />
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: SUMMARY */}
+          <div className={styles.summaryColumn}>
+            <div className={styles.noteCard}>
+              <h3 className={styles.noteTitle}>{t("price-summary")}</h3>
               
-            <p>{t("price")}:{""}</p>
-            <p>{selectedPackage ? selectedPackage.price + " QR": "0 QR"}</p>
-          
-            </li>
-            <li>
-              <p>{t("delivery")}:</p><p> {DELIVERY_CHARGE + " QR "} </p>
-            </li>
-            {additionalNote.trim() && (
-              <li>
-                <p>{t("add-note")}:</p>
-                <p>{additionalNote}</p>
-              </li>
-            )}
-            {!additionalNote.trim() && (
-              <li className={styles.addNote}>
-                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("add-note")}</p>
-              </li>
-            )}
-            {additionalNote.trim() && (
-              <li className={styles.addNote}>
-                <p onClick={() => setShowAdditionalNotePopup(true)}>{t("update-note")}</p>
-              </li>
-            )}
-            <br /><hr /><br />
-            
-            
-            
-            <li>
-              <strong><p>{t("total")}:{""}</p></strong>
-              <p>{selectedPackage ? selectedPackage.price + DELIVERY_CHARGE + " QR" : 0}</p>
-            </li>
-          </ul>
+              <div className={styles.summaryList}>
+                <div className={styles.summaryItem}>
+                  <span>{t("package")}</span>
+                  <span>{selectedPackage ? `${selectedPackage.persons} ${t("persons")}` : "0"}</span>
+                </div>
+                <div className={styles.summaryItem}>
+                  <span>{t("price")}</span>
+                  <span>{selectedPackage ? `${selectedPackage.price} QR` : "0 QR"}</span>
+                </div>
+                <div className={styles.summaryItem}>
+                  <span>{t("delivery")}</span>
+                  <span>{DELIVERY_CHARGE} QR</span>
+                </div>
+                
+                {additionalNote.trim() && (
+                  <div className={styles.summaryItem}>
+                    <span>{t("note")}</span>
+                    <span>{additionalNote}</span>
+                  </div>
+                )}
+                
+                <p className={styles.textLink} onClick={() => setShowAdditionalNotePopup(true)}>
+                  {additionalNote.trim() ? t("update-note") : t("add-note")}
+                </p>
 
-          
-          
+                <div className={styles.totalRow}>
+                  <span>{t("total")}</span>
+                  <span>{selectedPackage ? selectedPackage.price + DELIVERY_CHARGE : 0} QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <SecondaryButton
-          text={t("confirm-booking")}
-          onClick={handleSubmit}
-          style={{ width: "100%" }}
-        />
+        <div className={styles.bottomAction}>
+          <SecondaryButton
+            text={t("confirm-booking")}
+            onClick={handleSubmit}
+            style={{ width: "100%", maxWidth: "500px" }}
+            
+          />
+        </div>
       </form>
 
       <PopupWrapper
         isOpen={showAdditionalNotePopup}
         onClose={() => setShowAdditionalNotePopup(false)}
-        title="Additional Note"
+        title={t("add-note")}
       >
         <AdditionalNote
-        note={additionalNote} 
-        setNote={setAdditionalNote} 
-        setShowAdditionalNotePopup={setShowAdditionalNotePopup} />
+          note={additionalNote} 
+          setNote={setAdditionalNote} 
+          setShowAdditionalNotePopup={setShowAdditionalNotePopup} 
+        />
       </PopupWrapper>
     </section>
   );

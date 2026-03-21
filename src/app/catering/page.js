@@ -1,19 +1,15 @@
 'use client';
 import React, { useState } from "react";
 import styles from "./catering.module.css";
-import SecondHeader from "@/components/header/secondHeader";
 import CateringPackages from "@/components/catering/CateringPackages";
 import CateringMenu from "@/components/catering/CateringMenu";
-import CateringPolicies from "@/components/catering/CateringPolicies";
 import CateringBookingForm from "@/components/catering/CateringBookingForm";
-import { SecondaryButton } from "@/components/buttons/Buttons";
 import { useTranslations } from "next-intl";
 export default function Catering() {
   const [step, setStep] = useState(1);
   const t = useTranslations();
   return (
     <section className={styles.catering}>
-      <SecondHeader title={t("catering")} />
 
       {step === 1 && <CateringPackages onNextStep={() => setStep(2)} />}
 
@@ -27,18 +23,12 @@ export default function Catering() {
 
       {step === 3 && (
         <>
-          <CateringPolicies onNextStep={() => setStep(4)} />
+          <CateringBookingForm />
           {/* Optional: Back button */}
           {/* <SecondaryButton text="Back to menu" onClick={() => setStep(2)} /> */}
         </>
       )}
 
-      {step === 4 && (
-        <>
-          <CateringBookingForm />
-          {/* <BookingForm /> */}
-        </>
-      )}
     </section>
   );
 }
