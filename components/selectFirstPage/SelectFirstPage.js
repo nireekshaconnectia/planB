@@ -46,7 +46,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
 
           <div className={styles.textSquare}>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commado viverra maecenas accumsan lacus vel facilisis.
+              Premium specialty coffee spotoffering stunning skyline views, a Modern ambiance, and a curated menu of coffee, breakfast, and desserts—perfect for relaxing, working, or casual meetups.
             </p>
           </div>
 
