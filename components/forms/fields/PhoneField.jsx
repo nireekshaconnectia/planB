@@ -1,8 +1,7 @@
-import { useEffect } from "react";
-import { countryCodeMap } from "@/lib/countryCodeMap"; // same structure as you used
+import { useTranslations } from "next-intl";
+import { countryCodeMap } from "@/lib/countryCodeMap";
 import { usePhoneField } from "@/lib/form/usePhoneField";
 import styles from "../field.module.css";
-import { useTranslations } from "next-intl";
 
 export const PhoneField = ({
   value,
@@ -13,15 +12,33 @@ export const PhoneField = ({
   const { countryCode, setCountryCode, phoneNumber, setPhoneNumber } =
     usePhoneField(initialCode);
 
+  const t = useTranslations();
+
   const CurrentFlag =
     countryCodeMap[countryCode]?.flag || (() => <span>🌍</span>);
 
-  useEffect(() => {
-    if (onChange) {
-      onChange({ countryCode, phoneNumber });
-    }
-  }, [countryCode, phoneNumber, onChange]);
-  const t = useTranslations();
+  const handleCountryChange = (e) => {
+    let code = e.target.value.replace(/[^0-9+]/g, "");
+    if (!code.startsWith("+")) code = "+" + code;
+
+    setCountryCode(code);
+
+    onChange?.({
+      countryCode: code,
+      phoneNumber,
+    });
+  };
+
+  const handlePhoneChange = (e) => {
+    const number = e.target.value;
+
+    setPhoneNumber(number);
+
+    onChange?.({
+      countryCode,
+      phoneNumber: number,
+    });
+  };
 
   return (
     <div className={styles.inputGroup}>
@@ -30,11 +47,7 @@ export const PhoneField = ({
         <input
           type="text"
           value={countryCode}
-          onChange={(e) => {
-            let code = e.target.value.replace(/[^0-9+]/g, "");
-            if (!code.startsWith("+")) code = "+" + code;
-            setCountryCode(code);
-          }}
+          onChange={handleCountryChange}
           className={styles.countryCode}
           maxLength="4"
         />
@@ -43,7 +56,7 @@ export const PhoneField = ({
       <input
         type="text"
         value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
+        onChange={handlePhoneChange}
         placeholder={t("phone-number")}
       />
 

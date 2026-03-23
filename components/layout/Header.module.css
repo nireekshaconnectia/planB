@@ -121,6 +121,7 @@
     }
     .subTitle {
         font-size: 24px;
+        margin-top: -12px;
     }
     .logoImage {
         width: 50px !important;

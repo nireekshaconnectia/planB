@@ -6,36 +6,31 @@
     left: 0;
     height: 100vh;
     overflow-y: auto;
-    z-index: 999;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+/* Header Wrapper */
 .headerFadeIn {
+    width: 100%;
+    opacity: 0;
     animation: fadeIn 0.8s ease-out forwards;
 }
 
+/* Grid Logic */
 .gridWrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
+    /* Ensure no gaps for the mosaic look */
+    gap: 0; 
 }
 
-.imageSquare, .textSquare, .actionSquare {
+/* Base Square Styling */
+.imageSquare,
+.textSquare,
+.actionSquare {
     aspect-ratio: 1 / 1;
     display: flex;
     flex-direction: column;
@@ -43,50 +38,53 @@
     align-items: center;
     text-align: center;
     overflow: hidden;
-
-    opacity: 0;
-    animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    backface-visibility: hidden; 
+    position: relative;
+    width: 100%;
 }
 
-.gridWrapper > div:nth-child(1) { animation-delay: 0.05s; }
-.gridWrapper > div:nth-child(2) { animation-delay: 0.10s; }
-.gridWrapper > div:nth-child(3) { animation-delay: 0.15s; }
-.gridWrapper > div:nth-child(4) { animation-delay: 0.20s; }
-.gridWrapper > div:nth-child(5) { animation-delay: 0.25s; }
-.gridWrapper > div:nth-child(6) { animation-delay: 0.30s; }
-.gridWrapper > div:nth-child(7) { animation-delay: 0.35s; }
-.gridWrapper > div:nth-child(8) { animation-delay: 0.40s; }
-.gridWrapper > div:nth-child(9) { animation-delay: 0.45s; }
-.gridWrapper > div:nth-child(10) { animation-delay: 0.50s; }
-.gridWrapper > div:nth-child(11) { animation-delay: 0.55s; }
-.gridWrapper > div:nth-child(12) { animation-delay: 0.60s; }
+/* Entrance Animation Logic */
+.textSquare,
+.actionSquare,
+.imageSquare {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), 
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
+/* This class is triggered by your Intersection Observer */
+.showCard {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Image Specifics */
 .imageSquare img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 .imageSquare:hover img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
+/* Content Styling */
 .textSquare p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     line-height: 1.6;
-    color: #442d1d;
-    padding: 2rem;
-    font-weight: bolder;
-    font-family:'Courier New', Courier, monospace;
+    color: #8B4513;
+    padding: 10%;
+    font-weight: 700;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .actionSquare {
     cursor: pointer;
     background-color: #e7d5b4;
-    transition: background-color 0.4s ease;
+    transition: background-color 0.3s ease;
+    padding: 20px;
 }
 
 .actionSquare:hover {
@@ -95,69 +93,80 @@
 
 .actionSquare h3 {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 26px;
+    font-size: clamp(1.5rem, 2.5vw, 2rem); /* Fluid font size */
     color: #8B4513;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     text-transform: uppercase;
-    transition: transform 0.3s ease;
 }
-
-.actionSquare:hover h3 {
-    transform: translateY(-5px);
-}
-
 
 .pillBtn {
     background: transparent;
-    border: 1px solid #8B4513;
+    border: 2px solid #8B4513;
     border-radius: 40px;
-    padding: 10px 30px;
-    font-size: 10px;
-    font-weight: 600;
+    padding: 12px 30px;
+    font-size: 12px;
+    font-weight: 800;
     letter-spacing: 1.5px;
     color: #8B4513;
     cursor: pointer;
     text-transform: uppercase;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .actionSquare:hover .pillBtn {
     background: #8B4513;
     color: #e7d5b4;
-    box-shadow: 0 4px 15px rgba(68, 45, 29, 0.2);
 }
 
+/* Footer */
 .supportFooter {
-    padding: 60px;
+    padding: 80px 20px;
     text-align: center;
     color: #442d1d;
     text-decoration: underline;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     opacity: 0;
     animation: fadeIn 1s ease forwards;
-    animation-delay: 1.2s;
-    transition: opacity 0.3s ease;
+    animation-delay: 1s;
 }
 
-.supportFooter:hover {
-    opacity: 0.7 !important;
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
+/* MOBILE RESPONSIVE (Max 900px) */
 @media (max-width: 900px) {
     .gridWrapper {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr; /* Stacked */
+        padding: 15px;
+        gap: 20px;
     }
-    
-    .imageSquare, .textSquare, .actionSquare {
+
+    .imageSquare {
+        display: none; /* Hide images as per original logic */
+    }
+
+    .textSquare,
+    .actionSquare {
         aspect-ratio: auto;
-        min-height: 400px;
-        opacity: 1; 
+        min-height: 250px;
+        border: 1px solid rgba(139, 69, 19, 0.3);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 40px 20px;
     }
 
     .textSquare p {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    .actionSquare:active {
+        transform: scale(0.98);
     }
 }

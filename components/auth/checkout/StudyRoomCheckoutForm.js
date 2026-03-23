@@ -146,7 +146,7 @@ const StudyRoomCheckoutForm = ({ bookingData }) => {
             onChange={({ countryCode, phoneNumber }) =>
               setFormData((prev) => ({
                 ...prev,
-                phone: `${countryCode}${phoneNumber}`, // store full number
+                phone: `${countryCode}${phoneNumber}`,
               }))
             }
             error={null}
