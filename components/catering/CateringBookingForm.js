@@ -12,6 +12,9 @@ import { useTranslations } from "next-intl";
 import Header from "../layout/Header";
 import AdditionalNote from "@/components/forms/UserForms/additionalNote";
 import PopupWrapper from "@/components/popup/popupWrapper";
+import Image from 'next/image';
+
+const fallbackPolicies = ["policy1", "policy2", "policy3", "policy4", "policy5", "policy6", "policy7"];
 
 const DELIVERY_CHARGE = 170;
 
@@ -26,11 +29,13 @@ export default function BookingForm() {
   const [startTime, setStartTime] = useState("");
   const [additionalNote, setAdditionalNote] = useState("");
   
+  
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedOptional, setSelectedOptional] = useState([]);
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
 
   const [showAdditionalNotePopup, setShowAdditionalNotePopup] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
   window.scrollTo(0, 0);
@@ -38,11 +43,9 @@ export default function BookingForm() {
 
   useEffect(() => {
     const pkg = localStorage.getItem("selectedPackage");
-    const policies = localStorage.getItem("acceptedPolicies");
     const selectedOptionalRaw = localStorage.getItem("selectedMenuItems");
 
     if (pkg) setSelectedPackage(JSON.parse(pkg));
-    setAcceptedPolicies(policies === "true");
     try {
       const parsedOptional = selectedOptionalRaw ? JSON.parse(selectedOptionalRaw) : [];
       setSelectedOptional(parsedOptional);
@@ -98,6 +101,12 @@ export default function BookingForm() {
       alert("Please fill all required fields");
       return;
     }
+
+    if (!acceptedPolicies) {
+      alert(t('accept_policies_warning') || 'Please accept policies to continue');
+      return;
+    }
+
     if (!selectedPackage) { alert("Please select a package first"); return; }
     if (!acceptedPolicies) { alert("Please accept policies"); return; }
     if (!date || !startTime) { alert("Please select delivery date and time"); return; }
@@ -160,7 +169,6 @@ export default function BookingForm() {
       }
 
       localStorage.removeItem("selectedPackage");
-      localStorage.removeItem("acceptedPolicies");
       localStorage.removeItem("selectedMenuItems");
       window.location.href = paymentResult.data.payUrl;
     } catch (err) {
@@ -280,6 +288,38 @@ export default function BookingForm() {
             </div>
           </div>
         </div>
+
+        <div className={styles.noteCard}>
+        <h3 className={styles.noteTitle}>{t("policies.title")}</h3>
+        <ul className={`${styles.policyList} ${showAll ? styles.expanded : ""}`}>
+          {fallbackPolicies.map((policy, index) => (
+            <li key={index} className={styles.policyItem}>
+              <div className={styles.policyIconWrapper}>
+                 <Image src="/option.png" alt="icon" width={18} height={18} />
+              </div>
+              <span>{t(`policies.${policy}`)}</span>
+            </li>
+          ))}
+        </ul>
+
+        
+
+        <div className={styles.checkboxWrapper}>
+          <input
+            type="checkbox"
+            id="acceptPolicy"
+            checked={acceptedPolicies}
+            onChange={(e) => setAcceptedPolicies(e.target.checked)}
+            className={styles.hiddenCheckbox}
+          />
+          <label htmlFor="acceptPolicy" className={styles.customCheckboxLabel}>
+            <div className={`${styles.checkboxBox} ${acceptedPolicies ? styles.checked : ''}`}>
+                {acceptedPolicies && "✓"}
+            </div>
+            <span>{t("policies.iaccept")}</span>
+          </label>
+        </div>
+      </div>
 
         <div className={styles.bottomAction}>
           <SecondaryButton

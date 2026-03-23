@@ -4,14 +4,10 @@ import styles from './catering.module.css';
 import { SecondaryButton } from '@/components/buttons/Buttons';
 import { useTranslations } from 'next-intl';
 import Header from '../layout/Header';
-import Image from 'next/image';
-
-const fallbackPolicies = ["policy1", "policy2", "policy3", "policy4", "policy5", "policy6", "policy7"];
 
 export default function CateringMenu({ onNextStep }) {
   const [menu, setMenu] = useState({ mainItems: [], optionalItems: [] });
   const [selectedOptional, setSelectedOptional] = useState([]);
-  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
   const t = useTranslations();
 
   useEffect(() => {
@@ -35,12 +31,8 @@ export default function CateringMenu({ onNextStep }) {
   };
 
   const handleContinue = () => {
-    if (!acceptedPolicies) {
-      alert(t('accept_policies_warning') || 'Please accept policies to continue');
-      return;
-    }
+    
     localStorage.setItem('selectedMenuItems', JSON.stringify(selectedOptional));
-    localStorage.setItem('acceptedPolicies', 'true');
     onNextStep();
   };
 
@@ -83,42 +75,13 @@ export default function CateringMenu({ onNextStep }) {
         </div>
       </div>
 
-      {/* Policies Note Card */}
-      <div className={styles.noteCard}>
-        <h3 className={styles.noteTitle}>{t("policies.title")}</h3>
-        <ul className={styles.policyList}>
-          {fallbackPolicies.map((policy, index) => (
-            <li key={index} className={styles.policyItem}>
-              <div className={styles.policyIconWrapper}>
-                 <Image src="/option.png" alt="icon" width={18} height={18} />
-              </div>
-              <span>{t(`policies.${policy}`)}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            id="acceptPolicy"
-            checked={acceptedPolicies}
-            onChange={(e) => setAcceptedPolicies(e.target.checked)}
-            className={styles.hiddenCheckbox}
-          />
-          <label htmlFor="acceptPolicy" className={styles.customCheckboxLabel}>
-            <div className={`${styles.checkboxBox} ${acceptedPolicies ? styles.checked : ''}`}>
-                {acceptedPolicies && "✓"}
-            </div>
-            <span>{t("policies.iaccept")}</span>
-          </label>
-        </div>
-      </div>
+ 
+      
 
       <div className={styles.bottomAction}>
         <SecondaryButton
           text={t('book-now')}
           onClick={handleContinue}
-          disabled={!acceptedPolicies}
           style={{ width: "100%", maxWidth: "500px" }}
         />
       </div>

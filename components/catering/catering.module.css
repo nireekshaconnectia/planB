@@ -1,6 +1,7 @@
 /* Container & Background */
 .pageContainer {
-    background-color: #E6D4B5; /* Matching the beige background */
+    background-color: #E6D4B5;
+    /* Matching the beige background */
     min-height: 100vh;
     width: 100%;
     display: flex;
@@ -66,9 +67,9 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
-    
+
     opacity: 0;
     animation: fadeInUp 0.5s ease forwards;
 }
@@ -80,7 +81,7 @@
 
 .iconContainer {
     flex: 0;
-    font-size:xx-large;
+    font-size: xx-large;
 }
 
 .pillText {
@@ -134,6 +135,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -152,7 +154,11 @@
     padding-bottom: 50px;
 }
 
-.titleWrapper { padding: 40px 0 20px 0; text-align: center; }
+.titleWrapper {
+    padding: 40px 0 20px 0;
+    text-align: center;
+}
+
 .mainTitle {
     color: #6B4127;
     font-family: 'Times New Roman', serif;
@@ -162,7 +168,8 @@
 }
 
 /* Pills & Grids */
-.menuGrid, .optionalGrid {
+.menuGrid,
+.optionalGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -171,7 +178,8 @@
     padding: 20px;
 }
 
-.menuPillStatic, .menuPillSelectable {
+.menuPillStatic,
+.menuPillSelectable {
     background: white;
     border-radius: 50px;
     padding: 12px 20px;
@@ -179,73 +187,180 @@
     color: #6B4127;
     font-family: 'Times New Roman', serif;
     font-size: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     animation: fadeInUp 0.5s ease forwards;
     opacity: 0;
 }
 
-.menuPillSelectable { cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; }
-.selectedPill { border-color: #8B4513; background-color: #fdfaf7; transform: scale(1.05); }
+.menuPillSelectable {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
 
-/* Note Card Styles (Policies & Summary) */
+.selectedPill {
+    border-color: #8B4513;
+    background-color: #fdfaf7;
+    transform: scale(1.05);
+}
+
+
 .noteCard {
     background: white;
-    width: calc(100% - 40px);
+    width: calc(100% - 10px);
     max-width: 500px;
     margin: 20px auto;
-    padding: 30px 25px;
     border-radius: 40px;
     color: #6B4127;
     font-family: 'Times New Roman', serif;
 }
 
-.noteTitle { font-size: 28px; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-
-/* Policy List */
-.policyList { list-style: none; padding: 0; }
-.policyItem { display: flex; gap: 12px; margin-bottom: 15px; font-size: 15px; line-height: 1.4; }
-
-/* Booking Form Elements */
-.formWrapper { width: 100%; max-width: 500px; padding: 20px; display: flex; flex-direction: column; gap: 15px; text-align:start}
-
-.inputWithIcon { position: relative; width: 100%; }
-.iconInlayBtn {
-    position: absolute; right: 5px; top: 50%; transform: translateY(-50%);
-    background: #6B4127; color: white; border: none;
-    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; font-size: 20px;
+.noteTitle {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
-.dateTimeRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.policyList {
+    list-style: none;
+    padding: 0;
+    max-height: 170px;
+    overflow-y: auto;
+
+    scrollbar-width: none;
+}
+
+.policyList::-webkit-scrollbar {
+    display: none;
+}
+
+.policyList::after {
+    content: "";
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, white);
+    pointer-events: none;
+}
+
+.policyItem {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+/* Booking Form Elements */
+.formWrapper {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: start
+}
+
+.inputWithIcon {
+    position: relative;
+    width: 100%;
+}
+
+.iconInlayBtn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #6B4127;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.dateTimeRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
 .styledDateInput {
-    width: 100%; padding: 15px; border-radius: 50px; border: 1px solid #ddd;
-    font-family: inherit; font-size: 14px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+    font-size: 14px;
 }
 
 /* Summary Details */
-.summaryItem { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 17px; }
-.totalRow { 
-    margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc;
-    display: flex; justify-content: space-between; font-weight: bold; font-size: 22px; 
+.summaryItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.totalRow {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #ccc;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 22px;
 }
 
 .textLink {
-    color: #8B4513; text-decoration: underline; cursor: pointer;
-    font-weight: 600; text-align: center; margin: 15px 0; display: block;
+    color: #8B4513;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    margin: 15px 0;
+    display: block;
 }
 
-.checkboxContainer { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; }
-.checkboxLabel { font-size: 16px; cursor: pointer; }
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.checkboxLabel {
+    font-size: 16px;
+    cursor: pointer;
+}
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
 .formWrapper {
     width: 100%;
-    max-width: 1100px; 
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -257,7 +372,8 @@
     width: 100%;
 }
 
-.inputColumn, .summaryColumn {
+.inputColumn,
+.summaryColumn {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -265,7 +381,7 @@
 }
 
 .summaryColumn .noteCard {
-    margin: 0; 
+    margin: 0;
     width: 100%;
 }
 
@@ -284,7 +400,7 @@
     color: #6B4127;
     font-family: 'Times New Roman', serif;
     font-size: 16px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .dateTimeRow {
@@ -316,7 +432,7 @@
     padding-top: 15px;
     border-top: 2px dashed #E6D4B5;
 }
-  
+
 .sectionDivider {
     width: 100%;
     max-width: 800px;
@@ -344,7 +460,7 @@
     cursor: pointer;
     border: 2px solid transparent;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -417,37 +533,51 @@
 }
 
 @media (min-width: 1024px) {
-    .menuGrid, .optionalGrid {
-        grid-template-columns: repeat(3, 1fr); 
+
+    .menuGrid,
+    .optionalGrid {
+        grid-template-columns: repeat(3, 1fr);
         max-width: 900px;
     }
+
     .desktopSplitLayout {
         flex-direction: row;
         align-items: flex-start;
     }
 
     .inputColumn {
-        flex: 1.2; 
+        flex: 1.2;
     }
 
     .summaryColumn {
         flex: 0.8;
         position: sticky;
-        top: 20px; 
+        top: 20px;
     }
-    
+
     .mainTitle {
         font-size: 56px;
     }
 }
 
 @media (max-width: 600px) {
-    .menuGrid, .optionalGrid {
-        grid-template-columns: 1fr; 
+
+    .menuGrid,
+    .optionalGrid {
+        grid-template-columns: 1fr;
         padding: 15px;
     }
-    .mainTitle { font-size: 36px; }
-    .pillText { font-size: 24px; }
-    .listWrapper { padding: 15px; }
-  
+
+    .mainTitle {
+        font-size: 36px;
+    }
+
+    .pillText {
+        font-size: 24px;
+    }
+
+    .listWrapper {
+        padding: 15px;
+    }
+
 }
