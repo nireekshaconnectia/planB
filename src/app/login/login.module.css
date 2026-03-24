@@ -1,65 +1,68 @@
-/* styles/login.module.css */
 .loginContainer {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f3f4f6;
-    padding: 50px 1rem; /* Added padding for smaller screens */
+    background-color: #e7d5b4; /* Requested background */
+    padding: 20px;
 }
 
 .loginCard {
-    padding: 1.5rem; /* Reduced padding for smaller screens */
-    border-radius: 0.5rem;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
     width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.backButtonWrapper {
+    margin-bottom: 20px;
 }
 
 .loginTitle {
-    font-size: 24px; /* Reduced font size for smaller screens */
-    font-weight: bold;
-    margin-top: 30px;
-    margin-bottom: 60px; /* Reduced margin for smaller screens */
-    color: #000;
-}
-.loginForm{
-    display: flex;
-    flex-direction: column;
-    gap: 0px;
-}
-.label{
-    margin-bottom :10px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #000;
-}
-.inputGroup {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    border: 1px solid black;
-    border-radius: 50px;
-    overflow: hidden;
-    color: #000;
-    background-color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    color: #442d1d;
+    text-align: center;
 }
 
-.countrySelector {
+.loginForm {
     display: flex;
-    align-items: center;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    padding: 1rem 0.5rem;
-    color:#000;
+    flex-direction: column;
+    gap: 20px;
 }
-.countrySelector input{
-    background: transparent;
-    width: 50px;
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
-.phoneInput {
-    padding: 1rem 0.5rem;
+
+.label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #442d1d;
+    margin-left: 5px;
+}
+
+.inputField {
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background-color: #f9f9f9;
+    color: #442d1d;
+}
+
+.inputField:focus {
+    border-color: #442d1d;
     outline: none;
-    width: 100%;
     background-color: #fff;
+    color: #442d1d;
 }
 
 .continueButton {
@@ -67,28 +70,106 @@
     background-color: #442d1d;
     color: white;
     font-size: 16px;
-    line-height: 40px;
-    padding: 0.5rem;
-    border-radius: 50px;
+    padding: 14px;
+    border-radius: 12px;
     font-weight: bold;
     cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 .continueButton:hover {
-    background-color: #964a1e;
+    background-color: #5c3e29;
 }
 
-/* Mobile Responsive Styles */
+.continueButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Divider Styling */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+    color: #888;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.divider span {
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Google Button Styling */
+.googleButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: #fff;
+    color: #444;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.googleButton:hover {
+    background-color: #f5f5f5;
+}
+
+.googleIcon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Register Link Section */
+.registerPrompt {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.registerLink {
+    color: #442d1d;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.registerLink:hover {
+    text-decoration: underline;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 480px) {
     .loginCard {
-        padding: 1rem; /* Further reduced padding for very small screens */
+        padding: 30px 20px;
+        box-shadow: none; /* Looks cleaner on mobile */
+        background-color: transparent; /* Optional: makes it blend with the page */
+    }
+
+    .loginContainer {
+        background-color: #e7d5b4;
+        align-items: flex-start; /* Better for long forms on mobile */
+        padding-top: 60px;
     }
 
     .loginTitle {
-        font-size: 1.125rem; /* Further reduced font size for very small screens */
-    }
-
-    .continueButton {
-        font-size: 0.875rem; /* Adjust button font size for smaller screens */
+        font-size: 24px;
     }
 }

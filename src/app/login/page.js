@@ -1,129 +1,145 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import router for redirection
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import Flags from "country-flag-icons/react/3x2";
+import Link from "next/link";
 import BackButton from "@/components/backbutton/backbutton";
-import OTPPopup from "@/components/auth/verifyOTP/verifyOTP";
-import Recaptcha from "@/components/auth/recaptcha/Recaptcha";
 import styles from "./login.module.css";
-import { signInWithPhoneNumber, onAuthStateChanged } from "firebase/auth";
+
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+} from "firebase/auth";
+
 import { auth } from "@/lib/firebase/firebase";
 
-const countries = {
-  "+974": { name: "QA", flag: Flags.QA }, // Qatar
-  "+971": { name: "AE", flag: Flags.AE }, // UAE
-  "+91": { name: "IN", flag: Flags.IN }, // India
-  "+1": { name: "US", flag: Flags.US }, // USA
-  "+44": { name: "GB", flag: Flags.GB }, // UK
-  "+33": { name: "FR", flag: Flags.FR }, // France
-  "+49": { name: "DE", flag: Flags.DE }, // Germany
-};
-
 const LoginPage = () => {
-  const [countryCode, setCountryCode] = useState("+974"); // Default to Qatar
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [showOTPPopup, setShowOTPPopup] = useState(false);
-  const [confirmationResult, setConfirmationResult] = useState(null);
-  const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
+  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/";
-  const router = useRouter(); // Use router for navigation
   const t = useTranslations();
 
-  // ✅ Redirect user if already logged in
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("✅ User is already logged in:", user);
-         router.push(redirectTo); // Redirect to home page
-      }
+      if (user) router.push(redirectTo);
     });
+    return () => unsubscribe();
+  }, [router, redirectTo]);
 
-    return () => unsubscribe(); // Cleanup subscription
-  }, [router , redirectTo]);
-
-  const handleCountryCodeChange = (e) => {
-    let inputCode = e.target.value.replace(/[^0-9+]/g, ""); // Allow only numbers & '+'
-    if (!inputCode.startsWith("+")) {
-      inputCode = "+" + inputCode; // Ensure it always starts with '+'
-    }
-    setCountryCode(inputCode);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
-    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+    setLoading(true);
 
     try {
-      if (!recaptchaVerifier) {
-        alert("reCAPTCHA not ready. Please wait.");
-        return;
-      }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        fullPhoneNumber,
-        recaptchaVerifier
-      );
-      console.log("✅ OTP Sent Successfully to:", fullPhoneNumber);
-      setConfirmationResult(confirmation);
-      setShowOTPPopup(true);
+      const data = await res.json();
+      if (data.success) {
+        router.push(redirectTo);
+      } else {
+        alert(data.message || "Login failed");
+      }
     } catch (error) {
-      console.error("❌ Error sending OTP:", error);
-      alert(`Failed to send OTP: ${error.message}`);
+      console.error(error);
+      alert("Login error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const CurrentFlag = countries[countryCode]?.flag || (() => <span>🌍</span>); // Default globe icon
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const firebaseToken = await user.getIdToken();
+      console.log(firebaseToken);
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${firebaseToken}`,
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        router.push(redirectTo);
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert("Google login failed");
+    }
+  };
 
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        <div className={styles.mb4}>
-          <BackButton />
-        </div>
 
         <h1 className={styles.loginTitle}>{t("login")}</h1>
-        <form className={styles.loginForm} onSubmit={handleSubmit}>
-          <label htmlFor="phoneNumber" className={styles.label}>
-            {t("your-phone-number")}
-          </label>
-          <div className={styles.inputGroup}>
-            <div className={styles.countrySelector}>
-              <CurrentFlag className="w-6 h-4 mr-2" />
-              <input
-                type="text"
-                value={countryCode}
-                onChange={handleCountryCodeChange}
-                className={styles.countryCodeInput}
-                maxLength="4"
-              />
-            </div>
+
+        <form onSubmit={handleEmailLogin} className={styles.loginForm}>
+          <div className={styles.inputWrapper}>
+            <label className={styles.label}>Email</label>
             <input
-              type="text"
-              id="phoneNumber"
-              placeholder={t("your-phone-number")}
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className={styles.phoneInput}
+              type="email"
+              placeholder="example@mail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={styles.inputField}
+              required
             />
           </div>
-          <button type="submit" className={styles.continueButton}>
-            {t("continue")}
+
+          <div className={styles.inputWrapper}>
+            <label className={styles.label}>Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={styles.inputField}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className={styles.continueButton}>
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        {showOTPPopup && confirmationResult && (
-          <OTPPopup
-            onClose={() => setShowOTPPopup(false)}
-            onVerify={(otp) => handleVerifyOTP(otp)}
-            confirmationResult={confirmationResult}
-          />
-        )}
+        <div className={styles.divider}>
+          <span>OR</span>
+        </div>
 
-        <Recaptcha onReady={setRecaptchaVerifier} />
+        <button onClick={handleGoogleLogin} className={styles.googleButton}>
+          <img 
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+            alt="Google" 
+            className={styles.googleIcon} 
+          />
+          Continue with Google
+        </button>
+
+        <p className={styles.registerPrompt}>
+          Don't have an account?{" "}
+          <Link href={`/register?redirectTo=${redirectTo}`} className={styles.registerLink}>
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

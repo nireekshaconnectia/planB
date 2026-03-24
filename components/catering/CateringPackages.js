@@ -21,14 +21,14 @@ export default function CateringPackages({ onNextStep }) {
   const t = useTranslations();
 
   useEffect(() => {
-    fetch("/api/catering-packages")
-      .then((res) => {
-        if (!res.ok) throw new Error("API failed");
-        return res.json();
-      })
-      .then(setPackages)
-      .catch(() => setPackages(fallbackPackages));
-  }, []);
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/catering-packages`)
+    .then((res) => {
+      if (!res.ok) throw new Error("API failed");
+      return res.json();
+    })
+    .then(setPackages)
+    .catch(() => setPackages(fallbackPackages));
+}, []);
 
   const handleSelect = (pkg) => {
     localStorage.setItem("selectedPackage", JSON.stringify(pkg));
