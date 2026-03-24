@@ -264,7 +264,7 @@ const DashboardPage = () => {
                 <div className={styles.emptyState}>
                   <FaCalendarAlt className={styles.emptyIcon} />
                   <p>{t("no-bookings") || "You have no room bookings yet."}</p>
-                  <Link href="/studyroom" className={styles.bookNowButton}>
+                  <Link href="/study-room" className={styles.bookNowButton}>
                     {t("book-a-room") || "Book a Room"}
                   </Link>
                 </div>
