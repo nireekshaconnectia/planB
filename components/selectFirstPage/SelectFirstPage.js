@@ -59,7 +59,7 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
     {
       type: "text",
       content:
-        "Premium specialty coffee spot offering stunning skyline views with modern ambiance and a curated menu of coffee, breakfast, and desserts. Perfect for relaxing, working, or casual meetups.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
     },
     { type: "image", src: "/home/logo2.jpg" },
 
