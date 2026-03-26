@@ -3,12 +3,6 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import styles from "./studyRooms.module.css";
 
-// Helper to format image URL
-const formatImageUrl = (img) => {
-  if (!img) return "";
-  return `${process.env.NEXT_PUBLIC_API_UPLOADS}/${img}`;
-};
-
 export default function RoomForm({ onSave, onClose, initialData }) {
   const { data: session } = useSession();
 
@@ -73,6 +67,13 @@ export default function RoomForm({ onSave, onClose, initialData }) {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
+  // Create image URL for preview
+  const createImageUrl = (img) => {
+    if (img.startsWith('blob:')) return img;
+    if (img.startsWith('http')) return img;
+    return `${process.env.NEXT_PUBLIC_API_UPLOADS}/${img}`;
+  };
+
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,44 +81,25 @@ export default function RoomForm({ onSave, onClose, initialData }) {
     setIsLoading(true);
 
     try {
-      const url = initialData
-        ? `${process.env.NEXT_PUBLIC_API_URL}/rooms/${initialData._id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/rooms`;
-      const method = initialData ? "PUT" : "POST";
+      // Build the room data
+      const roomData = {
+        name: formData.name,
+        description: formData.description,
+        capacity: Number(formData.capacity),
+        price: Number(formData.price),
+        amenities: formData.amenities,
+        isAvailable: formData.isAvailable,
+        images: [...existingImages, ...selectedFiles.map(f => URL.createObjectURL(f))]
+      };
 
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("capacity", Number(formData.capacity));
-      formDataToSend.append("price", Number(formData.price));
-      formDataToSend.append("isAvailable", formData.isAvailable);
-
-      // Append amenities properly
-      formData.amenities.forEach((amenity) => {
-        formDataToSend.append("amenities[]", amenity);
-      });
-
-      // Append existing images
-      formDataToSend.append("existingImages", JSON.stringify(existingImages));
-
-      // Append new images
-      selectedFiles.forEach((file) => formDataToSend.append("images", file));
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Authorization: `Bearer ${session?.user?.token}`,
-        },
-        body: formDataToSend,
-      });
-
-      const data = await res.json();
-      if (res.ok && (data.success || data.status === "success")) {
-        onSave();
-        onClose();
-      } else {
-        setError(data.message || "Failed to save room");
+      if (initialData) {
+        roomData._id = initialData._id;
       }
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      onSave(roomData);
     } catch (err) {
       console.error(err);
       setError("Failed to save room");
@@ -128,7 +110,7 @@ export default function RoomForm({ onSave, onClose, initialData }) {
 
   return (
     <div className={styles.modalOverlay}>
-      <form className={styles.roomForm} onSubmit={handleSubmit} encType="multipart/form-data">
+      <form className={styles.roomForm} onSubmit={handleSubmit}>
         <h2>{initialData ? "Edit Room" : "Add Room"}</h2>
         {error && <div className={styles.error}>{error}</div>}
 
@@ -158,7 +140,7 @@ export default function RoomForm({ onSave, onClose, initialData }) {
 
         {/* Price */}
         <div className={styles.fieldGroup}>
-          <label>Price</label>
+          <label>Price (QR per hour)</label>
           <input type="number" name="price" min="1" value={formData.price} onChange={handleChange} required />
         </div>
 
@@ -194,14 +176,14 @@ export default function RoomForm({ onSave, onClose, initialData }) {
             <div className={styles.imagePreviewGrid}>
               {existingImages.map((img, idx) => (
                 <div key={idx} className={styles.imagePreview}>
-                <img
-                  src={formatImageUrl(img)}
-                  alt="existing"
-                  onClick={() => handleRemoveExistingImage(img)}
-                  className={styles.clickableImage}
-                />
-              </div>
-              
+                  <img
+                    src={createImageUrl(img)}
+                    alt="existing"
+                    onClick={() => handleRemoveExistingImage(img)}
+                    className={styles.clickableImage}
+                  />
+                  <span className={styles.removeImageHint}>Click to remove</span>
+                </div>
               ))}
             </div>
           </div>
@@ -215,14 +197,14 @@ export default function RoomForm({ onSave, onClose, initialData }) {
             <div className={styles.imagePreviewGrid}>
               {selectedFiles.map((file, idx) => (
                 <div key={idx} className={styles.imagePreview}>
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt="new upload"
-                  onClick={() => handleRemoveNewImage(idx)}
-                  className={styles.clickableImage}
-                />
-              </div>
-              
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt="new upload"
+                    onClick={() => handleRemoveNewImage(idx)}
+                    className={styles.clickableImage}
+                  />
+                  <span className={styles.removeImageHint}>Click to remove</span>
+                </div>
               ))}
             </div>
           )}

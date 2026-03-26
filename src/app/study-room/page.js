@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./studyroom.module.css";
 import { HiUsers } from "react-icons/hi2";
@@ -14,14 +14,41 @@ import PopupWrapper from "@/components/popup/popupWrapper";
 import ImageSlider from "@/components/ImageSlider/ImageSlider";
 import Header from "@/components/layout/Header";
 
+// Static room data
+const STATIC_ROOMS = [
+  {
+    _id: "room1",
+    name: "Study room 1",
+    price: 40,
+    capacity: 1,
+    isAvailable: true,
+    images: [],
+  },
+  {
+    _id: "room2",
+    name: "Study room 2",
+    price: 55,
+    capacity: 2,
+    isAvailable: true,
+    images: [],
+  },
+  {
+    _id: "room3",
+    name: "Meeting room",
+    price: 110,
+    capacity: 10,
+    isAvailable: true,
+    images: [],
+  },
+];
+
 const BookStudyRoom = () => {
     const t = useTranslations();
     const router = useRouter();
     const formRef = useRef(null);
 
     // --- ORIGINAL LOGIC STATE ---
-    const [studyRooms, setStudyRooms] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [studyRooms] = useState(STATIC_ROOMS);
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [date, setDate] = useState(null);
     const [startTime, setStartTime] = useState("");
@@ -34,24 +61,6 @@ const BookStudyRoom = () => {
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [galleryImages, setGalleryImages] = useState([]);
 
-    // --- LOGIC: FETCH ROOMS ---
-    useEffect(() => {
-        const fetchRooms = async () => {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`);
-                const result = await res.json();
-                if (result.success) {
-                    setStudyRooms(result.data.filter((room) => room.isAvailable));
-                }
-            } catch (error) {
-                console.error("Failed to fetch rooms:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchRooms();
-    }, []);
-
     // --- LOGIC: AVAILABILITY HANDLING ---
     const timeStrToMinutes = (hhmm) => {
         if (!hhmm) return 0;
@@ -59,47 +68,34 @@ const BookStudyRoom = () => {
         return h * 60 + m;
     };
 
-    useEffect(() => {
-    const loadAvailability = async () => {
-        if (!selectedRoom || !date) {
+    // Simulate availability check (always available for demo)
+    const loadAvailability = async (roomId, dateObj) => {
+        if (!roomId || !dateObj) {
             setAvailability(prev => (prev !== null ? null : prev));
             return;
         }
 
         try {
             setAvailabilityLoading(true);
-
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, "0");
-            const d = String(date.getDate()).padStart(2, "0");
-
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/rooms/${selectedRoom._id}/availability?date=${y}-${m}-${d}`
+            
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Set default availability: 9 AM to 9 PM, no blocked ranges
+            const openStartMin = 9 * 60; // 9:00 AM
+            const openEndMin = 21 * 60;   // 9:00 PM
+            
+            const newAvailability = {
+                openStartMin,
+                openEndMin,
+                unavailableMinutes: [] // No blocked times
+            };
+            
+            setAvailability(prev =>
+                JSON.stringify(prev) === JSON.stringify(newAvailability)
+                    ? prev
+                    : newAvailability
             );
-
-            const data = await res.json();
-
-            if (data.openHours) {
-                const openStartMin = timeStrToMinutes(data.openHours.start);
-                const openEndMin = timeStrToMinutes(data.openHours.end);
-
-                const blockedRangesMinutes = (data.blockedRanges || []).map((range) => ({
-                    start: timeStrToMinutes(range.startTime),
-                    end: timeStrToMinutes(range.endTime)
-                }));
-
-                const newAvailability = {
-                    openStartMin,
-                    openEndMin,
-                    unavailableMinutes: blockedRangesMinutes
-                };
-
-                setAvailability(prev =>
-                    JSON.stringify(prev) === JSON.stringify(newAvailability)
-                        ? prev
-                        : newAvailability
-                );
-            }
         } catch (e) {
             console.error("Availability error:", e);
             setAvailability(prev => (prev !== null ? null : prev));
@@ -108,8 +104,10 @@ const BookStudyRoom = () => {
         }
     };
 
-    loadAvailability();
-}, [selectedRoom?._id, date?.getTime()]);
+    // Trigger availability check when selected room or date changes
+    useState(() => {
+        loadAvailability(selectedRoom?._id, date);
+    }, [selectedRoom?._id, date?.getTime()]);
 
     // --- LOGIC: DATEPICKER FILTERS ---
     const startTimeFilter = (dateObj) => {
@@ -171,7 +169,7 @@ const BookStudyRoom = () => {
     };
 
     const getRoomIcon = (name, capacity) => {
-        return (name.toLowerCase().includes("conference") || capacity >= 10) ? IoIosBriefcase : HiUsers;
+        return (name.toLowerCase().includes("meeting") || capacity >= 10) ? IoIosBriefcase : HiUsers;
     };
 
     // Prepare time boundaries for DatePicker to avoid the "Both minTime and maxTime required" error
@@ -202,37 +200,33 @@ const BookStudyRoom = () => {
                     
                     {/* LEFT COLUMN: ROOM SELECTION */}
                     <div className={styles.roomsColumn}>
-                        {loading ? (
-                            <p className={styles.infoText}>{t("loading-rooms")}</p>
-                        ) : (
-                            <div className={styles.roomGrid}>
-                                {studyRooms.map((room, idx) => {
-                                    const Icon = getRoomIcon(room.name, room.capacity);
-                                    const isSelected = selectedRoom?._id === room._id;
-                                    return (
-                                        <div 
-                                            key={room._id}
-                                            className={`${styles.roomPill} ${isSelected ? styles.selectedRoom : ""}`}
-                                            onClick={() => handleRoomSelect(room)}
-                                            style={{ animationDelay: `${idx * 0.1}s` }}
-                                        >
-                                            <div className={styles.roomIconContainer}><Icon /></div>
-                                            <div className={styles.roomInfo}>
-                                                <h3>{t(room.name, { default: room.name })}</h3>
-                                                <p>{t("capacity-text", { count: room.capacity, person: room.capacity > 1 ? t("persons") : t("person") })}</p>
-                                                <span className={styles.priceTag}>{room.price} {t("price-per-hour")}</span>
-                                            </div>
-                                            <div className={styles.galleryBtnWrapper}>
-                                                <SecondarySmButton 
-                                                    text={t("gallery")} 
-                                                    onClick={(e) => handleOpenGallery(e, room)} 
-                                                />
-                                            </div>
+                        <div className={styles.roomGrid}>
+                            {studyRooms.map((room, idx) => {
+                                const Icon = getRoomIcon(room.name, room.capacity);
+                                const isSelected = selectedRoom?._id === room._id;
+                                return (
+                                    <div 
+                                        key={room._id}
+                                        className={`${styles.roomPill} ${isSelected ? styles.selectedRoom : ""}`}
+                                        onClick={() => handleRoomSelect(room)}
+                                        style={{ animationDelay: `${idx * 0.1}s` }}
+                                    >
+                                        <div className={styles.roomIconContainer}><Icon /></div>
+                                        <div className={styles.roomInfo}>
+                                            <h3>{t(room.name, { default: room.name })}</h3>
+                                            <p>{t("capacity-text", { count: room.capacity, person: room.capacity > 1 ? t("persons") : t("person") })}</p>
+                                            <span className={styles.priceTag}>{room.price} {t("price-per-hour")}</span>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        )}
+                                        <div className={styles.galleryBtnWrapper}>
+                                            <SecondarySmButton 
+                                                text={t("gallery")} 
+                                                onClick={(e) => handleOpenGallery(e, room)} 
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* RIGHT COLUMN: BOOKING FORM */}
