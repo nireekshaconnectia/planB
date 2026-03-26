@@ -1,583 +1,649 @@
 /* Container & Background */
 .pageContainer {
-    background-color: #E6D4B5;
-    /* Matching the beige background */
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 0;
+  background-color: #e6d4b5;
+  /* Matching the beige background */
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0;
 }
 
 /* Banner Styling */
 .bannerWrapper {
-    position: relative;
-    width: 100%;
-    height: 500px;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
 }
 
 .bannerImage {
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .bannerOverlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bannerOverlay h1 {
-    color: white;
-    font-family: Impact, sans-serif;
-    font-size: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  color: white;
+  font-family: Impact, sans-serif;
+  font-size: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .titleWrapper {
-    padding: 40px 0 20px 0;
+  padding: 40px 0 20px 0;
 }
 
 .mainTitle {
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 48px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 48px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .listWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
 }
 
 .packagePill {
-    background: white;
-    border-radius: 50px;
-    padding: 10px 40px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
+  background: white;
+  border-radius: 50px;
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
 
-    opacity: 0;
-    animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
 }
 
 .packagePill:hover {
-    transform: scale(1.02);
-    background-color: #fcfcfc;
+  transform: scale(1.02);
+  background-color: #fcfcfc;
 }
 
 .iconContainer {
-    flex: 0;
-    font-size: xx-large;
+  flex: 0;
+  font-size: xx-large;
 }
 
 .pillText {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 32px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 32px;
 }
 
 .number {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .noteCard {
-    background: white;
-    width: 100%;
-    max-width: 500px;
-    margin-top: 30px;
-    padding: 40px 20px;
-    border-radius: 40px 40px;
-    text-align: center;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    margin-bottom: 30px;
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 30px;
+  padding: 40px 20px;
+  border-radius: 40px 40px;
+  text-align: center;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  margin-bottom: 30px;
 }
 
 .noteTitle {
-    font-size: 32px;
-    margin-bottom: 15px;
+  font-size: 32px;
+  margin-bottom: 15px;
 }
 
 .noteDescription {
-    font-size: 20px;
-    margin-bottom: 5px;
-    line-height: 1.4;
+  font-size: 20px;
+  margin-bottom: 5px;
+  line-height: 1.4;
 }
 
 .phoneLink {
-    display: block;
-    color: #6B4127;
-    text-decoration: none;
-    font-size: 20px;
-    font-weight: 500;
+  display: block;
+  color: #6b4127;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-
 
 /* Base Layout */
 .pageContainer {
-    background-color: #E6D4B5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 50px;
+  background-color: #e6d4b5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50px;
 }
 
 .titleWrapper {
-    padding: 40px 0 20px 0;
-    text-align: center;
+  padding: 40px 0 20px 0;
+  text-align: center;
 }
 
 .mainTitle {
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 48px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 48px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 /* Pills & Grids */
 .menuGrid,
 .optionalGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
 }
 
 .menuPillStatic,
 .menuPillSelectable {
-    background: white;
-    border-radius: 50px;
-    padding: 12px 20px;
-    text-align: center;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 18px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    animation: fadeInUp 0.5s ease forwards;
-    opacity: 0;
+  background: white;
+  border-radius: 50px;
+  padding: 12px 20px;
+  text-align: center;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
 }
 
 .menuPillSelectable {
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .selectedPill {
-    border-color: #8B4513;
-    background-color: #fdfaf7;
-    transform: scale(1.05);
+  border-color: #8b4513;
+  background-color: #fdfaf7;
+  transform: scale(1.05);
 }
 
-
 .noteCard {
-    background: white;
-    width: calc(100% - 10px);
-    max-width: 500px;
-    margin: 20px auto;
-    border-radius: 40px;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
+  background: white;
+  width: calc(100% - 10px);
+  max-width: 500px;
+  margin: 20px auto;
+  border-radius: 40px;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
 }
 
 .noteTitle {
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
-
 .policyList {
-    list-style: none;
-    padding: 0;
-    max-height: 170px;
-    overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  max-height: 170px;
+  overflow-y: auto;
 
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 
 .policyList::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .policyList::after {
-    content: "";
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(to bottom, transparent, white);
-    pointer-events: none;
+  content: "";
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent, white);
+  pointer-events: none;
 }
 
 .policyItem {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 15px;
-    font-size: 15px;
-    line-height: 1.4;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 /* Booking Form Elements */
 .formWrapper {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    text-align: start
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: start;
 }
 
 .inputWithIcon {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .iconInlayBtn {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #6B4127;
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #6b4127;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .dateTimeRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .styledDateInput {
-    width: 100%;
-    padding: 15px;
-    border-radius: 50px;
-    border: 1px solid #ddd;
-    font-family: inherit;
-    font-size: 14px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 14px;
 }
 
 /* Summary Details */
 .summaryItem {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 17px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 17px;
 }
 
 .totalRow {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed #ccc;
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    font-size: 22px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #ccc;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 22px;
 }
 
 .textLink {
-    color: #8B4513;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: 600;
-    text-align: center;
-    margin: 15px 0;
-    display: block;
+  color: #8b4513;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  margin: 15px 0;
+  display: block;
 }
 
 .checkboxContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .checkboxLabel {
-    font-size: 16px;
-    cursor: pointer;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-
 .formWrapper {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .desktopSplitLayout {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
 }
 
 .inputColumn,
 .summaryColumn {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .summaryColumn .noteCard {
-    margin: 0;
-    width: 100%;
+  margin: 0;
+  width: 100%;
 }
 
 .bottomAction {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 .styledDateInput {
-    width: 100%;
-    padding: 18px 25px;
-    border-radius: 50px;
-    border: 1px solid #ddd;
-    background: white;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 16px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  width: 100%;
+  padding: 18px 25px;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .dateTimeRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
 .summaryList {
-    padding: 10px 5px;
+  padding: 10px 5px;
 }
 
 .summaryItem {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 18px;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 18px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 8px;
 }
 
 .totalRow {
-    display: flex;
-    justify-content: space-between;
-    font-size: 24px;
-    font-weight: bold;
-    color: #8B4513;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 2px dashed #E6D4B5;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8b4513;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px dashed #e6d4b5;
 }
 
 .sectionDivider {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 40px;
-    text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 40px;
+  text-align: center;
 }
 
 .subHeader {
-    color: #8B4513;
-    font-family: Impact, sans-serif;
-    font-size: 28px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+  color: #8b4513;
+  font-family: Impact, sans-serif;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
 }
 
 .menuPillSelectable {
-    background: white;
-    border-radius: 50px;
-    padding: 12px 25px;
-    text-align: center;
-    color: #6B4127;
-    font-family: 'Times New Roman', serif;
-    font-size: 18px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    animation: fadeInUp 0.5s ease forwards;
+  background: white;
+  border-radius: 50px;
+  padding: 12px 25px;
+  text-align: center;
+  color: #6b4127;
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
 }
 
 .selectedPill {
-    background-color: #6B4127;
-    color: #E6D4B5;
-    border-color: #8B4513;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(107, 65, 39, 0.2);
+  background-color: #6b4127;
+  color: #e6d4b5;
+  border-color: #8b4513;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(107, 65, 39, 0.2);
 }
 
 .checkBadge {
-    font-size: 14px;
-    background: #E6D4B5;
-    color: #6B4127;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-size: 14px;
+  background: #e6d4b5;
+  color: #6b4127;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .policyIconWrapper {
-    flex-shrink: 0;
-    margin-top: 2px;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .checkboxWrapper {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 .hiddenCheckbox {
-    display: none;
+  display: none;
 }
 
 .customCheckboxLabel {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    font-family: 'Times New Roman', serif;
-    font-size: 18px;
-    color: #6B4127;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  color: #6b4127;
 }
 
 .checkboxBox {
-    width: 24px;
-    height: 24px;
-    border: 2px solid #6B4127;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    background: white;
-    font-weight: bold;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #6b4127;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: white;
+  font-weight: bold;
 }
 
 .checkboxBox.checked {
-    background: #6B4127;
-    color: white;
+  background: #6b4127;
+  color: white;
+}
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
+.popupContent {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+  z-index: 10000;
+}
+
+.popupTitle {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #6b4127;
+}
+
+.popupDetails {
+  margin: 20px 0;
+}
+
+.popupDetails p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.popupActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.confirmButton {
+  background: #6b4127;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+.cancelButton {
+  background: #ddd;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b4127;
+}
 @media (min-width: 1024px) {
+  .menuGrid,
+  .optionalGrid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+  }
 
-    .menuGrid,
-    .optionalGrid {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 900px;
-    }
+  .desktopSplitLayout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 
-    .desktopSplitLayout {
-        flex-direction: row;
-        align-items: flex-start;
-    }
+  .inputColumn {
+    flex: 1.2;
+  }
 
-    .inputColumn {
-        flex: 1.2;
-    }
+  .summaryColumn {
+    flex: 0.8;
+    position: sticky;
+    top: 20px;
+  }
 
-    .summaryColumn {
-        flex: 0.8;
-        position: sticky;
-        top: 20px;
-    }
-
-    .mainTitle {
-        font-size: 56px;
-    }
+  .mainTitle {
+    font-size: 56px;
+  }
 }
 
 @media (max-width: 600px) {
+  .menuGrid,
+  .optionalGrid {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
 
-    .menuGrid,
-    .optionalGrid {
-        grid-template-columns: 1fr;
-        padding: 15px;
-    }
+  .mainTitle {
+    font-size: 36px;
+  }
 
-    .mainTitle {
-        font-size: 36px;
-    }
+  .pillText {
+    font-size: 24px;
+  }
 
-    .pillText {
-        font-size: 24px;
-    }
-
-    .listWrapper {
-        padding: 15px;
-    }
-
+  .listWrapper {
+    padding: 15px;
+  }
 }

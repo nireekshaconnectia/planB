@@ -17,117 +17,141 @@ import { auth } from "@/lib/firebase/firebase";
 const LoginPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/dashboard"; // Changed default to dashboard
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
   const t = useTranslations();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Function to store auth data
   const storeAuthData = (token, user) => {
-    // Store token in localStorage
-    localStorage.setItem("authToken", token);
-    
-    // Store user data if needed
-    if (user) {
-      localStorage.setItem("userData", JSON.stringify(user));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("authToken", token);
+      
+      if (user) {
+        localStorage.setItem("userData", JSON.stringify(user));
+      }
+      
+      document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
     }
-    
-    // Also set cookie for server-side authentication
-    document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`; // 7 days
   };
 
   // Function to clear auth data (for logout)
   const clearAuthData = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    }
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Check if user is already logged in via Firebase
-        // You might want to verify with your backend here
-        router.push(redirectTo);
+        // If user is already logged in via Firebase, get the token and redirect
+        try {
+          const firebaseToken = await user.getIdToken();
+          // Verify with backend or just redirect
+          router.push(redirectTo);
+        } catch (error) {
+          console.error("Error getting Firebase token:", error);
+        }
       }
     });
     return () => unsubscribe();
   }, [router, redirectTo]);
 
+  // Handle email/password login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ 
+          email, 
+          password,
+          provider: "email"
+        }),
         credentials: "include",
       });
 
       const data = await res.json();
+      
       if (data.success) {
-        // Store the token from response
+        // Store the JWT token from response
         if (data.user && data.user.token) {
           storeAuthData(data.user.token, data.user);
         }
         
-        // Redirect based on profile completion status
+        // Use window.location for hard redirect to avoid RSC issues
         if (data.user.profileCompleted === false) {
-          router.push("/dashboard");
+          window.location.href = "/dashboard";
         } else {
-          router.push(redirectTo);
+          window.location.href = redirectTo;
         }
       } else {
-        alert(data.message || "Login failed");
+        setError(data.message || "Login failed");
       }
     } catch (error) {
-      console.error(error);
-      alert("Login error");
+      console.error("Login error:", error);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Handle Google login
   const handleGoogleLogin = async () => {
     setLoading(true);
+    setError("");
+    
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const firebaseToken = await user.getIdToken();
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+      // Send Firebase token to backend for Google login
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${firebaseToken}`,
+        headers: { 
+          "Content-Type": "application/json"
         },
+        body: JSON.stringify({ 
+          firebaseToken,
+          email: user.email,
+          name: user.displayName,
+          provider: "google"
+        }),
         credentials: "include",
       });
 
       const data = await res.json();
+      
       if (data.success) {
-        // Store the token from response
+        // Store the JWT token from response
         if (data.user && data.user.token) {
           storeAuthData(data.user.token, data.user);
         }
         
-        // Redirect based on profile completion status
+        // Use window.location for hard redirect to avoid RSC issues
         if (data.user.profileCompleted === false) {
-          router.push("/complete-profile");
+          window.location.href = "/dashboard";
         } else {
-          router.push(redirectTo);
+          window.location.href = redirectTo;
         }
       } else {
-        alert(data.message || "Google login failed");
+        setError(data.message || "Google login failed");
       }
     } catch (error) {
       console.error("Google login error:", error);
-      alert("Google login failed");
+      setError("Google login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -137,6 +161,12 @@ const LoginPage = () => {
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
         <h1 className={styles.loginTitle}>{t("login")}</h1>
+
+        {error && (
+          <div className={styles.errorMessage}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleEmailLogin} className={styles.loginForm}>
           <div className={styles.inputWrapper}>
@@ -148,6 +178,7 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               className={styles.inputField}
               required
+              disabled={loading}
             />
           </div>
 
@@ -160,6 +191,7 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               className={styles.inputField}
               required
+              disabled={loading}
             />
           </div>
 

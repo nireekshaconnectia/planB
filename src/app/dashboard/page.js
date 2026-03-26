@@ -4,12 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase/firebase";
 import Header from "@/components/layout/Header";
 import styles from "./dashboard.module.css";
 
-// Icons (you can replace with your preferred icon library)
+// Icons
 import {
   FaUserCircle,
   FaSignOutAlt,
@@ -33,65 +31,90 @@ const DashboardPage = () => {
   const [cateringOrders, setCateringOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("profile");
+  const [error, setError] = useState(null);
 
-  // Fetch user data and bookings
+  // Fetch user data and bookings using JWT token
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Get current user from Firebase
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
+        // Get token from localStorage
+        const token = localStorage.getItem("authToken");
+        
+        console.log("Token found:", token ? "Yes" : "No");
+        
+        if (!token) {
+          console.log("No token found, redirecting to login");
           router.push("/login?redirectTo=/dashboard");
           return;
         }
 
         // Fetch user profile from your backend
         const profileRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+          method: "GET",
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${await currentUser.getIdToken()}`,
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
         });
+        
+        console.log("Profile response status:", profileRes.status);
+        
+        if (profileRes.status === 401) {
+          // Token is invalid or expired
+          console.log("Token invalid, clearing storage and redirecting");
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("userData");
+          router.push("/login?redirectTo=/dashboard");
+          return;
+        }
+        
         const profileData = await profileRes.json();
+        console.log("Profile data:", profileData);
 
-        if (profileData.success) {
-          setUser(profileData.data);
+        if (profileData.success && profileData.user) {
+          setUser(profileData.user);
         } else {
-          // Fallback to Firebase user data
-          setUser({
-            name: currentUser.displayName || "",
-            email: currentUser.email,
-            phone: "",
-            address: "",
-            uid: currentUser.uid,
-          });
+          setError("Failed to load user profile");
+          return;
         }
 
         // Fetch study room bookings
-        const bookingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/user`, {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${await currentUser.getIdToken()}`,
-          },
-        });
-        const bookingsData = await bookingsRes.json();
-        if (bookingsData.success) {
-          setBookings(bookingsData.data);
+        try {
+          const bookingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/user`, {
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          const bookingsData = await bookingsRes.json();
+          if (bookingsData.success) {
+            setBookings(bookingsData.data || []);
+          }
+        } catch (err) {
+          console.error("Error fetching bookings:", err);
         }
 
         // Fetch catering orders
-        const cateringRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/catering/orders/user`, {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${await currentUser.getIdToken()}`,
-          },
-        });
-        const cateringData = await cateringRes.json();
-        if (cateringData.success) {
-          setCateringOrders(cateringData.data);
+        try {
+          const cateringRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/catering/orders/user`, {
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          const cateringData = await cateringRes.json();
+          if (cateringData.success) {
+            setCateringOrders(cateringData.data || []);
+          }
+        } catch (err) {
+          console.error("Error fetching catering orders:", err);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setError("Network error. Please check your connection.");
       } finally {
         setLoading(false);
       }
@@ -102,15 +125,34 @@ const DashboardPage = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
-      // Also call your backend logout if needed
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-      router.push("/");
+      const token = localStorage.getItem("authToken");
+      
+      // Call your backend logout
+      if (token) {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+      }
+      
+      // Clear local storage
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      
+      // Clear cookie
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      
+      // Redirect to home page
+      window.location.href = "/";
     } catch (error) {
       console.error("Sign out error:", error);
+      // Still clear local data and redirect
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      window.location.href = "/";
     }
   };
 
@@ -147,7 +189,21 @@ const DashboardPage = () => {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loader}></div>
-        <p>{t("loading-dashboard") || "Loading your dashboard..."}</p>
+        <p>Loading your dashboard...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <div className={styles.errorMessage}>
+          <h2>Error Loading Dashboard</h2>
+          <p>{error}</p>
+          <button onClick={() => window.location.href = "/login"}>
+            Return to Login
+          </button>
+        </div>
       </div>
     );
   }
@@ -155,7 +211,7 @@ const DashboardPage = () => {
   if (!user) {
     return (
       <div className={styles.loadingContainer}>
-        <p>{t("redirecting") || "Redirecting to login..."}</p>
+        <p>Redirecting to login...</p>
       </div>
     );
   }
@@ -183,27 +239,27 @@ const DashboardPage = () => {
               onClick={() => setActiveTab("profile")}
             >
               <FaUserCircle />
-              <span>{t("profile") || "Profile"}</span>
+              <span>Profile</span>
             </button>
             <button
               className={`${styles.navButton} ${activeTab === "bookings" ? styles.activeNav : ""}`}
               onClick={() => setActiveTab("bookings")}
             >
               <FaCalendarAlt />
-              <span>{t("room-bookings") || "Room Bookings"}</span>
+              <span>Room Bookings</span>
             </button>
             <button
               className={`${styles.navButton} ${activeTab === "catering" ? styles.activeNav : ""}`}
               onClick={() => setActiveTab("catering")}
             >
               <FaUtensils />
-              <span>{t("catering-orders") || "Catering Orders"}</span>
+              <span>Catering Orders</span>
             </button>
           </nav>
 
           <button className={styles.signOutButton} onClick={handleSignOut}>
             <FaSignOutAlt />
-            <span>{t("sign-out") || "Sign Out"}</span>
+            <span>Sign Out</span>
           </button>
         </aside>
 
@@ -212,10 +268,10 @@ const DashboardPage = () => {
           {activeTab === "profile" && (
             <div className={styles.profileSection}>
               <div className={styles.sectionHeader}>
-                <h2>{t("profile-details") || "Profile Details"}</h2>
+                <h2>Profile Details</h2>
                 <Link href="/dashboard/edit-profile" className={styles.editButton}>
                   <FaEdit />
-                  <span>{t("edit") || "Edit"}</span>
+                  <span>Edit</span>
                 </Link>
               </div>
 
@@ -224,28 +280,28 @@ const DashboardPage = () => {
                   <div className={styles.infoRow}>
                     <div className={styles.infoLabel}>
                       <FaUserCircle />
-                      <span>{t("full-name") || "Full Name"}</span>
+                      <span>Full Name</span>
                     </div>
                     <div className={styles.infoValue}>{user.name || "—"}</div>
                   </div>
                   <div className={styles.infoRow}>
                     <div className={styles.infoLabel}>
                       <FaEnvelope />
-                      <span>{t("email") || "Email"}</span>
+                      <span>Email</span>
                     </div>
                     <div className={styles.infoValue}>{user.email || "—"}</div>
                   </div>
                   <div className={styles.infoRow}>
                     <div className={styles.infoLabel}>
                       <FaPhone />
-                      <span>{t("phone") || "Phone Number"}</span>
+                      <span>Phone Number</span>
                     </div>
                     <div className={styles.infoValue}>{user.phone || "—"}</div>
                   </div>
                   <div className={styles.infoRow}>
                     <div className={styles.infoLabel}>
                       <FaMapMarkerAlt />
-                      <span>{t("address") || "Address"}</span>
+                      <span>Address</span>
                     </div>
                     <div className={styles.infoValue}>{user.address || "—"}</div>
                   </div>
@@ -257,15 +313,15 @@ const DashboardPage = () => {
           {activeTab === "bookings" && (
             <div className={styles.bookingsSection}>
               <div className={styles.sectionHeader}>
-                <h2>{t("room-bookings") || "Study Room Bookings"}</h2>
+                <h2>Study Room Bookings</h2>
               </div>
 
               {bookings.length === 0 ? (
                 <div className={styles.emptyState}>
                   <FaCalendarAlt className={styles.emptyIcon} />
-                  <p>{t("no-bookings") || "You have no room bookings yet."}</p>
+                  <p>You have no room bookings yet.</p>
                   <Link href="/study-room" className={styles.bookNowButton}>
-                    {t("book-a-room") || "Book a Room"}
+                    Book a Room
                   </Link>
                 </div>
               ) : (
@@ -293,18 +349,18 @@ const DashboardPage = () => {
                           </span>
                         </div>
                         <div className={styles.detailItem}>
-                          <strong>{t("duration") || "Duration"}:</strong>
-                          <span>{booking.duration} {t("hours") || "hours"}</span>
+                          <strong>Duration:</strong>
+                          <span>{booking.duration} hours</span>
                         </div>
                         <div className={styles.detailItem}>
-                          <strong>{t("total") || "Total"}:</strong>
+                          <strong>Total:</strong>
                           <span>{booking.totalPrice || booking.price} QR</span>
                         </div>
                       </div>
                       {booking.status?.toLowerCase() === "pending" && (
                         <div className={styles.bookingActions}>
                           <button className={styles.cancelButton}>
-                            {t("cancel") || "Cancel Booking"}
+                            Cancel Booking
                           </button>
                         </div>
                       )}
@@ -318,15 +374,15 @@ const DashboardPage = () => {
           {activeTab === "catering" && (
             <div className={styles.cateringSection}>
               <div className={styles.sectionHeader}>
-                <h2>{t("catering-orders") || "Catering Orders"}</h2>
+                <h2>Catering Orders</h2>
               </div>
 
               {cateringOrders.length === 0 ? (
                 <div className={styles.emptyState}>
                   <FaUtensils className={styles.emptyIcon} />
-                  <p>{t("no-catering-orders") || "You have no catering orders yet."}</p>
+                  <p>You have no catering orders yet.</p>
                   <Link href="/catering" className={styles.orderNowButton}>
-                    {t("order-catering") || "Order Catering"}
+                    Order Catering
                   </Link>
                 </div>
               ) : (
@@ -348,17 +404,17 @@ const DashboardPage = () => {
                           <span>{formatDate(order.eventDate)}</span>
                         </div>
                         <div className={styles.detailItem}>
-                          <strong>{t("guests") || "Guests"}:</strong>
+                          <strong>Guests:</strong>
                           <span>{order.guestCount || "—"}</span>
                         </div>
                         <div className={styles.detailItem}>
-                          <strong>{t("total") || "Total"}:</strong>
+                          <strong>Total:</strong>
                           <span>{order.totalPrice} QR</span>
                         </div>
                       </div>
                       {order.menuItems && order.menuItems.length > 0 && (
                         <div className={styles.menuPreview}>
-                          <p className={styles.menuLabel}>{t("selected-items") || "Selected Items"}:</p>
+                          <p className={styles.menuLabel}>Selected Items:</p>
                           <div className={styles.menuTags}>
                             {order.menuItems.slice(0, 3).map((item, idx) => (
                               <span key={idx} className={styles.menuTag}>
