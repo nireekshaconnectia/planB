@@ -8,15 +8,42 @@ import { useTranslations } from 'next-intl';
 
 const formatImageUrl = (url) => {
     if (!url) return '';
-    if (url.startsWith('http')) {
+    
+    // Handle external URLs
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        // Check if it's a freepik page URL
+        if (url.includes('freepik.com') && (url.includes('.htm') || url.includes('#'))) {
+            console.warn('Invalid image URL (freepik page):', url);
+            return '';
+        }
         return url;
     }
+    
+    // Handle local paths
     const formattedUrl = url.replace(/\\/g, '/');
     const cleanUrl = formattedUrl.replace(/^\/+/, '');
     return `${process.env.NEXT_PUBLIC_API_UPLOADS}/${cleanUrl}`;
 };
 
+// Helper to validate image URL
+const isValidImageUrl = (url) => {
+    if (!url) return false;
+    try {
+        new URL(url);
+        // Check if it's a valid image URL (has image extension or from known image hosts)
+        const imageExtensions = /\.(jpg|jpeg|png|gif|webp|svg)$/i;
+        const imageHosts = ['images.unsplash.com', 'cdn.pixabay.com', 'i.imgur.com', 'res.cloudinary.com'];
+        const urlObj = new URL(url);
+        const hasImageExtension = imageExtensions.test(urlObj.pathname);
+        const isKnownImageHost = imageHosts.some(host => urlObj.hostname.includes(host));
+        return hasImageExtension || isKnownImageHost;
+    } catch {
+        return false;
+    }
+};
+
 function getInitialFormData(initialData) {
+    const imageUrl = initialData?.image ? formatImageUrl(initialData.image) : '';
     return {
         name: initialData?.name || '',
         nameAr: initialData?.nameAr || '',
@@ -26,8 +53,10 @@ function getInitialFormData(initialData) {
         categories: initialData?.categories?.map(cat => typeof cat === 'object' ? cat._id : cat) || [],
         isAvailable: initialData?.isAvailable ?? true,
         image: null,
-        imagePreview: initialData?.image ? formatImageUrl(initialData.image) : '',
+        imageUrl: isValidImageUrl(imageUrl) ? imageUrl : '', // Store the image URL separately
+        imagePreview: isValidImageUrl(imageUrl) ? imageUrl : '',
         preparationTime: initialData?.preparationTime || 5,
+        imageError: false,
     };
 }
 
@@ -41,12 +70,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        // Log initial data for debugging
-        console.log('Initial Data:', initialData);
-        console.log('Form Data:', formData);
-    }, [initialData]);
-
-    useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/admin');
         }
@@ -58,8 +81,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
 
     useEffect(() => {
         setFormData(getInitialFormData(initialData));
-
-        // Only fetch if editing (initialData has id)
+        
         if (initialData && initialData.id) {
             const fetchBothLanguages = async () => {
                 try {
@@ -80,7 +102,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                             description: enData.data.description || '',
                             nameAr: arData.data.name || '',
                             descriptionAr: arData.data.description || '',
-                            // keep other fields as is
                         }));
                     }
                 } catch (err) {
@@ -101,8 +122,6 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
             const data = await response.json();
             if (data.status === 'success') {
                 setCategories(data.data.categories);
-                // Log categories for debugging
-                console.log('Fetched Categories:', data.data.categories);
             }
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -111,7 +130,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
     };
 
     const validateImage = (file) => {
-        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
         const maxSize = 5 * 1024 * 1024; // 5MB
 
         if (!validTypes.includes(file.type)) {
@@ -123,6 +142,21 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
         }
     };
 
+    const validateImageUrl = (url) => {
+        if (!url) return true;
+        
+        try {
+            new URL(url);
+            // Check if it's a freepik page URL
+            if (url.includes('freepik.com') && (url.includes('.htm') || url.includes('#'))) {
+                throw new Error('Invalid image URL: Freepik page URLs are not valid image sources. Please use a direct image URL.');
+            }
+            return true;
+        } catch {
+            throw new Error('Please enter a valid image URL');
+        }
+    };
+
     const handleCategoryChange = (categoryId) => {
         setFormData(prev => {
             const currentCategories = prev.categories || [];
@@ -131,6 +165,28 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                 : [...currentCategories, categoryId];
             return { ...prev, categories: newCategories };
         });
+    };
+
+    const handleImageUrlChange = (e) => {
+        const url = e.target.value;
+        try {
+            validateImageUrl(url);
+            setFormData(prev => ({
+                ...prev,
+                imageUrl: url,
+                imagePreview: url,
+                image: null, // Clear file if URL is provided
+                imageError: false
+            }));
+            setError('');
+        } catch (err) {
+            setError(err.message);
+            setFormData(prev => ({
+                ...prev,
+                imageUrl: url,
+                imageError: true
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -150,7 +206,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
         }
 
         try {
-            // Create a plain object instead of FormData
+            // Prepare data to send
             const dataToSend = {
                 name: formData.name.trim(),
                 nameAr: formData.nameAr.trim(),
@@ -162,7 +218,18 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                 preparationTime: parseInt(formData.preparationTime),
             };
 
-            // If there's a new image, use FormData
+            // If there's an image URL (external), include it
+            if (formData.imageUrl && !formData.imageError && isValidImageUrl(formData.imageUrl)) {
+                dataToSend.image = formData.imageUrl;
+            }
+
+            const url = initialData 
+                ? `${process.env.NEXT_PUBLIC_API_URL}/menu/${initialData.id}`
+                : `${process.env.NEXT_PUBLIC_API_URL}/menu`;
+
+            let response;
+            
+            // If there's a file upload, use FormData
             if (formData.image) {
                 const formDataToSend = new FormData();
                 Object.keys(dataToSend).forEach(key => {
@@ -170,69 +237,22 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                         dataToSend[key].forEach(value => {
                             formDataToSend.append(`${key}[]`, value);
                         });
-                    } else {
+                    } else if (key !== 'image') {
                         formDataToSend.append(key, dataToSend[key]);
                     }
                 });
                 formDataToSend.append('image', formData.image);
 
-                const url = initialData 
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/menu/${initialData.id}`
-                    : `${process.env.NEXT_PUBLIC_API_URL}/menu`;
-
-                console.log('Submitting to URL:', url);
-                console.log('Form data:', Object.fromEntries(formDataToSend));
-
-                const response = await fetch(url, {
+                response = await fetch(url, {
                     method: initialData ? 'PUT' : 'POST',
                     headers: {
                         'Authorization': `Bearer ${session.user.token}`
                     },
                     body: formDataToSend
                 });
-
-                console.log('Response status:', response.status);
-                const responseData = await response.json();
-                console.log('Response data:', responseData);
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        router.push('/admin');
-                        throw new Error(t('session-expired'));
-                    }
-                    throw new Error(responseData.message || t('save-failed'));
-                }
-
-                if (responseData.success) {
-                    onSave();
-                    onClose();
-                    if (!initialData) {
-                        setFormData({
-                            name: '',
-                            nameAr: '',
-                            description: '',
-                            descriptionAr: '',
-                            price: '',
-                            categories: [],
-                            isAvailable: true,
-                            image: null,
-                            imagePreview: '',
-                            preparationTime: 5,
-                        });
-                    }
-                } else {
-                    throw new Error(responseData.message || t('save-failed'));
-                }
             } else {
-                // If no new image, send as JSON
-                const url = initialData 
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/menu/${initialData.id}`
-                    : `${process.env.NEXT_PUBLIC_API_URL}/menu`;
-
-                console.log('Submitting to URL:', url);
-                console.log('Request data:', dataToSend);
-
-                const response = await fetch(url, {
+                // Otherwise send as JSON
+                response = await fetch(url, {
                     method: initialData ? 'PUT' : 'POST',
                     headers: {
                         'Authorization': `Bearer ${session.user.token}`,
@@ -240,46 +260,42 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     },
                     body: JSON.stringify(dataToSend)
                 });
+            }
 
-                console.log('Response status:', response.status);
-                const responseData = await response.json();
-                console.log('Response data:', responseData);
+            const responseData = await response.json();
 
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        router.push('/admin');
-                        throw new Error(t('session-expired'));
-                    }
-                    throw new Error(responseData.message || t('save-failed'));
+            if (!response.ok) {
+                if (response.status === 401) {
+                    router.push('/admin');
+                    throw new Error(t('session-expired'));
                 }
+                throw new Error(responseData.message || t('save-failed'));
+            }
 
-                if (responseData.success) {
-                    onSave();
-                    onClose();
-                    if (!initialData) {
-                        setFormData({
-                            name: '',
-                            nameAr: '',
-                            description: '',
-                            descriptionAr: '',
-                            price: '',
-                            categories: [],
-                            isAvailable: true,
-                            image: null,
-                            imagePreview: '',
-                            preparationTime: 5,
-                        });
-                    }
-                } else {
-                    throw new Error(responseData.message || t('save-failed'));
+            if (responseData.success) {
+                onSave();
+                onClose();
+                if (!initialData) {
+                    setFormData({
+                        name: '',
+                        nameAr: '',
+                        description: '',
+                        descriptionAr: '',
+                        price: '',
+                        categories: [],
+                        isAvailable: true,
+                        image: null,
+                        imageUrl: '',
+                        imagePreview: '',
+                        preparationTime: 5,
+                        imageError: false,
+                    });
                 }
+            } else {
+                throw new Error(responseData.message || t('save-failed'));
             }
         } catch (error) {
             console.error('Error saving menu item:', error);
-            console.error('Error details:', {
-                message: error.message,
-                stack: error.stack
-            });
             setError(error.message || t('save-failed'));
         } finally {
             setIsLoading(false);
@@ -300,6 +316,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     required
                 />
             </div>
+            
             <div className={styles.fieldGroup}>
                 <label>{t('item-name-ar') || 'Item Name (Arabic)'}</label>
                 <input
@@ -310,6 +327,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     required
                 />
             </div>
+            
             <div className={styles.fieldGroup}>
                 <label>{t('description-en') || 'Description (English)'}</label>
                 <textarea
@@ -319,6 +337,7 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                     required
                 />
             </div>
+            
             <div className={styles.fieldGroup}>
                 <label>{t('description-ar') || 'Description (Arabic)'}</label>
                 <textarea
@@ -385,7 +404,20 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
             </div>
 
             <div className={styles.fieldGroup}>
-                <label>{t('item-image')}</label>
+                <label>Image URL (optional)</label>
+                <input
+                    type="url"
+                    value={formData.imageUrl}
+                    onChange={handleImageUrlChange}
+                    placeholder="https://example.com/image.jpg"
+                />
+                <small style={{ color: '#666', marginTop: '4px', display: 'block' }}>
+                    Enter a direct image URL (e.g., from Unsplash, Imgur, or your own server)
+                </small>
+            </div>
+
+            <div className={styles.fieldGroup}>
+                <label>Or Upload Image File</label>
                 <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -397,22 +429,24 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
                                 setFormData(prev => ({
                                     ...prev,
                                     image: file,
-                                    imagePreview: URL.createObjectURL(file)
+                                    imageUrl: '', // Clear URL if file is uploaded
+                                    imagePreview: URL.createObjectURL(file),
+                                    imageError: false
                                 }));
+                                setError('');
                             } catch (error) {
                                 setError(error.message);
                             }
                         }
                     }}
                 />
-                {formData.imagePreview && (
+                {formData.imagePreview && !formData.imageError && (
                     <div className={styles.imagePreview}>
-                        <Image 
+                        <img 
                             src={formData.imagePreview} 
                             alt="Preview" 
-                            width={60} 
-                            height={60}
-                            style={{ objectFit: 'cover' }}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            onError={() => setFormData(prev => ({ ...prev, imageError: true }))}
                         />
                     </div>
                 )}
@@ -436,4 +470,4 @@ export default function ItemForm({ onSave, initialData = null, onClose }) {
             </div>
         </form>
     );
-} 
+}
