@@ -12,7 +12,9 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
             return date.toLocaleDateString('en-IN', {
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
         } catch (err) {
             return dateString;
@@ -56,7 +58,7 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
     const total = order.total || order.amount || order.amountPaid || order.paymentDetails?.amountPaid || 0;
 
     return (
-        <PopupWrapper isOpen={isOpen} onClose={onClose} title="Order Details">
+        <PopupWrapper isOpen={isOpen} onClose={onClose} title={`Order Details - #${orderId}`}>
             <div className={styles.orderDetails}>
                 <div className={styles.section}>
                     <h3 className={styles.sectionTitle}>Order Information</h3>
@@ -68,7 +70,7 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                         <span className={styles.label}>Status:</span>
                         <span 
                             className={styles.value} 
-                            style={{ color: getStatusColor(status) }}
+                            style={{ color: getStatusColor(status), fontWeight: 'bold' }}
                         >
                             {status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ')}
                         </span>
@@ -77,7 +79,7 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                         <span className={styles.label}>Payment Status:</span>
                         <span 
                             className={styles.value} 
-                            style={{ color: getStatusColor(paymentStatus) }}
+                            style={{ color: getStatusColor(paymentStatus), fontWeight: 'bold' }}
                         >
                             {paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)}
                         </span>
@@ -86,6 +88,12 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                         <div className={styles.detailRow}>
                             <span className={styles.label}>Order Date:</span>
                             <span className={styles.value}>{formatDate(order.createdAt)}</span>
+                        </div>
+                    )}
+                    {order.updatedAt && (
+                        <div className={styles.detailRow}>
+                            <span className={styles.label}>Last Updated:</span>
+                            <span className={styles.value}>{formatDate(order.updatedAt)}</span>
                         </div>
                     )}
                 </div>
@@ -110,6 +118,12 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                             <span className={styles.value}>
                                 {order.user?.email || order.email}
                             </span>
+                        </div>
+                    )}
+                    {order.userId && (
+                        <div className={styles.detailRow}>
+                            <span className={styles.label}>User ID:</span>
+                            <span className={styles.value}>{order.userId}</span>
                         </div>
                     )}
                 </div>
@@ -142,6 +156,18 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                                     )
                                     : <span>{order.selectedOptional}</span>
                                 }
+                            </div>
+                        </div>
+                    )}
+                    {order.menuItems && order.menuItems.length > 0 && (
+                        <div className={styles.detailRow}>
+                            <span className={styles.label}>Menu Items:</span>
+                            <div className={styles.value}>
+                                <ul className={styles.optionalList}>
+                                    {order.menuItems.map((item, idx) => (
+                                        <li key={idx}>{item.name || item} x {item.quantity || 1}</li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     )}
@@ -188,27 +214,45 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
 
                 <div className={styles.section}>
                     <h3 className={styles.sectionTitle}>Pricing</h3>
-                    <div className={styles.detailRow}>
-                        <span className={styles.label}>Subtotal:</span>
-                        <span className={styles.value}>QR {order.subtotal || 0}</span>
-                    </div>
+                    {order.subtotal && (
+                        <div className={styles.detailRow}>
+                            <span className={styles.label}>Subtotal:</span>
+                            <span className={styles.value}>QR {order.subtotal.toFixed(2)}</span>
+                        </div>
+                    )}
                     {order.deliveryCharge && (
                         <div className={styles.detailRow}>
                             <span className={styles.label}>Delivery Charge:</span>
-                            <span className={styles.value}>QR {order.deliveryCharge}</span>
+                            <span className={styles.value}>QR {order.deliveryCharge.toFixed(2)}</span>
                         </div>
                     )}
                     {order.discount && order.discount > 0 && (
                         <div className={styles.detailRow}>
                             <span className={styles.label}>Discount:</span>
-                            <span className={styles.value}>QR {order.discount}</span>
+                            <span className={styles.value}>QR {order.discount.toFixed(2)}</span>
                         </div>
                     )}
                     <div className={styles.detailRow}>
                         <span className={styles.label}>Total:</span>
-                        <span className={styles.totalValue}>QR {total}</span>
+                        <span className={styles.totalValue}>QR {total.toFixed(2)}</span>
                     </div>
                 </div>
+
+                {order.paymentMethod && (
+                    <div className={styles.section}>
+                        <h3 className={styles.sectionTitle}>Payment Information</h3>
+                        <div className={styles.detailRow}>
+                            <span className={styles.label}>Payment Method:</span>
+                            <span className={styles.value}>{order.paymentMethod}</span>
+                        </div>
+                        {order.paymentDetails?.transactionId && (
+                            <div className={styles.detailRow}>
+                                <span className={styles.label}>Transaction ID:</span>
+                                <span className={styles.value}>{order.paymentDetails.transactionId}</span>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {order.specialInstructions && (
                     <div className={styles.section}>
@@ -221,16 +265,6 @@ export default function CateringOrderDetails({ isOpen, onClose, order }) {
                     <div className={styles.section}>
                         <h3 className={styles.sectionTitle}>Additional Notes</h3>
                         <p className={styles.instructions}>{order.additionalNote}</p>
-                    </div>
-                )}
-
-                {order.paymentMethod && (
-                    <div className={styles.section}>
-                        <h3 className={styles.sectionTitle}>Payment Information</h3>
-                        <div className={styles.detailRow}>
-                            <span className={styles.label}>Payment Method:</span>
-                            <span className={styles.value}>{order.paymentMethod}</span>
-                        </div>
                     </div>
                 )}
             </div>
