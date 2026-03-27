@@ -115,7 +115,7 @@ const fetchCustomers = async () => {
                         <div key={customer._id} className={styles.customerCard}>
                             <div className={styles.customerHeader}>
                                 <h3>{customer.name}</h3>
-                                <span className={styles.customerId}>{t("id")}: {customer._id}</span>
+                               
                             </div>
 
                             <div className={styles.customerInfo}>
