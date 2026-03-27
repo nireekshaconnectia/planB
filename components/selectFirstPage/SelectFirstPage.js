@@ -56,14 +56,15 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
   // 🔥 Grid Data (clean structure)
   const gridItems = [
     { type: "image", src: "/home/logo1.jpg" },
-    {
-      type: "text",
-      content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
-    },
-    { type: "image", src: "/home/logo2.jpg" },
-
+    // {
+    //   type: "text",
+    //   content:
+    //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    // },
     { type: "action", title: t("catering"), action: () => handleSelect("catering") },
+    { type: "image", src: "/home/logo2.jpg" },
+    // { type: "action", title: t("catering"), action: () => handleSelect("catering") },
+    
     { type: "image", src: "/home/logo3.jpg" },
 
     { type: "action", title: t("study-room"), action: () => handleSelect("study-room") },
