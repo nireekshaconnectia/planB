@@ -36,21 +36,12 @@ export default function SideMenu({ onClose }) {
                     <li onClick={() => handleMenuClick("/admin/dashboard")}>
                         <div><MdDashboard /> {t('Dashboard')}</div>
                     </li>
-                    <li onClick={() => handleMenuClick("/admin/menu/categories")}>
-                        <div><MdOutlineCategory /> {t('Categories')}</div>
-                    </li>
-                    {/* <li onClick={() => handleMenuClick("/admin/catering-packages")}>
-                        <div><MdOutlineFastfood /> {t('catering-packages')}</div>
-                    </li> */}
-                    <li onClick={() => handleMenuClick("/admin/menu/items")}>
-                        <div><MdOutlineFastfood /> {t('Menu Items')}</div>
-                    </li>
+                    
+                    
                     <li onClick={() => handleMenuClick("/admin/study-rooms")}>
                         <div><MdOutlineMeetingRoom /> {t('study-rooms')}</div>
                     </li>
-                    <li onClick={() => handleMenuClick("/admin/orders")}>
-                        <div><FaClipboardList /> {t('Orders')}</div>
-                    </li>
+                   
                     <li onClick={() => handleMenuClick("/admin/catering-orders")}>
                         <div><MdOutlineFastfood /> {t('catering-orders')}</div>
                     </li>
