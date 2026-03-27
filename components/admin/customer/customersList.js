@@ -17,73 +17,73 @@ export default function CustomersList() {
         fetchCustomers();
     }, []);
 
-    const fetchCustomerStatistics = async (customerId) => {
-        if (!session?.user?.token) return;
-        try {
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
-            const apiUrl = `${baseUrl}/users/customers/${customerId}/statistics`;
-            
-            const res = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${session.user.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
+const fetchCustomerStatistics = async (customerId) => {
+    if (!session?.user?.token) return;
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
+        // Fix: Use admin route with customer ID
+        const apiUrl = `${baseUrl}/${customerId}/statistics`;
+        
+        const res = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${session.user.token}`,
+                'Content-Type': 'application/json'
             }
-            
-            const data = await res.json();
-            if (data.success) {
-                setCustomerStats(prev => ({
-                    ...prev,
-                    [customerId]: data.data
-                }));
-            }
-        } catch (err) {
-            console.error(`Error fetching statistics for customer ${customerId}:`, err);
+        });
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
-    };
+        
+        const data = await res.json();
+        if (data.success) {
+            setCustomerStats(prev => ({
+                ...prev,
+                [customerId]: data.data
+            }));
+        }
+    } catch (err) {
+        console.error(`Error fetching statistics for customer ${customerId}:`, err);
+    }
+};
 
-    const fetchCustomers = async () => {
-        if (!session?.user?.token) return;
-        setLoading(true);
-        try {
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
-            const apiUrl = `${baseUrl}/users/customers`;
-            
-            console.log('Fetching customers from:', apiUrl);
-            const res = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${session.user.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
+const fetchCustomers = async () => {
+    if (!session?.user?.token) return;
+    setLoading(true);
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '');
+        // Fix: Use admin route for getting all users
+        const apiUrl = `${baseUrl}/admin`;
+        
+        const res = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${session.user.token}`,
+                'Content-Type': 'application/json'
             }
-            
-            const data = await res.json();
-            console.log('Customers data:', data);
-            
-            if (data.success) {
-                setCustomers(data.data);
-                // Fetch statistics for each customer
-                data.data.forEach(customer => {
-                    fetchCustomerStatistics(customer._id);
-                });
-            } else {
-                setError(data.message || t("failedToLoadCustomers"));
-            }
-        } catch (err) {
-            console.error('Error fetching customers:', err);
-            setError(t("failedToLoadCustomers"));
-        } finally {
-            setLoading(false);
+        });
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
-    };
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            setCustomers(data.data);
+            // Fetch statistics for each customer
+            data.data.forEach(customer => {
+                fetchCustomerStatistics(customer._id);
+            });
+        } else {
+            setError(data.message || t("failedToLoadCustomers"));
+        }
+    } catch (err) {
+        console.error('Error fetching customers:', err);
+        setError(t("failedToLoadCustomers"));
+    } finally {
+        setLoading(false);
+    }
+};
 
     const filteredCustomers = customers.filter(customer => 
         customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

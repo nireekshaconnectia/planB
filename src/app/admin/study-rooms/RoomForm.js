@@ -58,8 +58,28 @@ export default function RoomForm({ onSave, onClose, initialData }) {
   };
 
   // Remove existing image
-  const handleRemoveExistingImage = (img) => {
-    setExistingImages((prev) => prev.filter((i) => i !== img));
+  const handleRemoveExistingImage = async (img) => {
+    if (!session?.user?.token) return alert('Not authorized');
+    
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${initialData?._id}/photo`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.user.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ imageUrl: img })
+      });
+      
+      if (res.ok) {
+        setExistingImages((prev) => prev.filter((i) => i !== img));
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Failed to delete image');
+      }
+    } catch (err) {
+      alert('Failed to delete image');
+    }
   };
 
   // Remove newly added image
@@ -71,7 +91,9 @@ export default function RoomForm({ onSave, onClose, initialData }) {
   const createImageUrl = (img) => {
     if (img.startsWith('blob:')) return img;
     if (img.startsWith('http')) return img;
-    return `${process.env.NEXT_PUBLIC_API_UPLOADS}/${img}`;
+    // Remove any leading slashes from the image path
+    const cleanImg = img.replace(/^\/+/, '');
+    return `${process.env.NEXT_PUBLIC_API_URL}/uploads/${cleanImg}`;
   };
 
   // Submit form
@@ -81,28 +103,57 @@ export default function RoomForm({ onSave, onClose, initialData }) {
     setIsLoading(true);
 
     try {
-      // Build the room data
-      const roomData = {
-        name: formData.name,
-        description: formData.description,
-        capacity: Number(formData.capacity),
-        price: Number(formData.price),
-        amenities: formData.amenities,
-        isAvailable: formData.isAvailable,
-        images: [...existingImages, ...selectedFiles.map(f => URL.createObjectURL(f))]
-      };
-
-      if (initialData) {
-        roomData._id = initialData._id;
+      if (!session?.user?.token) {
+        throw new Error('Not authorized');
       }
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Create FormData for file uploads
+      const formDataToSend = new FormData();
+      
+      // Add all text fields
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('capacity', formData.capacity);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('isAvailable', formData.isAvailable);
+      formDataToSend.append('amenities', JSON.stringify(formData.amenities));
+      
+      // Add existing images (as JSON string)
+      if (existingImages.length > 0) {
+        formDataToSend.append('existingImages', JSON.stringify(existingImages));
+      }
+      
+      // Add new image files
+      selectedFiles.forEach((file) => {
+        formDataToSend.append('images', file);
+      });
 
-      onSave(roomData);
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/rooms`;
+      let method = 'POST';
+
+      if (initialData) {
+        url = `${process.env.NEXT_PUBLIC_API_URL}/rooms/${initialData._id}`;
+        method = 'PUT';
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${session.user.token}`,
+        },
+        body: formDataToSend,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        onSave(data.data);
+      } else {
+        setError(data.message || 'Failed to save room');
+      }
     } catch (err) {
       console.error(err);
-      setError("Failed to save room");
+      setError(err.message || 'Failed to save room');
     } finally {
       setIsLoading(false);
     }

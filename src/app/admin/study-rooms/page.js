@@ -1,53 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./studyRooms.module.css";
 import { useSession } from 'next-auth/react';
 import RoomForm from './RoomForm';
 
-// Static room data
-const STATIC_ROOMS = [
-  {
-    _id: "room1",
-    name: "Study room 1",
-    capacity: 1,
-    price: 40,
-    description: "A cozy study room perfect for focused work or study sessions.",
-    amenities: ["Desk", "Chair", "WiFi", "Power Outlet"],
-    isAvailable: true,
-    images: []
-  },
-  {
-    _id: "room2",
-    name: "Study room 2",
-    capacity: 2,
-    price: 55,
-    description: "A comfortable study room for two, ideal for collaborative work.",
-    amenities: ["Desk", "Chairs", "WiFi", "Power Outlet", "Whiteboard"],
-    isAvailable: true,
-    images: []
-  },
-  {
-    _id: "room3",
-    name: "Meeting room",
-    capacity: 10,
-    price: 110,
-    description: "A spacious meeting room equipped for professional gatherings and presentations.",
-    amenities: ["Large Table", "Chairs", "WiFi", "Power Outlet", "Projector", "Whiteboard", "Conference Phone"],
-    isAvailable: true,
-    images: []
-  }
-];
-
 export default function StudyRooms() {
     const t = useTranslations();
     const { data: session } = useSession();
-    const [rooms, setRooms] = useState(STATIC_ROOMS);
-    const [loading, setLoading] = useState(false);
+    const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [editingRoom, setEditingRoom] = useState(null);
     const [availabilityLoading, setAvailabilityLoading] = useState(null);
+
+    useEffect(() => {
+        fetchRooms();
+    }, []);
+
+    const fetchRooms = async () => {
+        setLoading(true);
+        setError("");
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`);
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setRooms(data.data);
+            } else {
+                setError(data.message || "Failed to load rooms");
+            }
+        } catch (err) {
+            setError("Failed to load rooms");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleAdd = () => {
         setEditingRoom(null);
@@ -60,33 +48,53 @@ export default function StudyRooms() {
     };
 
     const handleDelete = async (roomId) => {
+        if (!session?.user?.token) return alert('Not authorized');
         if (!window.confirm('Are you sure you want to delete this room?')) return;
-        setRooms(rooms => rooms.filter(r => r._id !== roomId));
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${roomId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${session.user.token}` }
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setRooms(rooms => rooms.filter(r => r._id !== roomId));
+            } else {
+                alert(data.message || 'Failed to delete room');
+            }
+        } catch (err) {
+            alert('Failed to delete room');
+        }
     };
 
-    const handleSave = (savedRoom) => {
-        if (editingRoom) {
-            // Update existing room
-            setRooms(rooms => rooms.map(r => r._id === savedRoom._id ? savedRoom : r));
-        } else {
-            // Add new room with a unique ID
-            const newRoom = {
-                ...savedRoom,
-                _id: `room${Date.now()}`,
-                images: savedRoom.images || []
-            };
-            setRooms(rooms => [...rooms, newRoom]);
-        }
+    const handleSave = () => {
+        fetchRooms();
         setShowForm(false);
         setEditingRoom(null);
     };
 
     const handleToggleAvailability = async (roomId, isAvailable) => {
+        if (!session?.user?.token) return alert('Not authorized');
         setAvailabilityLoading(roomId);
-        setRooms(rooms => rooms.map(room => 
-            room._id === roomId ? { ...room, isAvailable: !isAvailable } : room
-        ));
-        setAvailabilityLoading(null);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms/${roomId}/availability`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${session.user.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isAvailable: !isAvailable })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                fetchRooms();
+            } else {
+                alert(data.message || 'Failed to update availability');
+            }
+        } catch (err) {
+            alert('Failed to update availability');
+        } finally {
+            setAvailabilityLoading(null);
+        }
     };
 
     return (
