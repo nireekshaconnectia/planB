@@ -64,19 +64,19 @@ const SelectFirstPage = ({ isOpen, onClose }) => {
     { type: "action", title: t("catering"), action: () => handleSelect("catering") },
     { type: "image", src: "/home/logo2.jpg" },
     // { type: "action", title: t("catering"), action: () => handleSelect("catering") },
-    
-    { type: "image", src: "/home/logo3.jpg" },
-
     { type: "action", title: t("study-room"), action: () => handleSelect("study-room") },
+    { type: "image", src: "/home/logo3.jpg" },
+    { type: "action", title: t("loyalty card"), action: loyalty },
+   
     { type: "image", src: "/home/logo4.jpg" },
 
-    { type: "action", title: t("loyalty card"), action: loyalty },
+    { type: "action", title: t("delivery platforms"), action: () => setShowDeliveryPopup(true) },
     { type: "image", src: "/home/logo5.jpg" },
 
-    { type: "action", title: t("delivery platforms"), action: () => setShowDeliveryPopup(true) },
-    { type: "image", src: "/home/logo6.jpg" },
 
     { type: "action", title: t("location"), action: location },
+    { type: "image", src: "/home/logo6.jpg" },
+
   ];
 
   return (
