@@ -58,9 +58,9 @@ const DashboardPage = () => {
           return;
         }
         
-        // Fetch study room bookings
+        // Fetch study room bookings - FIXED ENDPOINT
         try {
-          const bookingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/user`, {
+          const bookingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/room-bookings/my-bookings`, {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const DashboardPage = () => {
   const handleCancelBooking = async (bookingId) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/${bookingId}/cancel`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/room-bookings/${bookingId}/cancel`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

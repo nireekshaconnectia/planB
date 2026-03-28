@@ -7,7 +7,11 @@ import {
   FaClock, 
   FaCheckCircle, 
   FaHourglassHalf, 
-  FaTimesCircle 
+  FaTimesCircle,
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaCreditCard
 } from "react-icons/fa";
 import styles from "../dashboard.module.css";
 
@@ -23,6 +27,20 @@ const BookingsTab = ({ bookings, onCancelBooking }) => {
         return <FaTimesCircle className={styles.statusIconCancelled} />;
       default:
         return <FaClock className={styles.statusIconDefault} />;
+    }
+  };
+
+  const getPaymentStatusBadge = (status) => {
+    switch (status?.toLowerCase()) {
+      case "completed":
+      case "paid":
+        return <span className={styles.paymentStatusPaid}>Paid</span>;
+      case "pending":
+        return <span className={styles.paymentStatusPending}>Pending</span>;
+      case "failed":
+        return <span className={styles.paymentStatusFailed}>Failed</span>;
+      default:
+        return null;
     }
   };
 
@@ -73,8 +91,10 @@ const BookingsTab = ({ bookings, onCancelBooking }) => {
                 <span className={styles.statusText}>
                   {booking.status || "Confirmed"}
                 </span>
+                {getPaymentStatusBadge(booking.paymentStatus)}
               </div>
             </div>
+            
             <div className={styles.bookingDetails}>
               <div className={styles.detailItem}>
                 <FaCalendarAlt />
@@ -92,9 +112,49 @@ const BookingsTab = ({ bookings, onCancelBooking }) => {
               </div>
               <div className={styles.detailItem}>
                 <strong>Total:</strong>
-                <span>{booking.totalPrice || booking.price} QR</span>
+                <span>{booking.totalPrice} QR</span>
               </div>
             </div>
+
+            {/* Customer Information */}
+            {booking.customerName && (
+              <div className={styles.customerInfo}>
+                <div className={styles.detailItem}>
+                  <FaUser />
+                  <span>{booking.customerName}</span>
+                </div>
+                {booking.customerPhone && (
+                  <div className={styles.detailItem}>
+                    <FaPhone />
+                    <span>{booking.customerPhone}</span>
+                  </div>
+                )}
+                {booking.customerEmail && (
+                  <div className={styles.detailItem}>
+                    <FaEnvelope />
+                    <span>{booking.customerEmail}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Purpose */}
+            {booking.purpose && (
+              <div className={styles.bookingPurpose}>
+                <strong>Purpose:</strong> {booking.purpose}
+              </div>
+            )}
+
+            {/* Payment Details */}
+            {booking.paymentDetails && (
+              <div className={styles.paymentDetails}>
+                <div className={styles.detailItem}>
+                  <FaCreditCard />
+                  <span>Transaction ID: {booking.paymentDetails.transactionId}</span>
+                </div>
+              </div>
+            )}
+            
             {booking.status?.toLowerCase() === "pending" && (
               <div className={styles.bookingActions}>
                 <button 
@@ -112,4 +172,4 @@ const BookingsTab = ({ bookings, onCancelBooking }) => {
   );
 };
 
-export default BookingsTab; 
+export default BookingsTab;

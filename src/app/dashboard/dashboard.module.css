@@ -863,4 +863,79 @@
   .formGroup textarea {
     padding: 10px 14px;
   }
+
+}
+/* Payment Status Badges */
+.paymentStatusPaid {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.paymentStatusPending {
+  background-color: #fff3e0;
+  color: #ed6c02;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.paymentStatusFailed {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* Customer Info Section */
+.customerInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e0c8a8;
+}
+
+.bookingPurpose {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #fefaf5;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #5a3a24;
+}
+
+.bookingPurpose strong {
+  color: #442d1d;
+  font-weight: 600;
+}
+
+.paymentDetails {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .customerInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .bookingStatus {
+    flex-wrap: wrap;
+  }
 }

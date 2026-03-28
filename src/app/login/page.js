@@ -25,6 +25,25 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Function to get token from localStorage or cookies
+  const getAuthToken = () => {
+    if (typeof window !== 'undefined') {
+      // Try to get from localStorage first
+      const token = localStorage.getItem("authToken");
+      if (token) return token;
+      
+      // Try to get from cookies
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'token') {
+          return value;
+        }
+      }
+    }
+    return null;
+  };
+
   // Function to store auth data
   const storeAuthData = (token, user) => {
     if (typeof window !== 'undefined') {
@@ -38,25 +57,14 @@ const LoginPage = () => {
     }
   };
 
-  // Function to clear auth data (for logout)
-  const clearAuthData = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("userData");
-      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    }
-  };
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // If user is already logged in via Firebase, get the token and redirect
+        // If user is already logged in via Firebase, redirect
         try {
-          const firebaseToken = await user.getIdToken();
-          // Verify with backend or just redirect
           router.push(redirectTo);
         } catch (error) {
-          console.error("Error getting Firebase token:", error);
+          console.error("Error redirecting:", error);
         }
       }
     });
@@ -69,38 +77,61 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
 
+    // Basic validation
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      // Get existing token if any (though login shouldn't require it)
+      const existingToken = getAuthToken();
+      
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      
+      // Add token if it exists (to satisfy backend middleware)
+      if (existingToken) {
+        headers["Authorization"] = `Bearer ${existingToken}`;
+      }
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
         body: JSON.stringify({ 
-          email, 
+          email: email.trim(), 
           password,
           provider: "email"
         }),
-        credentials: "include",
       });
 
-      const data = await res.json();
+      const data = await response.json();
       
-      if (data.success) {
+      if (response.ok && data.success) {
         // Store the JWT token from response
         if (data.user && data.user.token) {
           storeAuthData(data.user.token, data.user);
         }
         
-        // Use window.location for hard redirect to avoid RSC issues
+        // Redirect based on profile completion
         if (data.user.profileCompleted === false) {
           window.location.href = "/dashboard";
         } else {
           window.location.href = redirectTo;
         }
       } else {
-        setError(data.message || "Login failed");
+        // Handle specific error messages
+        if (response.status === 401) {
+          setError("Invalid email or password. Please try again.");
+        } else {
+          setError(data.message || "Login failed. Please check your credentials.");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError("Network error. Please try again.");
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -117,41 +148,58 @@ const LoginPage = () => {
       const user = result.user;
       const firebaseToken = await user.getIdToken();
 
+      // Get existing token if any
+      const existingToken = getAuthToken();
+      
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      
+      // Add token if it exists
+      if (existingToken) {
+        headers["Authorization"] = `Bearer ${existingToken}`;
+      }
+
       // Send Firebase token to backend for Google login
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
-        },
+        headers: headers,
         body: JSON.stringify({ 
           firebaseToken,
           email: user.email,
           name: user.displayName,
           provider: "google"
         }),
-        credentials: "include",
       });
 
-      const data = await res.json();
+      const data = await response.json();
       
-      if (data.success) {
+      if (response.ok && data.success) {
         // Store the JWT token from response
         if (data.user && data.user.token) {
           storeAuthData(data.user.token, data.user);
         }
         
-        // Use window.location for hard redirect to avoid RSC issues
+        // Redirect based on profile completion
         if (data.user.profileCompleted === false) {
           window.location.href = "/dashboard";
         } else {
           window.location.href = redirectTo;
         }
       } else {
-        setError(data.message || "Google login failed");
+        setError(data.message || "Google login failed. Please try again.");
       }
     } catch (error) {
       console.error("Google login error:", error);
-      setError("Google login failed. Please try again.");
+      
+      // Handle specific Firebase errors
+      if (error.code === 'auth/popup-blocked') {
+        setError("Popup was blocked. Please allow popups for this site and try again.");
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        setError("Login cancelled. Please try again.");
+      } else {
+        setError("Google login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -179,6 +227,7 @@ const LoginPage = () => {
               className={styles.inputField}
               required
               disabled={loading}
+              autoComplete="email"
             />
           </div>
 
@@ -192,6 +241,7 @@ const LoginPage = () => {
               className={styles.inputField}
               required
               disabled={loading}
+              autoComplete="current-password"
             />
           </div>
 
@@ -212,6 +262,7 @@ const LoginPage = () => {
           onClick={handleGoogleLogin} 
           disabled={loading}
           className={styles.googleButton}
+          type="button"
         >
           <img 
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
