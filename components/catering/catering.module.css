@@ -1,7 +1,6 @@
 /* Container & Background */
 .pageContainer {
   background-color: #e6d4b5;
-  /* Matching the beige background */
   min-height: 100vh;
   width: 100%;
   display: flex;
@@ -69,7 +68,6 @@
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
-
   opacity: 0;
   animation: fadeInUp 0.5s ease forwards;
 }
@@ -135,7 +133,6 @@
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -224,7 +221,6 @@
   padding: 0;
   max-height: 170px;
   overflow-y: auto;
-
   scrollbar-width: none;
 }
 
@@ -262,6 +258,50 @@
   text-align: start;
 }
 
+/* Location Container Styles - NEW */
+.locationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.locationInputWrapper {
+  width: 100%;
+}
+
+.locationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #6b4127;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.locationButton:hover:not(:disabled) {
+  background: #8b5a3a;
+  transform: translateY(-2px);
+}
+
+.locationButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.locationButton svg {
+  font-size: 18px;
+}
+
+/* Original Input With Icon - Keep for compatibility */
 .inputWithIcon {
   position: relative;
   width: 100%;
@@ -308,6 +348,13 @@
   font-size: 17px;
 }
 
+.noteText {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .totalRow {
   margin-top: 20px;
   padding-top: 15px;
@@ -328,6 +375,25 @@
   display: block;
 }
 
+.textLinkButton {
+  background: none;
+  border: none;
+  color: #8b4513;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  margin: 15px 0;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.textLinkButton:hover {
+  color: #6b4127;
+}
+
 .checkboxContainer {
   display: flex;
   align-items: center;
@@ -339,18 +405,6 @@
 .checkboxLabel {
   font-size: 16px;
   cursor: pointer;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .formWrapper {
@@ -526,6 +580,7 @@
   background: #6b4127;
   color: white;
 }
+
 .popupOverlay {
   position: fixed;
   top: 0;
@@ -601,6 +656,8 @@
   cursor: pointer;
   color: #6b4127;
 }
+
+/* Responsive Styles */
 @media (min-width: 1024px) {
   .menuGrid,
   .optionalGrid {
@@ -625,6 +682,22 @@
 
   .mainTitle {
     font-size: 56px;
+  }
+
+  /* Location button horizontal layout on desktop */
+  .locationContainer {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .locationInputWrapper {
+    flex: 1;
+  }
+
+  .locationButton {
+    width: auto;
+    white-space: nowrap;
+    padding: 15px 24px;
   }
 }
 

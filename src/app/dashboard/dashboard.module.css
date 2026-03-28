@@ -446,7 +446,7 @@
   background-color: #ffffff;
   border-radius: 24px;
   padding: 30px;
-  max-width: 500px;
+  max-width: 600px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
@@ -494,6 +494,39 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Form Sections */
+.formSection {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e7d5b4;
+}
+
+.formSection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #442d1d;
+  margin: 0 0 15px 0;
+  font-family: "Times New Roman", serif;
+}
+
+/* Form Row for side-by-side fields */
+.formRow {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 0;
+}
+
+.formRow .formGroup {
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .formGroup {
@@ -832,6 +865,7 @@
   .modalContent {
     padding: 20px;
     width: 95%;
+    max-width: 95%;
   }
 
   .modalHeader h3 {
@@ -864,7 +898,17 @@
     padding: 10px 14px;
   }
 
+  /* Form row responsive */
+  .formRow {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .formRow .formGroup {
+    margin-bottom: 0;
+  }
 }
+
 /* Payment Status Badges */
 .paymentStatusPaid {
   background-color: #e8f5e9;
@@ -937,5 +981,293 @@
   
   .bookingStatus {
     flex-wrap: wrap;
+  }
+}/* Payment Methods Styles */
+.paymentMethodsContainer {
+  background-color: #fefaf5;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+.paymentMethodsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.paymentMethodCard {
+  background-color: #ffffff;
+  border: 1px solid #e7d5b4;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.paymentMethodCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.paymentMethodHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0e6da;
+}
+
+.paymentMethodType {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paymentIcon {
+  font-size: 20px;
+  color: #6b4127;
+}
+
+.paymentTypeText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #442d1d;
+  text-transform: uppercase;
+}
+
+.defaultBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #e7d5b4;
+  color: #442d1d;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.defaultBadge svg {
+  font-size: 10px;
+}
+
+.paymentMethodDetails {
+  margin-bottom: 16px;
+}
+
+.cardBrand {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b5a2b;
+  margin-bottom: 8px;
+}
+
+.cardNumber {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c2c2c;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-family: monospace;
+}
+
+.cardExpiry,
+.cardHolder {
+  font-size: 12px;
+  color: #8b5a2b;
+  margin-top: 4px;
+}
+
+.upiId {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c2c2c;
+  font-family: monospace;
+}
+
+.paymentMethodActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f0e6da;
+}
+
+.setDefaultButton {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #e7d5b4;
+  color: #6b4127;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.setDefaultButton:hover {
+  background-color: #f5ede4;
+  border-color: #b45f2b;
+}
+
+.deletePaymentButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #ffcdd2;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deletePaymentButton:hover {
+  background-color: #ffebee;
+  border-color: #d32f2f;
+}
+
+.deletePaymentButton:disabled,
+.setDefaultButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.emptyPaymentState {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.emptyPaymentState .emptyIcon {
+  font-size: 48px;
+  color: #c9aa7b;
+  margin-bottom: 16px;
+}
+
+.emptyPaymentState p {
+  font-size: 14px;
+  color: #8b5a2b;
+  margin-bottom: 20px;
+}
+
+.addPaymentButton {
+  background-color: #442d1d;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.addPaymentButton:hover {
+  background-color: #5c3e29;
+}
+
+/* Add Payment Modal Styles */
+.addPaymentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.paymentTypeSelector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.paymentTypeButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: #f5ede4;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5a3a24;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paymentTypeButton:hover {
+  background-color: #e7d5b4;
+}
+
+.activePaymentType {
+  background-color: #e7d5b4;
+  border-color: #6b4127;
+  color: #442d1d;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #5a3a24;
+}
+
+.checkboxLabel input {
+  width: auto;
+  cursor: pointer;
+}
+
+.formHelper {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: #b8a28c;
+}
+
+/* Add Button */
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #442d1d;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #5c3e29;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .paymentMethodsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .paymentMethodActions {
+    flex-direction: column;
+  }
+  
+  .setDefaultButton,
+  .deletePaymentButton {
+    width: 100%;
+  }
+  
+  .paymentTypeSelector {
+    flex-direction: column;
   }
 }

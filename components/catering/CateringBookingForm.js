@@ -15,12 +15,12 @@ import PopupWrapper from "@/components/popup/popupWrapper";
 import Image from 'next/image';
 
 const fallbackPolicies = ["policy1", "policy2", "policy3", "policy4", "policy5", "policy6", "policy7"];
-
 const DELIVERY_CHARGE = 170;
 
 export default function BookingForm() {
   const t = useTranslations();
 
+  // Form state
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState({ countryCode: "+974", phoneNumber: "" });
   const [currentLocation, setCurrentLocation] = useState("");
@@ -29,17 +29,19 @@ export default function BookingForm() {
   const [startTime, setStartTime] = useState("");
   const [additionalNote, setAdditionalNote] = useState("");
   
-  
+  // Package state
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedOptional, setSelectedOptional] = useState([]);
   const [acceptedPolicies, setAcceptedPolicies] = useState(false);
 
+  // UI state
   const [showAdditionalNotePopup, setShowAdditionalNotePopup] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
 
   useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const pkg = localStorage.getItem("selectedPackage");
@@ -62,15 +64,19 @@ export default function BookingForm() {
 
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation not supported");
+      alert(t("geolocation_not_supported") || "Geolocation is not supported by your browser");
       return;
     }
+
+    setIsGettingLocation(true);
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
+        
         if (!window.google?.maps?.Geocoder) {
-          alert("Google Maps API not loaded");
+          alert(t("google_maps_not_loaded") || "Google Maps API not loaded. Please enter location manually.");
+          setIsGettingLocation(false);
           return;
         }
 
@@ -78,38 +84,73 @@ export default function BookingForm() {
         geocoder.geocode(
           { location: { lat: latitude, lng: longitude } },
           (results, status) => {
+            setIsGettingLocation(false);
             if (status === "OK" && results[0]) {
               setCurrentLocation(results[0].formatted_address);
             } else {
-              alert("Couldn't fetch address. Please enter manually.");
+              alert(t("location_fetch_error") || "Couldn't fetch address. Please enter manually.");
             }
           }
         );
       },
       (err) => {
+        setIsGettingLocation(false);
         console.error("Geo error:", err);
-        alert("We couldn't get your location. Please enter it manually.");
+        
+        let errorMessage = t("location_error") || "We couldn't get your location. Please enter it manually.";
+        if (err.code === 1) {
+          errorMessage = t("location_permission_denied") || "Location permission denied. Please enter your location manually.";
+        } else if (err.code === 2) {
+          errorMessage = t("location_unavailable") || "Location information is unavailable. Please enter manually.";
+        }
+        alert(errorMessage);
       }
     );
   };
 
-
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
 
-    if (!fullName.trim() || !phone.phoneNumber.trim() || !detailedAddress.trim()) {
-      alert("Please fill all required fields");
+    // Validation
+    if (!fullName.trim()) {
+      alert(t("full_name_required") || "Please enter your full name");
+      return;
+    }
+    
+    if (!phone.phoneNumber.trim()) {
+      alert(t("phone_required") || "Please enter your phone number");
+      return;
+    }
+    
+    if (!currentLocation.trim()) {
+      alert(t("location_required") || "Please enter your current location");
+      return;
+    }
+    
+    if (!detailedAddress.trim()) {
+      alert(t("detailed_address_required") || "Please enter your detailed address");
       return;
     }
 
+    if (!selectedPackage) {
+      alert(t("package_required") || "Please select a package first");
+      return;
+    }
+    
     if (!acceptedPolicies) {
-      alert(t('accept_policies_warning') || 'Please accept policies to continue');
+      alert(t("accept_policies_warning") || "Please accept policies to continue");
       return;
     }
-
-    if (!selectedPackage) { alert("Please select a package first"); return; }
-    if (!acceptedPolicies) { alert("Please accept policies"); return; }
-    if (!date || !startTime) { alert("Please select delivery date and time"); return; }
+    
+    if (!date) {
+      alert(t("date_required") || "Please select delivery date");
+      return;
+    }
+    
+    if (!startTime) {
+      alert(t("time_required") || "Please select delivery time");
+      return;
+    }
 
     const subtotal = selectedPackage.price;
     const total = subtotal + DELIVERY_CHARGE;
@@ -146,7 +187,10 @@ export default function BookingForm() {
         body: JSON.stringify(paymentPayload),
       });
       const result = await res.json();
-      if (!result.success) { alert("Order creation failed"); return; }
+      if (!result.success) {
+        alert(t("order_creation_failed") || "Order creation failed");
+        return;
+      }
 
       // Step 2: Get Payment URL
       const paymentRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/create`, {
@@ -164,7 +208,7 @@ export default function BookingForm() {
 
       const paymentResult = await paymentRes.json();
       if (!paymentResult.success || !paymentResult.data?.payUrl) {
-        alert("Failed to initiate payment");
+        alert(t("payment_initiation_failed") || "Failed to initiate payment");
         return;
       }
 
@@ -173,11 +217,9 @@ export default function BookingForm() {
       window.location.href = paymentResult.data.payUrl;
     } catch (err) {
       console.error("Booking error:", err);
-      alert("Something went wrong. Please try again.");
+      alert(t("something_went_wrong") || "Something went wrong. Please try again.");
     }
   };
-
-  
 
   return (
     <section className={styles.pageContainer}>
@@ -201,19 +243,23 @@ export default function BookingForm() {
 
             <PhoneField value={phone} onChange={setPhone} />
 
-            <div className={styles.inputWithIcon}>
-              <TextField
-                value={currentLocation}
-                onChange={() => {}}
-                placeholder={t("current-location")}
-                readOnly
-              />
+            <div className={styles.locationContainer}>
+              <div className={styles.locationInputWrapper}>
+                <TextField
+                  value={currentLocation}
+                  onChange={(e) => setCurrentLocation(e.target.value)}
+                  placeholder={t("current-location")}
+                  required
+                />
+              </div>
               <button
                 type="button"
                 onClick={handleUseCurrentLocation}
-                className={styles.iconInlayBtn}
+                className={styles.locationButton}
+                disabled={isGettingLocation}
               >
                 <IoLocationOutline />
+                {isGettingLocation ? t("getting_location") || "Getting..." : t("use-my-location") || "Use My Location"}
               </button>
             </div>
 
@@ -232,6 +278,7 @@ export default function BookingForm() {
                 minDate={new Date()}
                 className={styles.styledDateInput}
                 placeholderText={t("select-date")}
+                required
               />
               <DatePicker
                 selected={startTime ? new Date(`1970-01-01T${startTime}`) : null}
@@ -246,6 +293,7 @@ export default function BookingForm() {
                 dateFormat="HH:mm"
                 className={styles.styledDateInput}
                 placeholderText={t("select-time")}
+                required
               />
             </div>
           </div>
@@ -272,13 +320,17 @@ export default function BookingForm() {
                 {additionalNote.trim() && (
                   <div className={styles.summaryItem}>
                     <span>{t("note")}</span>
-                    <span>{additionalNote}</span>
+                    <span className={styles.noteText}>{additionalNote}</span>
                   </div>
                 )}
                 
-                <p className={styles.textLink} onClick={() => setShowAdditionalNotePopup(true)}>
+                <button 
+                  type="button"
+                  className={styles.textLinkButton}
+                  onClick={() => setShowAdditionalNotePopup(true)}
+                >
                   {additionalNote.trim() ? t("update-note") : t("add-note")}
-                </p>
+                </button>
 
                 <div className={styles.totalRow}>
                   <span>{t("total")}</span>
@@ -290,43 +342,40 @@ export default function BookingForm() {
         </div>
 
         <div className={styles.noteCard}>
-        <h3 className={styles.noteTitle}>{t("policies.title")}</h3>
-        <ul className={`${styles.policyList} ${showAll ? styles.expanded : ""}`}>
-          {fallbackPolicies.map((policy, index) => (
-            <li key={index} className={styles.policyItem}>
-              <div className={styles.policyIconWrapper}>
-                 <Image src="/option.png" alt="icon" width={18} height={18} />
-              </div>
-              <span>{t(`policies.${policy}`)}</span>
-            </li>
-          ))}
-        </ul>
+          <h3 className={styles.noteTitle}>{t("policies.title")}</h3>
+          <ul className={`${styles.policyList} ${showAll ? styles.expanded : ""}`}>
+            {fallbackPolicies.map((policy, index) => (
+              <li key={index} className={styles.policyItem}>
+                <div className={styles.policyIconWrapper}>
+                  <Image src="/option.png" alt="icon" width={18} height={18} />
+                </div>
+                <span>{t(`policies.${policy}`)}</span>
+              </li>
+            ))}
+          </ul>
 
-        
-
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            id="acceptPolicy"
-            checked={acceptedPolicies}
-            onChange={(e) => setAcceptedPolicies(e.target.checked)}
-            className={styles.hiddenCheckbox}
-          />
-          <label htmlFor="acceptPolicy" className={styles.customCheckboxLabel}>
-            <div className={`${styles.checkboxBox} ${acceptedPolicies ? styles.checked : ''}`}>
+          <div className={styles.checkboxWrapper}>
+            <input
+              type="checkbox"
+              id="acceptPolicy"
+              checked={acceptedPolicies}
+              onChange={(e) => setAcceptedPolicies(e.target.checked)}
+              className={styles.hiddenCheckbox}
+            />
+            <label htmlFor="acceptPolicy" className={styles.customCheckboxLabel}>
+              <div className={`${styles.checkboxBox} ${acceptedPolicies ? styles.checked : ''}`}>
                 {acceptedPolicies && "✓"}
-            </div>
-            <span>{t("policies.iaccept")}</span>
-          </label>
+              </div>
+              <span>{t("policies.iaccept")}</span>
+            </label>
+          </div>
         </div>
-      </div>
 
         <div className={styles.bottomAction}>
           <SecondaryButton
             text={t("confirm-booking")}
             onClick={handleSubmit}
             style={{ width: "100%", maxWidth: "500px" }}
-            
           />
         </div>
       </form>

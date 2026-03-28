@@ -77,7 +77,7 @@ const DashboardPage = () => {
 
         // Fetch catering orders
         try {
-          const cateringRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/catering/orders/user`, {
+          const cateringRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/catering-orders`, {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
